@@ -1,0 +1,27 @@
+User-agent: *
+Allow: /
+
+# Önemli sayfalar
+Allow: /activities
+Allow: /news
+Allow: /certificates
+Allow: /clubs
+
+# Ana sitemap
+Sitemap: https://naal.org.tr/sitemap.xml
+
+# Crawl-delay (isteğe bağlı)
+Crawl-delay: 1
+
+# Özel bot direktifleri
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+User-agent: YandexBot
+Allow: /
+Crawl-delay: 1
