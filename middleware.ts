@@ -9,6 +9,7 @@ const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
 export async function middleware(request: NextRequest) {
   const hostname = request.headers.get('host')
+  const pathname = request.nextUrl.pathname
   
   // URL kısaltıcı entegrasyonu - Önce bunu kontrol et
   if (hostname) {
@@ -28,21 +29,24 @@ export async function middleware(request: NextRequest) {
         )
         
         if (matchedClubCode) {
-          const pathname = request.nextUrl.pathname
+          // Path'i düzelt: başındaki /'yi kaldır
+          const cleanPath = pathname.startsWith('/') ? pathname.slice(1) : pathname
           
           // URL tablosundan redirect URL'yi bul
           const { data: urlData, error: urlError } = await supabase
             .from('url')
             .select('redirect')
             .eq('club_code', matchedClubCode)
-            .eq('path', pathname)
+            .eq('path', cleanPath)
             .single()
           
           if (!urlError && urlData && urlData.redirect) {
             // Redirect URL'ye yönlendir
             return NextResponse.redirect(urlData.redirect)
+          } else {
+            // URL bulunamazsa, ana siteye yönlendir
+            return NextResponse.redirect('https://naal.org.tr')
           }
-          // Eğer URL bulunamazsa, normal akışa devam et (404 verme)
         }
       }
     } catch (error) {
@@ -53,7 +57,6 @@ export async function middleware(request: NextRequest) {
   // Eğer subdomain cert. ile başlıyorsa
   if (hostname?.startsWith('cert.')) {
     const url = request.nextUrl.clone()
-    const pathname = url.pathname
     
     // Eğer zaten /certificates ile başlıyorsa, doğrudan geç
     if (pathname.startsWith('/certificates')) {
