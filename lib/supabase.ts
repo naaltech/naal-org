@@ -139,12 +139,12 @@ export async function verifyCertificateUnified(identifier: string) {
   }
 
   // Eğer identifier sayısal ise, ID ile arama yap (eski sistem entegrasyonu için)
-  if (/^\d+$/.test(identifier)) {
-    const idResult = await verifyCertificateById(parseInt(identifier))
-    if (idResult.success) {
-      return idResult
-    }
-  }
+  // if (/^\d+$/.test(identifier)) {
+  //   const idResult = await verifyCertificateById(parseInt(identifier))
+  //   if (idResult.success) {
+  //     return idResult
+  //   }
+  // }
 
   return {
     success: false,
