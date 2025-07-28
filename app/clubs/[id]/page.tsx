@@ -30,8 +30,8 @@ export default async function ClubPage({ params }: ClubPageProps) {
   const urls = parseClubUrls(club.urls)
   const instagrams = parseClubInstagram(club.instagram)
   
-  // Logo path: naal+kulüp_kodu.png
-  const logoPath = club.code ? `/logos/naal${club.code}.png` : "/placeholder.svg"
+  // Logo'yu veritabanından al, yoksa placeholder kullan
+  const logoPath = club.logo || "/placeholder.svg"
 
   return (
     <div className="min-h-screen bg-background">

@@ -40,8 +40,8 @@ export default async function ClubsPage() {
         {clubsData.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {clubsData.map((club) => {
-              // Logo path: naal+kulüp_kodu.png
-              const logoPath = club.code ? `/logos/naal${club.code}.png` : "/placeholder.svg"
+              // Logo'yu veritabanından al, yoksa placeholder kullan
+              const logoPath = club.logo || "/placeholder.svg"
               const instagrams = parseClubInstagram(club.instagram)
               
               return (

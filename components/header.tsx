@@ -9,6 +9,7 @@ import { getAllClubs, type Club } from "@/lib/supabase"
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isClubsOpen, setIsClubsOpen] = useState(false)
   const [clubs, setClubs] = useState<Club[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [isCertSubdomain, setIsCertSubdomain] = useState(false)
@@ -167,17 +168,29 @@ export default function Header() {
 
               {!isCertSubdomain && (
                 <div className="pt-2 border-t">
-                  <p className="px-4 py-2 text-sm font-medium text-muted-foreground">Okul Kulüpleri</p>
-                  {!isLoading && clubs.map((club) => (
-                    <Link key={club.id} href={`/clubs/${club.id}`} passHref className="block">
-                      <Button variant="ghost" className="w-full justify-start pl-6">
-                        {club.title || 'Kulüp Adı'}
-                      </Button>
-                    </Link>
-                  ))}
-                  {clubs.length === 0 && !isLoading && (
-                    <div className="px-4 py-2 text-sm text-muted-foreground">
-                      Henüz kulüp yok
+                  <Button 
+                    variant="ghost" 
+                    className="w-full justify-between px-4 py-2 text-sm font-medium text-muted-foreground"
+                    onClick={() => setIsClubsOpen(!isClubsOpen)}
+                  >
+                    Okul Kulüpleri
+                    <ChevronDown className={`h-4 w-4 transition-transform ${isClubsOpen ? 'rotate-180' : ''}`} />
+                  </Button>
+                  
+                  {isClubsOpen && (
+                    <div className="space-y-1">
+                      {!isLoading && clubs.map((club) => (
+                        <Link key={club.id} href={`/clubs/${club.id}`} passHref className="block">
+                          <Button variant="ghost" className="w-full justify-start pl-6">
+                            {club.title || 'Kulüp Adı'}
+                          </Button>
+                        </Link>
+                      ))}
+                      {clubs.length === 0 && !isLoading && (
+                        <div className="px-4 py-2 text-sm text-muted-foreground">
+                          Henüz kulüp yok
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
