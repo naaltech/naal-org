@@ -4,7 +4,9 @@ import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
-import { Calendar, User, BookOpen, Shield, Share2, Download, ExternalLink, ArrowLeft, Linkedin, Twitter, Facebook } from "lucide-react"
+import { Calendar, User, BookOpen, Shield, Download, FileCheck2, ExternalLink, ArrowLeft } from "lucide-react"
+import Linkedin from '@/components/icons/linkedin-icon';
+import { SiX, SiFacebook } from '@icons-pack/react-simple-icons';
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -13,6 +15,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import Header from "@/components/header"
+import Footer from "@/components/footer"
 import { verifyCertificateUnified, UnifiedCertificate } from "@/lib/supabase"
 
 export default function LegacyCertificateDetailPage() {
@@ -63,7 +66,7 @@ export default function LegacyCertificateDetailPage() {
   const getTwitterShareUrl = () => {
     const text = encodeURIComponent(`${certificate?.cert_name || certificate?.head || 'Sertifika'} - Nevzat Ayaz Etkileşim Ağı üzerinden doğrulandı`)
     const url = encodeURIComponent(shareUrl)
-    return `https://twitter.com/intent/tweet?text=${text}&url=${url}`
+    return `https://x.com/intent/tweet?text=${text}&url=${url}`
   }
 
   const getFacebookShareUrl = () => {
@@ -235,10 +238,6 @@ export default function LegacyCertificateDetailPage() {
                       </div>
                     )}
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Sertifika ID:</span>
-                      <span className="font-mono">{certificate.id}</span>
-                    </div>
-                    <div className="flex justify-between">
                       <span className="text-muted-foreground">Oluşturma Tarihi:</span>
                       <span>{new Date(certificate.created_at).toLocaleDateString('tr-TR')}</span>
                     </div>
@@ -303,7 +302,7 @@ export default function LegacyCertificateDetailPage() {
                     asChild
                   >
                     <a href={getTwitterShareUrl()} target="_blank" rel="noopener noreferrer">
-                      <Twitter className="h-4 w-4" />
+                      <SiX className="h-4 w-4" />
                     </a>
                   </Button>
                   <Button
@@ -312,7 +311,7 @@ export default function LegacyCertificateDetailPage() {
                     asChild
                   >
                     <a href={getFacebookShareUrl()} target="_blank" rel="noopener noreferrer">
-                      <Facebook className="h-4 w-4" />
+                      <SiFacebook className="h-4 w-4" />
                     </a>
                   </Button>
                 </div>
@@ -337,7 +336,7 @@ export default function LegacyCertificateDetailPage() {
                 <Dialog>
                   <DialogTrigger asChild>
                     <Button variant="outline" className="w-full">
-                      <Share2 className="mr-2 h-4 w-4" />
+                      <FileCheck2 className="mr-2 h-4 w-4" />
                       Başka Sertifika Doğrula
                     </Button>
                   </DialogTrigger>
@@ -366,6 +365,7 @@ export default function LegacyCertificateDetailPage() {
           </div>
         </div>
       </div>
+      <Footer/>
     </main>
   )
 }

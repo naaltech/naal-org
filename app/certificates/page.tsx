@@ -10,6 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Badge } from "@/components/ui/badge"
 import Header from "@/components/header"
+import Footer from "@/components/footer"
 import { verifyCertificateUnified, UnifiedCertificate } from "@/lib/supabase"
 
 export default function CertificateVerificationPage() {
@@ -336,6 +337,7 @@ export default function CertificateVerificationPage() {
             </div>
           </div>
         </section>
+        <Footer/>
       </main>
     </div>
   )

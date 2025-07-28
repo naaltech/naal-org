@@ -25,12 +25,13 @@ export default function StudentEmailRequestPage() {
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [submitError, setSubmitError] = useState<string | null>(null)
 
   // Privacy Policy Component
   const PrivacyPolicyDialog = () => (
     <Dialog>
       <DialogTrigger asChild>
-        <button className="text-blue-600 hover:underline">
+        <button className=" hover:underline" style={{ color: '#2ea5d5' }}>
           Gizlilik Politikası
         </button>
       </DialogTrigger>
@@ -151,12 +152,41 @@ export default function StudentEmailRequestPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
+    setSubmitError(null)
     
-    // Simulate API call - will be implemented later
-    setTimeout(() => {
+    try {
+      // Create FormData object to handle file upload
+      const formDataToSend = new FormData()
+      formDataToSend.append('name', formData.firstName)
+      formDataToSend.append('surname', formData.lastName)
+      formDataToSend.append('phone', formData.phoneNumber)
+      formDataToSend.append('email', formData.personalEmail)
+      formDataToSend.append('grade', formData.grade)
+      formDataToSend.append('studentNumber', formData.studentNumber)
+      
+      // Add document if provided
+      if (formData.studentDocument) {
+        formDataToSend.append('document', formData.studentDocument)
+      }
+
+      // Send to API
+      const response = await fetch('https://forms.naal.org.tr/', {
+        method: 'POST',
+        body: formDataToSend
+      })
+
+      if (response.ok) {
+        setIsSubmitted(true)
+      } else {
+        const errorText = await response.text()
+        throw new Error(`Form submission failed: ${response.status} ${errorText}`)
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error)
+      setSubmitError('Başvuru gönderilirken bir hata oluştu. Lütfen internet bağlantınızı kontrol edip tekrar deneyin.')
+    } finally {
       setIsSubmitting(false)
-      setIsSubmitted(true)
-    }, 2000)
+    }
   }
 
   const isFormValid = () => {
@@ -192,6 +222,7 @@ export default function StudentEmailRequestPage() {
               <Button 
                 onClick={() => {
                   setIsSubmitted(false)
+                  setSubmitError(null)
                   setFormData({
                     firstName: "",
                     lastName: "",
@@ -222,7 +253,7 @@ export default function StudentEmailRequestPage() {
       <div className="container max-w-2xl mx-auto px-4 py-12">
         <div className="text-center mb-8">
           <div className="flex items-center justify-center mb-4">
-            <Mail className="h-8 w-8 text-blue-600 mr-2" />
+            <Mail className="h-8 w-8 mr-2" style={{ color: '#2ea5d5' }}/>
             <h1 className="text-3xl font-bold">Öğrenci E-posta Talebi</h1>
           </div>
           <p className="text-muted-foreground max-w-lg mx-auto">
@@ -231,6 +262,26 @@ export default function StudentEmailRequestPage() {
           </p>
         </div>
 
+        <Card className="mb-6">
+          <CardContent className="pt-6">
+            <div className="text-center mb-4">
+              <h3 className="font-semibold text-2xl">Başvuru İşleme Süreci</h3>
+            </div>
+            <div className="text-sm text-muted-foreground space-y-3 leading-relaxed">
+              <p>
+              Form üzerinden iletilen veriler, <a href="https://www.llama.com/models/llama-4/" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors"><strong>Llama 4 Maverick</strong></a> tabanlı başvuru işleme modülü tarafından işlenmektedir. Başvurular modül tarafından değerlendirilir. Doğrulanan başvurular için, <a href="https://developers.google.com/workspace/admin/directory/v1/guides?hl=tr" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors"><strong>Google Workspace Directory API</strong></a> kullanılarak e-posta hesabı otomatik olarak oluşturulur. Başvuran öğrencinin hesap bilgileri ve başvuru sonucu, modül tarafından oluşturulan sonuç yazısı ile <a href="mailto:mail@naal.org.tr" className="hover:text-foreground transition-colors"><strong>mail@naal.org.tr</strong></a> e-posta adresi üzerinden öğrencinin formda belirttiği e-posta adresine gönderilir.
+              </p>
+              <p>Başvuru işleme modülü, <strong>Yukarı Dudullu Mah. 3. Cad. No:4, Ümraniye/İstanbul</strong> adresinde bulunan <a href="https://www.equinix.com/data-centers/europe-colocation/turkey-colocation/istanbul-data-centers/il2" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors"><strong>Equinix IL2 Data Center</strong></a>’da barındırılmaktadır. Sunucu erişimleri kayda alınmakta olup, sunucuya erişim sadece <strong>SSH anahtarı</strong> ile sağlanmaktadır. Bu yapı sayesinde öğrenci verileri üçüncü taraflarla paylaşılmamaktadır ve veri güvenliği sağlanmaktadır.</p>
+            </div>
+          </CardContent>
+        </Card>
+
+        {submitError && (
+          <Alert variant="destructive" className="mb-6">
+            <AlertTitle>Hata</AlertTitle>
+            <AlertDescription>{submitError}</AlertDescription>
+          </Alert>
+        )}
         <Alert className="mb-6">
           <Info className="h-4 w-4" />
           <AlertTitle>Önemli Bilgiler</AlertTitle>
@@ -241,6 +292,7 @@ export default function StudentEmailRequestPage() {
             <p>• Öğrencilik belgesi zorunlu değildir ancak işlemi hızlandırabilir.</p>
           </AlertDescription>
         </Alert>
+        
 
         <Card>
           <CardHeader>

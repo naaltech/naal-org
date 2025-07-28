@@ -40,68 +40,90 @@ export default function Home() {
 
       {/* Official News Section */}
       <OfficialNewsSection />
-
-      {/* Certificate Verification Section */}
+      
+      {/* Other Websites Section */}
       <section className="w-full py-12 md:py-24 bg-background">
         <div className="container max-w-7xl mx-auto px-4 md:px-6">
           <div className="flex flex-col items-center justify-center space-y-6 text-center">
             <div className="space-y-4 max-w-4xl">
               <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">
-                Sertifika Doğrulama
+                Diğer Websitelerimiz
+              </h2>
+              <p className="max-w-3xl mx-auto text-muted-foreground text-lg md:text-xl">
+                Okulumuzun farklı alanlardaki projelerini ve etkinliklerini keşfedin.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 w-full max-w-4xl">
+              <Card className="hover:shadow-lg transition-shadow duration-300">
+                <CardHeader>
+                  <CardTitle className="text-xl text-center">
+                    Teknoloji Kulübü
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="text-center">
+                  <p className="text-muted-foreground mb-4">
+                    Nevzat Ayaz Anadolu Lisesi Teknoloji Kulübü
+                  </p>
+                  <Link href="https://tech.naal.org.tr" target="_blank" rel="noopener noreferrer">
+                    <Button variant="outline" className="w-full">
+                      tech.naal.org.tr
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+
+              <Card className="hover:shadow-lg transition-shadow duration-300">
+                <CardHeader>
+                  <CardTitle className="text-xl text-center">
+                    Hackathon Turnuvası
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="text-center">
+                  <p className="text-muted-foreground mb-4">
+                    Nevzat Ayaz Anadolu Lisesi Hackathon Turnuvası
+                  </p>
+                  <Link href="https://hack.naal.org.tr" target="_blank" rel="noopener noreferrer">
+                    <Button variant="outline" className="w-full">
+                      hack.naal.org.tr
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+
+              <Card className="hover:shadow-lg transition-shadow duration-300">
+                <CardHeader>
+                  <CardTitle className="text-xl text-center">
+                    Fen Bilimleri Çalıştayı
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="text-center">
+                  <p className="text-muted-foreground mb-4">
+                    Nevzat Ayaz Anadolu Lisesi Fen Bilimleri Çalıştayı
+                  </p>
+                  <Link href="https://fbc.naal.org.tr" target="_blank" rel="noopener noreferrer">
+                    <Button variant="outline" className="w-full">
+                      fbc.naal.org.tr
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      {/* Certificate Verification Section */}
+      <section className="w-full py-12 md:py-24 bg-muted">
+        <div className="container max-w-7xl mx-auto px-4 md:px-6">
+          <div className="flex flex-col items-center justify-center space-y-6 text-center">
+            <div className="space-y-4 max-w-4xl">
+              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">
+                Sertifika Sistemi
               </h2>
               <p className="max-w-3xl mx-auto text-muted-foreground text-lg md:text-xl">
                 Öğrenci sertifikalarının geçerliliğini hızlı ve güvenli bir şekilde doğrulayın.
               </p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12 w-full max-w-6xl">
-              <Card className="text-center border-0 shadow-lg h-full">
-                <CardHeader className="pb-4">
-                  <div className="mx-auto rounded-full bg-green-100 p-4 w-fit mb-4">
-                    <svg className="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                  </div>
-                  <CardTitle className="text-xl">Güvenli Doğrulama</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground">
-                    Güvenli veritabanı teknolojisiyle sertifika doğrulama
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card className="text-center border-0 shadow-lg h-full">
-                <CardHeader className="pb-4">
-                  <div className="mx-auto rounded-full bg-blue-100 p-4 w-fit mb-4">
-                    <svg className="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                    </svg>
-                  </div>
-                  <CardTitle className="text-xl">Hızlı Kontrol</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground">
-                    Sertifika UID veya File ID ile anında doğrulama yapın
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card className="text-center border-0 shadow-lg h-full">
-                <CardHeader className="pb-4">
-                  <div className="mx-auto rounded-full bg-purple-100 p-4 w-fit mb-4">
-                    <svg className="h-8 w-8 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                    </svg>
-                  </div>
-                  <CardTitle className="text-xl">Şeffaf Sistem</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground">
-                    Tüm sertifika bilgileri şeffaf ve erişilebilir
-                  </p>
-                </CardContent>
-              </Card>
             </div>
 
             <div className="mt-12">
@@ -114,7 +136,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-
+      
       <Footer />
     </main>
   )

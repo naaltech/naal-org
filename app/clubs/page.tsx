@@ -1,11 +1,13 @@
 import Link from "next/link"
 import Image from "next/image"
-import { ArrowLeft, ArrowRight, Users, Globe, Instagram } from "lucide-react"
+import { ArrowLeft, ArrowRight, Users, Globe } from "lucide-react"
+import { SiInstagram } from '@icons-pack/react-simple-icons'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import Header from "@/components/header"
 import { getAllClubs, parseClubInstagram } from "@/lib/supabase"
+import Footer from "@/components/footer"
 
 export default async function ClubsPage() {
   const { success, clubs } = await getAllClubs()
@@ -40,8 +42,8 @@ export default async function ClubsPage() {
         {clubsData.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {clubsData.map((club) => {
-              // Logo path: naal+kulüp_kodu.png
-              const logoPath = club.code ? `/logos/naal${club.code}.png` : "/placeholder.svg"
+              // Logo'yu veritabanından al, yoksa placeholder kullan
+              const logoPath = club.logo || "/placeholder.svg"
               const instagrams = parseClubInstagram(club.instagram)
               
               return (
@@ -81,7 +83,7 @@ export default async function ClubsPage() {
                     )}
                     {instagrams.length > 0 && (
                       <div className="flex items-center gap-1">
-                        <Instagram className="h-3 w-3" />
+                        <SiInstagram className="h-3 w-3" />
                         <span className="truncate">@{instagrams[0].replace(/^@/, '')}</span>
                       </div>
                     )}
@@ -112,7 +114,9 @@ export default async function ClubsPage() {
             </p>
           </div>
         )}
+        
       </main>
+      <Footer/>
     </div>
   )
 }

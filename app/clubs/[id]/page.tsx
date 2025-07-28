@@ -1,10 +1,14 @@
 import Link from "next/link"
 import Image from "next/image"
-import { ArrowLeft, Users, ExternalLink, Instagram, Globe } from "lucide-react"
+import { ArrowLeft, Users, ExternalLink, Globe } from "lucide-react"
+import { SiInstagram } from '@icons-pack/react-simple-icons'
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
 import Header from "@/components/header"
+import Footer from "@/components/footer"
+
+import ClubInstagramFeed from "@/components/club-instagram-feed"
 import { getClubById, parseClubUrls, parseClubInstagram } from "@/lib/supabase"
 import { notFound } from "next/navigation"
 
@@ -30,8 +34,8 @@ export default async function ClubPage({ params }: ClubPageProps) {
   const urls = parseClubUrls(club.urls)
   const instagrams = parseClubInstagram(club.instagram)
   
-  // Logo path: naal+kulüp_kodu.png
-  const logoPath = club.code ? `/logos/naal${club.code}.png` : "/placeholder.svg"
+  // Logo'yu veritabanından al, yoksa placeholder kullan
+  const logoPath = club.logo || "/placeholder.svg"
 
   return (
     <div className="min-h-screen bg-background">
@@ -90,7 +94,7 @@ export default async function ClubPage({ params }: ClubPageProps) {
               
               {instagrams.length > 0 && (
                 <div className="flex items-center gap-2">
-                  <Instagram className="h-5 w-5 text-muted-foreground" />
+                  <SiInstagram className="h-5 w-5 text-muted-foreground" />
                   <span className="font-medium">Instagram:</span>
                   <div className="flex flex-wrap gap-2">
                     {instagrams.map((ig, index) => (
@@ -133,18 +137,34 @@ export default async function ClubPage({ params }: ClubPageProps) {
         </div>
 
         {/* Content Tabs */}
-        <Tabs defaultValue="about" className="w-full">
+        <Tabs defaultValue="instagram" className="w-full">
           <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="about">Hakkında</TabsTrigger>
+            <TabsTrigger value="instagram">Instagram</TabsTrigger>
             <TabsTrigger value="contact">İletişim</TabsTrigger>
           </TabsList>
           
-          <TabsContent value="about" className="mt-6">
-            <div className="prose max-w-none">
-              <h3 className="text-xl font-semibold mb-4">Kulüp Hakkında</h3>
-              <p className="text-muted-foreground leading-relaxed">
-                {club.description || "Bu kulüp hakkında detaylı bilgi henüz eklenmemiş."}
-              </p>
+          <TabsContent value="instagram" className="mt-6">
+            <div className="space-y-6">
+              <div className="flex items-center gap-2 mb-4">
+                <SiInstagram className="h-5 w-5 text-muted-foreground" />
+                <h3 className="text-xl font-semibold">Instagram Postları</h3>
+              </div>
+              
+              {instagrams.length > 0 ? (
+                <div className="space-y-6">
+                  <div className="text-sm text-muted-foreground mb-4">
+                    Takip edilen hesaplar: {instagrams.map(ig => `@${ig.replace(/^@/, '')}`).join(', ')}
+                  </div>
+                  <ClubInstagramFeed clubInstagramAccounts={instagrams} />
+                </div>
+              ) : (
+                <div className="text-center py-12">
+                  <SiInstagram className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                  <p className="text-muted-foreground">
+                    Bu kulübün Instagram hesabı henüz eklenmemiş.
+                  </p>
+                </div>
+              )}
               
               {club.code && (
                 <div className="mt-6 p-4 bg-muted rounded-lg">
@@ -172,7 +192,7 @@ export default async function ClubPage({ params }: ClubPageProps) {
 
                 {instagrams.length > 0 && (
                   <div className="flex items-start gap-3 p-4 bg-muted rounded-lg">
-                    <Instagram className="h-5 w-5 text-muted-foreground mt-0.5" />
+                    <SiInstagram className="h-5 w-5 text-muted-foreground mt-0.5" />
                     <div>
                       <h4 className="font-medium">Instagram</h4>
                       <div className="space-y-1">
@@ -218,6 +238,7 @@ export default async function ClubPage({ params }: ClubPageProps) {
           </TabsContent>
         </Tabs>
       </main>
+      <Footer/>
     </div>
   )
 }

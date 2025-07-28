@@ -3,12 +3,15 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { ChevronDown, Menu, X, Mail, MapPin, Instagram, Twitter, Youtube } from "lucide-react"
+import { ChevronDown, Menu, X, Mail, MapPin } from "lucide-react"
+import Linkedin from '@/components/icons/linkedin-icon';
+import { SiInstagram, SiX, SiYoutube, SiFacebook } from '@icons-pack/react-simple-icons';
 import { useState, useEffect } from "react"
 import { getAllClubs, type Club } from "@/lib/supabase"
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isClubsOpen, setIsClubsOpen] = useState(false)
   const [clubs, setClubs] = useState<Club[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [isCertSubdomain, setIsCertSubdomain] = useState(false)
@@ -47,15 +50,40 @@ export default function Header() {
               </div>
             </div>
 
-            {/* Right side - Social Media */}
+            {/* Right side - Social Media & Admin */}
             <div className="flex items-center space-x-3">
+              <a 
+                href="https://admin.naal.org.tr/" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="hidden md:flex text-muted-foreground hover:text-foreground transition-colors text-xs px-2 py-1 border border-muted-foreground/20 rounded-md hover:border-foreground/50"
+              >
+                Yönetici Arayüzü
+              </a>
+              <div className="hidden md:block w-px h-4 bg-muted-foreground/20" />
+              <a 
+                href="https://www.facebook.com/nevzatayaz.al.14" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <SiFacebook className="h-4 w-4" />
+              </a>
               <a 
                 href="https://www.instagram.com/nevzatayazanadolulisesi_/" 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="text-muted-foreground hover:text-foreground transition-colors"
               >
-                <Instagram className="h-4 w-4" />
+                <SiInstagram className="h-4 w-4" />
+              </a>
+              <a 
+                href="https://www.linkedin.com/school/nevzatayazlisesi/" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <Linkedin className="h-4 w-4" />
               </a>
               <a 
                 href="https://x.com/NevzatAyazLise" 
@@ -63,7 +91,7 @@ export default function Header() {
                 rel="noopener noreferrer" 
                 className="text-muted-foreground hover:text-foreground transition-colors"
               >
-                <Twitter className="h-4 w-4" />
+                <SiX className="h-4 w-4" />
               </a>
               <a 
                 href="https://www.youtube.com/@NaalRec" 
@@ -71,7 +99,7 @@ export default function Header() {
                 rel="noopener noreferrer" 
                 className="text-muted-foreground hover:text-foreground transition-colors"
               >
-                <Youtube className="h-4 w-4" />
+                <SiYoutube className="h-4 w-4" />
               </a>
             </div>
           </div>
@@ -167,17 +195,29 @@ export default function Header() {
 
               {!isCertSubdomain && (
                 <div className="pt-2 border-t">
-                  <p className="px-4 py-2 text-sm font-medium text-muted-foreground">Okul Kulüpleri</p>
-                  {!isLoading && clubs.map((club) => (
-                    <Link key={club.id} href={`/clubs/${club.id}`} passHref className="block">
-                      <Button variant="ghost" className="w-full justify-start pl-6">
-                        {club.title || 'Kulüp Adı'}
-                      </Button>
-                    </Link>
-                  ))}
-                  {clubs.length === 0 && !isLoading && (
-                    <div className="px-4 py-2 text-sm text-muted-foreground">
-                      Henüz kulüp yok
+                  <Button 
+                    variant="ghost" 
+                    className="w-full justify-between px-4 py-2 text-sm font-medium text-muted-foreground"
+                    onClick={() => setIsClubsOpen(!isClubsOpen)}
+                  >
+                    Okul Kulüpleri
+                    <ChevronDown className={`h-4 w-4 transition-transform ${isClubsOpen ? 'rotate-180' : ''}`} />
+                  </Button>
+                  
+                  {isClubsOpen && (
+                    <div className="space-y-1">
+                      {!isLoading && clubs.map((club) => (
+                        <Link key={club.id} href={`/clubs/${club.id}`} passHref className="block">
+                          <Button variant="ghost" className="w-full justify-start pl-6">
+                            {club.title || 'Kulüp Adı'}
+                          </Button>
+                        </Link>
+                      ))}
+                      {clubs.length === 0 && !isLoading && (
+                        <div className="px-4 py-2 text-sm text-muted-foreground">
+                          Henüz kulüp yok
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
@@ -192,6 +232,15 @@ export default function Header() {
                   </Button>
                 </div>
               )}
+
+              {/* Admin Panel Link for Mobile */}
+              <div className="pt-2 border-t">
+                <Button variant="outline" className="w-full" asChild>
+                  <a href="https://admin.naal.org.tr/" target="_blank" rel="noopener noreferrer">
+                    Yönetici Arayüzü
+                  </a>
+                </Button>
+              </div>
             </div>
           </div>
         )}

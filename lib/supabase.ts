@@ -139,12 +139,12 @@ export async function verifyCertificateUnified(identifier: string) {
   }
 
   // Eğer identifier sayısal ise, ID ile arama yap (eski sistem entegrasyonu için)
-  if (/^\d+$/.test(identifier)) {
-    const idResult = await verifyCertificateById(parseInt(identifier))
-    if (idResult.success) {
-      return idResult
-    }
-  }
+  // if (/^\d+$/.test(identifier)) {
+  //   const idResult = await verifyCertificateById(parseInt(identifier))
+  //   if (idResult.success) {
+  //     return idResult
+  //   }
+  // }
 
   return {
     success: false,
@@ -300,12 +300,26 @@ export function parseClubInstagram(instagram: string | null): string[] {
   return instagram.split(',').map(ig => ig.trim()).filter(ig => ig.length > 0)
 }
 
-// Instagram postlarını getir
-export async function getInstagramPosts(limit: number = 10) {
+// Kulüp özelinde Instagram postlarını getir
+export async function getInstagramPostsByClub(clubInstagramAccounts: string[], limit: number = 8) {
   try {
-    const { data, error } = await supabase
+    if (clubInstagramAccounts.length === 0) {
+      return {
+        success: true,
+        posts: [],
+        totalCount: 0
+      }
+    }
+
+    // @ işaretini kaldır ve küçük harfe çevir
+    const cleanAccounts = clubInstagramAccounts.map(account => 
+      account.replace(/^@/, '').toLowerCase()
+    )
+
+    const { data, error, count } = await supabase
       .from('posts_instagram')
-      .select('*')
+      .select('*', { count: 'exact' })
+      .in('user_name', cleanAccounts)
       .order('time', { ascending: false })
       .limit(limit)
 
@@ -315,12 +329,71 @@ export async function getInstagramPosts(limit: number = 10) {
 
     return {
       success: true,
-      posts: data as InstagramPost[]
+      posts: data as InstagramPost[],
+      totalCount: count || 0
     }
   } catch (error) {
     return {
       success: false,
-      error: 'Instagram postları yüklenirken hata oluştu'
+      error: 'Instagram postları yüklenirken hata oluştu',
+      posts: [],
+      totalCount: 0
+    }
+  }
+}
+
+// Instagram postlarını getir - pagination desteği ile
+export async function getInstagramPosts(limit: number = 10, offset: number = 0) {
+  try {
+    const { data, error, count } = await supabase
+      .from('posts_instagram')
+      .select('*', { count: 'exact' })
+      .order('time', { ascending: false })
+      .range(offset, offset + limit - 1)
+
+    if (error) {
+      throw error
+    }
+
+    return {
+      success: true,
+      posts: data as InstagramPost[],
+      totalCount: count || 0,
+      hasMore: (offset + limit) < (count || 0)
+    }
+  } catch (error) {
+    return {
+      success: false,
+      error: 'Instagram postları yüklenirken hata oluştu',
+      posts: [],
+      totalCount: 0,
+      hasMore: false
+    }
+  }
+}
+
+// Tek bir Instagram postunu ID ile getir
+export async function getInstagramPostById(id: number) {
+  try {
+    const { data, error } = await supabase
+      .from('posts_instagram')
+      .select('*')
+      .eq('id', id)
+      .single()
+
+    if (error) {
+      throw error
+    }
+
+    return {
+      success: true,
+      post: data as InstagramPost
+    }
+  } catch (error) {
+    return {
+      success: false,
+      error: 'Instagram postu bulunamadı',
+      post: null
     }
   }
 }
@@ -403,4 +476,63 @@ export async function deleteInstagramPost(id: number) {
 export function parseInstagramImages(imageLinks: { links: string[] } | null): string[] {
   if (!imageLinks || !imageLinks.links) return []
   return imageLinks.links.filter(link => link && link.trim().length > 0)
+}
+
+// URL kısaltıcı için interface
+export interface ShortUrl {
+  id: number
+  created_at: string
+  club_code: string | null
+  path: string | null
+  redirect: string | null
+}
+
+// Club code ve path'e göre URL bulma fonksiyonu
+export async function getShortUrlByClubCodeAndPath(clubCode: string, path: string) {
+  try {
+    const { data, error } = await supabase
+      .from('url')
+      .select('*')
+      .eq('club_code', clubCode)
+      .eq('path', path)
+      .single()
+
+    if (error) {
+      throw error
+    }
+
+    return {
+      success: true,
+      shortUrl: data as ShortUrl
+    }
+  } catch (error) {
+    return {
+      success: false,
+      error: 'URL bulunamadı'
+    }
+  }
+}
+
+// Tüm club code'larını getirme fonksiyonu
+export async function getAllClubCodes() {
+  try {
+    const { data, error } = await supabase
+      .from('clubs')
+      .select('code')
+      .not('code', 'is', null)
+
+    if (error) {
+      throw error
+    }
+
+    return {
+      success: true,
+      clubCodes: data.map((club: { code: string | null }) => club.code).filter(Boolean) as string[]
+    }
+  } catch (error) {
+    return {
+      success: false,
+      error: 'Club code\'ları getirilemedi'
+    }
+  }
 }

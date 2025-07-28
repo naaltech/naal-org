@@ -19,16 +19,19 @@ export default function StructuredData() {
     },
     "contactPoint": {
       "@type": "ContactPoint",
-      "telephone": "+90-216-XXX-XXXX",
+      "telephone": "+90-216-631-7644",
       "email": "iletisim@naal.org.tr",
-      "contactType": "customer service",
+      "contactType": "school administrator",
       "availableLanguage": "Turkish"
     },
     "sameAs": [
       "https://www.instagram.com/nevzatayazanadolulisesi_/",
       "https://x.com/NevzatAyazLise",
       "https://www.youtube.com/@NaalRec",
-      "https://nevzatayazal.meb.k12.tr"
+      "https://nevzatayazal.meb.k12.tr",
+      "https://ogr.nevzatayazal.k12.tr/",
+      "https://nevzatayazal.k12.tr/",
+      "https://www.linkedin.com/school/nevzatayazlisesi/"
     ],
     "foundingDate": "1985",
     "areaServed": {
@@ -46,14 +49,6 @@ export default function StructuredData() {
     "publisher": {
       "@type": "EducationalOrganization",
       "name": "Nevzat Ayaz Anadolu Lisesi"
-    },
-    "potentialAction": {
-      "@type": "SearchAction",
-      "target": {
-        "@type": "EntryPoint",
-        "urlTemplate": "https://naal.org.tr/search?q={search_term_string}"
-      },
-      "query-input": "required name=search_term_string"
     }
   }
 
@@ -75,10 +70,23 @@ export default function StructuredData() {
       },
       {
         "@type": "ListItem",
-        "position": 2,
+        "position": 3,
         "name": "İnstagram Akışı",
         "item": "https://naal.org.tr/instagram"
-      }
+      },
+      {
+        "@type": "ListItem",
+        "position": 4,
+        "name": "Kulüp İnstagram Hesapları",
+        "item": "https://naal.org.tr/instagram/accounts"
+      },
+      {
+        "@type": "ListItem",
+        "position": 5,
+        "name": "Öğrenci E-Posta Talebi",
+        "item": "https://naal.org.tr/student-email"
+      },
+
     ]
   }
 

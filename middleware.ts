@@ -1,13 +1,62 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import { createClient } from '@supabase/supabase-js'
 
-export function middleware(request: NextRequest) {
+// Supabase konfigürasyonu
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
+const supabase = createClient(supabaseUrl, supabaseAnonKey)
+
+export async function middleware(request: NextRequest) {
   const hostname = request.headers.get('host')
+  const pathname = request.nextUrl.pathname
+  
+  // URL kısaltıcı entegrasyonu - Önce bunu kontrol et
+  if (hostname) {
+    try {
+      // Tüm club code'larını getir
+      const { data: clubsData, error: clubsError } = await supabase
+        .from('clubs')
+        .select('code')
+        .not('code', 'is', null)
+      
+      if (!clubsError && clubsData) {
+        const clubCodes = clubsData.map((club: { code: string | null }) => club.code).filter(Boolean) as string[]
+        
+        // Hostname'in herhangi bir club code'unu içerip içermediğini kontrol et
+        const matchedClubCode = clubCodes.find(code => 
+          hostname.includes(code) || hostname.startsWith(`${code}.`)
+        )
+        
+        if (matchedClubCode) {
+          // Path'i düzelt: başındaki /'yi kaldır
+          const cleanPath = pathname.startsWith('/') ? pathname.slice(1) : pathname
+          
+          // URL tablosundan redirect URL'yi bul
+          const { data: urlData, error: urlError } = await supabase
+            .from('url')
+            .select('redirect')
+            .eq('club_code', matchedClubCode)
+            .eq('path', cleanPath)
+            .single()
+          
+          if (!urlError && urlData && urlData.redirect) {
+            // Redirect URL'ye yönlendir
+            return NextResponse.redirect(urlData.redirect)
+          } else {
+            // URL bulunamazsa, ana siteye yönlendir
+            return NextResponse.redirect('https://naal.org.tr')
+          }
+        }
+      }
+    } catch (error) {
+      console.error('URL kısaltıcı hatası:', error)
+    }
+  }
   
   // Eğer subdomain cert. ile başlıyorsa
   if (hostname?.startsWith('cert.')) {
     const url = request.nextUrl.clone()
-    const pathname = url.pathname
     
     // Eğer zaten /certificates ile başlıyorsa, doğrudan geç
     if (pathname.startsWith('/certificates')) {
