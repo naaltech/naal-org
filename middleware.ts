@@ -10,41 +10,7 @@ const supabase = createClient(supabaseUrl, supabaseAnonKey)
 export async function middleware(request: NextRequest) {
   const hostname = request.headers.get('host')
   
-  // Eğer subdomain cert. ile başlıyorsa
-  if (hostname?.startsWith('cert.')) {
-    const url = request.nextUrl.clone()
-    const pathname = url.pathname
-    
-    // Eğer zaten /certificates ile başlıyorsa, doğrudan geç
-    if (pathname.startsWith('/certificates')) {
-      return NextResponse.next()
-    }
-    
-    // Eğer /cert ile başlıyorsa, doğrudan geç (eski sistem URL'leri için)
-    if (pathname.startsWith('/cert')) {
-      return NextResponse.next()
-    }
-    
-    // Root path ise sertifika doğrulama sayfasına yönlendir
-    if (pathname === '/') {
-      url.pathname = '/certificates'
-      return NextResponse.redirect(url)
-    }
-    
-    // Eğer direkt ID ile geliyorsa (örn: /1234 gibi), certificates/id'ye yönlendir
-    const idPattern = /^\/([0-9a-zA-Z-]+)$/
-    if (idPattern.test(pathname)) {
-      url.pathname = `/certificates${pathname}`
-      return NextResponse.redirect(url)
-    }
-    
-    // Diğer tüm path'ler için sertifika doğrulama sayfasına yönlendir
-    url.pathname = '/certificates'
-    return NextResponse.redirect(url)
-  }
-  
-  // URL kısaltıcı entegrasyonu
-  // Subdomain'in herhangi bir club code'unu içerip içermediğini kontrol et
+  // URL kısaltıcı entegrasyonu - Önce bunu kontrol et
   if (hostname) {
     try {
       // Tüm club code'larını getir
@@ -76,11 +42,45 @@ export async function middleware(request: NextRequest) {
             // Redirect URL'ye yönlendir
             return NextResponse.redirect(urlData.redirect)
           }
+          // Eğer URL bulunamazsa, normal akışa devam et (404 verme)
         }
       }
     } catch (error) {
       console.error('URL kısaltıcı hatası:', error)
     }
+  }
+  
+  // Eğer subdomain cert. ile başlıyorsa
+  if (hostname?.startsWith('cert.')) {
+    const url = request.nextUrl.clone()
+    const pathname = url.pathname
+    
+    // Eğer zaten /certificates ile başlıyorsa, doğrudan geç
+    if (pathname.startsWith('/certificates')) {
+      return NextResponse.next()
+    }
+    
+    // Eğer /cert ile başlıyorsa, doğrudan geç (eski sistem URL'leri için)
+    if (pathname.startsWith('/cert')) {
+      return NextResponse.next()
+    }
+    
+    // Root path ise sertifika doğrulama sayfasına yönlendir
+    if (pathname === '/') {
+      url.pathname = '/certificates'
+      return NextResponse.redirect(url)
+    }
+    
+    // Eğer direkt ID ile geliyorsa (örn: /1234 gibi), certificates/id'ye yönlendir
+    const idPattern = /^\/([0-9a-zA-Z-]+)$/
+    if (idPattern.test(pathname)) {
+      url.pathname = `/certificates${pathname}`
+      return NextResponse.redirect(url)
+    }
+    
+    // Diğer tüm path'ler için sertifika doğrulama sayfasına yönlendir
+    url.pathname = '/certificates'
+    return NextResponse.redirect(url)
   }
   
   return NextResponse.next()
