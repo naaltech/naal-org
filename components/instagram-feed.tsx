@@ -112,7 +112,6 @@ export default function InstagramFeed() {
         <div className="container max-w-7xl mx-auto px-4 md:px-6">
           <div className="flex flex-col items-center justify-center space-y-4 text-center mb-10">
             <div className="flex items-center space-x-2">
-              <Instagram className="h-6 w-6 text-pink-500" />
               <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">Kulüp Güncellemeleri</h2>
             </div>
             <p className="max-w-[700px] text-muted-foreground">Yükleniyor...</p>
