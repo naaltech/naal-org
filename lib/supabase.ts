@@ -404,3 +404,62 @@ export function parseInstagramImages(imageLinks: { links: string[] } | null): st
   if (!imageLinks || !imageLinks.links) return []
   return imageLinks.links.filter(link => link && link.trim().length > 0)
 }
+
+// URL kısaltıcı için interface
+export interface ShortUrl {
+  id: number
+  created_at: string
+  club_code: string | null
+  path: string | null
+  redirect: string | null
+}
+
+// Club code ve path'e göre URL bulma fonksiyonu
+export async function getShortUrlByClubCodeAndPath(clubCode: string, path: string) {
+  try {
+    const { data, error } = await supabase
+      .from('url')
+      .select('*')
+      .eq('club_code', clubCode)
+      .eq('path', path)
+      .single()
+
+    if (error) {
+      throw error
+    }
+
+    return {
+      success: true,
+      shortUrl: data as ShortUrl
+    }
+  } catch (error) {
+    return {
+      success: false,
+      error: 'URL bulunamadı'
+    }
+  }
+}
+
+// Tüm club code'larını getirme fonksiyonu
+export async function getAllClubCodes() {
+  try {
+    const { data, error } = await supabase
+      .from('clubs')
+      .select('code')
+      .not('code', 'is', null)
+
+    if (error) {
+      throw error
+    }
+
+    return {
+      success: true,
+      clubCodes: data.map((club: { code: string | null }) => club.code).filter(Boolean) as string[]
+    }
+  } catch (error) {
+    return {
+      success: false,
+      error: 'Club code\'ları getirilemedi'
+    }
+  }
+}

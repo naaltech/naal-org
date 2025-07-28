@@ -1,7 +1,13 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import { createClient } from '@supabase/supabase-js'
 
-export function middleware(request: NextRequest) {
+// Supabase konfigürasyonu
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
+const supabase = createClient(supabaseUrl, supabaseAnonKey)
+
+export async function middleware(request: NextRequest) {
   const hostname = request.headers.get('host')
   
   // Eğer subdomain cert. ile başlıyorsa
@@ -35,6 +41,46 @@ export function middleware(request: NextRequest) {
     // Diğer tüm path'ler için sertifika doğrulama sayfasına yönlendir
     url.pathname = '/certificates'
     return NextResponse.redirect(url)
+  }
+  
+  // URL kısaltıcı entegrasyonu
+  // Subdomain'in herhangi bir club code'unu içerip içermediğini kontrol et
+  if (hostname) {
+    try {
+      // Tüm club code'larını getir
+      const { data: clubsData, error: clubsError } = await supabase
+        .from('clubs')
+        .select('code')
+        .not('code', 'is', null)
+      
+      if (!clubsError && clubsData) {
+        const clubCodes = clubsData.map((club: { code: string | null }) => club.code).filter(Boolean) as string[]
+        
+        // Hostname'in herhangi bir club code'unu içerip içermediğini kontrol et
+        const matchedClubCode = clubCodes.find(code => 
+          hostname.includes(code) || hostname.startsWith(`${code}.`)
+        )
+        
+        if (matchedClubCode) {
+          const pathname = request.nextUrl.pathname
+          
+          // URL tablosundan redirect URL'yi bul
+          const { data: urlData, error: urlError } = await supabase
+            .from('url')
+            .select('redirect')
+            .eq('club_code', matchedClubCode)
+            .eq('path', pathname)
+            .single()
+          
+          if (!urlError && urlData && urlData.redirect) {
+            // Redirect URL'ye yönlendir
+            return NextResponse.redirect(urlData.redirect)
+          }
+        }
+      }
+    } catch (error) {
+      console.error('URL kısaltıcı hatası:', error)
+    }
   }
   
   return NextResponse.next()
