@@ -90,8 +90,3 @@ pnpm start
 
 Bu proje MIT lisansı altında lisanslanmıştır. Detaylar için [LICENSE](LICENSE) dosyasına bakın.
 
-## 👥 Takım
-
-- **Geliştirici**: [@erdemhglu](https://github.com/ta2edh)
-- **Kulüp**: [Nevzat Ayaz Anadolu Lisesi Teknoloji Kulübü](https://tech.naal.org.tr)
-]
