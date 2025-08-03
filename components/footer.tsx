@@ -13,12 +13,6 @@ export default function Footer() {
               Açık Kaynak: <Link href="https://github.com/naaltech/naal-org" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">GitHub</Link>
             </p>
           </div>
-          <div className="text-center md:text-right">
-            <p className="text-xs text-muted-foreground">
-              İmza: <Link href="https://www.instagram.com/erdemhglu/" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">@erdemhglu</Link>
-            </p>
-          </div>
-        </div>
       </div>
     </footer>
   )
