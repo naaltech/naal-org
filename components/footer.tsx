@@ -12,7 +12,6 @@ export default function Footer() {
             <p className="text-xs text-muted-foreground mt-1">
               Açık Kaynak: <Link href="https://github.com/naaltech/naal-org" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">GitHub</Link>
             </p>
-                </div>
           </div>
       </div>
     </footer>
