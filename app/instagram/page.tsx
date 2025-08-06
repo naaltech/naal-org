@@ -142,7 +142,7 @@ export default function InstagramPage() {
         <div className="flex-1 py-12">
           <div className="container max-w-7xl mx-auto px-4 md:px-6">
             <div className="text-center">
-              <Instagram className="h-12 w-12 text-pink-500 mx-auto mb-4" />
+              <Instagram className="h-12 w-12 mx-auto mb-4" style={{ color: '#2ea5d5' }} />
               <h1 className="text-3xl font-bold mb-2">Instagram Paylaşımları</h1>
               <p className="text-muted-foreground">Yükleniyor...</p>
             </div>
@@ -319,10 +319,11 @@ export default function InstagramPage() {
                             
                             {post.post_link && (
                               <Link 
-                                href={post.post_link} 
+                                href={post.post_link}
+                                style={{color: '#2ea5d5'}} 
                                 target="_blank" 
                                 rel="noopener noreferrer"
-                                className="text-xs text-pink-500 hover:text-pink-600 font-medium"
+                                className="text-xs font-medium"
                               >
                                 Instagram'da Gör
                               </Link>
