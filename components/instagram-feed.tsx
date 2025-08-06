@@ -91,7 +91,7 @@ export default function InstagramFeed() {
   useEffect(() => {
     async function fetchPosts() {
       console.log('Instagram posts çekiliyor...')
-      const { success, posts: postsData } = await getInstagramPosts(8)
+      const { success, posts: postsData } = await getInstagramPosts(4)
       console.log('Instagram posts result:', { success, postsData })
       
       if (success && postsData) {
