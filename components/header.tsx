@@ -48,8 +48,17 @@ export default function Header() {
               </div>
             </div>
 
-            {/* Right side - Social Media */}
+            {/* Right side - Social Media & Admin */}
             <div className="flex items-center space-x-3">
+              <a 
+                href="https://yonetici.naal.org.tr/" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="hidden md:flex text-muted-foreground hover:text-foreground transition-colors text-xs px-2 py-1 border border-muted-foreground/20 rounded-md hover:border-foreground/50"
+              >
+                Yönetici Paneli
+              </a>
+              <div className="hidden md:block w-px h-4 bg-muted-foreground/20" />
               <a 
                 href="https://www.instagram.com/nevzatayazanadolulisesi_/" 
                 target="_blank" 
@@ -205,6 +214,15 @@ export default function Header() {
                   </Button>
                 </div>
               )}
+
+              {/* Admin Panel Link for Mobile */}
+              <div className="pt-2 border-t">
+                <Button variant="outline" className="w-full" asChild>
+                  <a href="https://yonetici.naal.org.tr/" target="_blank" rel="noopener noreferrer">
+                    Yönetici Paneli
+                  </a>
+                </Button>
+              </div>
             </div>
           </div>
         )}

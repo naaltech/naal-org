@@ -25,6 +25,7 @@ export default function StudentEmailRequestPage() {
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [submitError, setSubmitError] = useState<string | null>(null)
 
   // Privacy Policy Component
   const PrivacyPolicyDialog = () => (
@@ -151,12 +152,41 @@ export default function StudentEmailRequestPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
+    setSubmitError(null)
     
-    // Simulate API call - will be implemented later
-    setTimeout(() => {
+    try {
+      // Create FormData object to handle file upload
+      const formDataToSend = new FormData()
+      formDataToSend.append('name', formData.firstName)
+      formDataToSend.append('surname', formData.lastName)
+      formDataToSend.append('phone', formData.phoneNumber)
+      formDataToSend.append('email', formData.personalEmail)
+      formDataToSend.append('grade', formData.grade)
+      formDataToSend.append('studentNumber', formData.studentNumber)
+      
+      // Add document if provided
+      if (formData.studentDocument) {
+        formDataToSend.append('document', formData.studentDocument)
+      }
+
+      // Send to API
+      const response = await fetch('https://form-to-discord-worker.naal.workers.dev/', {
+        method: 'POST',
+        body: formDataToSend
+      })
+
+      if (response.ok) {
+        setIsSubmitted(true)
+      } else {
+        const errorText = await response.text()
+        throw new Error(`Form submission failed: ${response.status} ${errorText}`)
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error)
+      setSubmitError('Başvuru gönderilirken bir hata oluştu. Lütfen internet bağlantınızı kontrol edip tekrar deneyin.')
+    } finally {
       setIsSubmitting(false)
-      setIsSubmitted(true)
-    }, 2000)
+    }
   }
 
   const isFormValid = () => {
@@ -192,6 +222,7 @@ export default function StudentEmailRequestPage() {
               <Button 
                 onClick={() => {
                   setIsSubmitted(false)
+                  setSubmitError(null)
                   setFormData({
                     firstName: "",
                     lastName: "",
@@ -241,6 +272,13 @@ export default function StudentEmailRequestPage() {
             <p>• Öğrencilik belgesi zorunlu değildir ancak işlemi hızlandırabilir.</p>
           </AlertDescription>
         </Alert>
+
+        {submitError && (
+          <Alert variant="destructive" className="mb-6">
+            <AlertTitle>Hata</AlertTitle>
+            <AlertDescription>{submitError}</AlertDescription>
+          </Alert>
+        )}
 
         <Card>
           <CardHeader>
