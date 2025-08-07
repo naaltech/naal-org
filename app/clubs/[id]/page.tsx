@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
 import Header from "@/components/header"
+import ClubInstagramFeed from "@/components/club-instagram-feed"
 import { getClubById, parseClubUrls, parseClubInstagram } from "@/lib/supabase"
 import { notFound } from "next/navigation"
 
@@ -133,18 +134,34 @@ export default async function ClubPage({ params }: ClubPageProps) {
         </div>
 
         {/* Content Tabs */}
-        <Tabs defaultValue="about" className="w-full">
+        <Tabs defaultValue="instagram" className="w-full">
           <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="about">Hakkında</TabsTrigger>
+            <TabsTrigger value="instagram">Instagram</TabsTrigger>
             <TabsTrigger value="contact">İletişim</TabsTrigger>
           </TabsList>
           
-          <TabsContent value="about" className="mt-6">
-            <div className="prose max-w-none">
-              <h3 className="text-xl font-semibold mb-4">Kulüp Hakkında</h3>
-              <p className="text-muted-foreground leading-relaxed">
-                {club.description || "Bu kulüp hakkında detaylı bilgi henüz eklenmemiş."}
-              </p>
+          <TabsContent value="instagram" className="mt-6">
+            <div className="space-y-6">
+              <div className="flex items-center gap-2 mb-4">
+                <Instagram className="h-5 w-5 text-muted-foreground" />
+                <h3 className="text-xl font-semibold">Instagram Postları</h3>
+              </div>
+              
+              {instagrams.length > 0 ? (
+                <div className="space-y-6">
+                  <div className="text-sm text-muted-foreground mb-4">
+                    Takip edilen hesaplar: {instagrams.map(ig => `@${ig.replace(/^@/, '')}`).join(', ')}
+                  </div>
+                  <ClubInstagramFeed clubInstagramAccounts={instagrams} />
+                </div>
+              ) : (
+                <div className="text-center py-12">
+                  <Instagram className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                  <p className="text-muted-foreground">
+                    Bu kulübün Instagram hesabı henüz eklenmemiş.
+                  </p>
+                </div>
+              )}
               
               {club.code && (
                 <div className="mt-6 p-4 bg-muted rounded-lg">

@@ -300,6 +300,48 @@ export function parseClubInstagram(instagram: string | null): string[] {
   return instagram.split(',').map(ig => ig.trim()).filter(ig => ig.length > 0)
 }
 
+// Kulüp özelinde Instagram postlarını getir
+export async function getInstagramPostsByClub(clubInstagramAccounts: string[], limit: number = 8) {
+  try {
+    if (clubInstagramAccounts.length === 0) {
+      return {
+        success: true,
+        posts: [],
+        totalCount: 0
+      }
+    }
+
+    // @ işaretini kaldır ve küçük harfe çevir
+    const cleanAccounts = clubInstagramAccounts.map(account => 
+      account.replace(/^@/, '').toLowerCase()
+    )
+
+    const { data, error, count } = await supabase
+      .from('posts_instagram')
+      .select('*', { count: 'exact' })
+      .in('user_name', cleanAccounts)
+      .order('time', { ascending: false })
+      .limit(limit)
+
+    if (error) {
+      throw error
+    }
+
+    return {
+      success: true,
+      posts: data as InstagramPost[],
+      totalCount: count || 0
+    }
+  } catch (error) {
+    return {
+      success: false,
+      error: 'Instagram postları yüklenirken hata oluştu',
+      posts: [],
+      totalCount: 0
+    }
+  }
+}
+
 // Instagram postlarını getir - pagination desteği ile
 export async function getInstagramPosts(limit: number = 10, offset: number = 0) {
   try {
