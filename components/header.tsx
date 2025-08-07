@@ -219,7 +219,7 @@ export default function Header() {
               <div className="pt-2 border-t">
                 <Button variant="outline" className="w-full" asChild>
                   <a href="https://yonetici.naal.org.tr/" target="_blank" rel="noopener noreferrer">
-                    Yönetici Paneli
+                    Yönetici Arayüzü
                   </a>
                 </Button>
               </div>
