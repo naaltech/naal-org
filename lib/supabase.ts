@@ -300,14 +300,14 @@ export function parseClubInstagram(instagram: string | null): string[] {
   return instagram.split(',').map(ig => ig.trim()).filter(ig => ig.length > 0)
 }
 
-// Instagram postlarını getir
-export async function getInstagramPosts(limit: number = 10) {
+// Instagram postlarını getir - pagination desteği ile
+export async function getInstagramPosts(limit: number = 10, offset: number = 0) {
   try {
-    const { data, error } = await supabase
+    const { data, error, count } = await supabase
       .from('posts_instagram')
-      .select('*')
+      .select('*', { count: 'exact' })
       .order('time', { ascending: false })
-      .limit(limit)
+      .range(offset, offset + limit - 1)
 
     if (error) {
       throw error
@@ -315,12 +315,17 @@ export async function getInstagramPosts(limit: number = 10) {
 
     return {
       success: true,
-      posts: data as InstagramPost[]
+      posts: data as InstagramPost[],
+      totalCount: count || 0,
+      hasMore: (offset + limit) < (count || 0)
     }
   } catch (error) {
     return {
       success: false,
-      error: 'Instagram postları yüklenirken hata oluştu'
+      error: 'Instagram postları yüklenirken hata oluştu',
+      posts: [],
+      totalCount: 0,
+      hasMore: false
     }
   }
 }

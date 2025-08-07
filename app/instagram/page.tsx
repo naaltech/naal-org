@@ -14,8 +14,9 @@ import { getInstagramPosts, parseInstagramImages, InstagramPost } from "@/lib/su
 export default function InstagramPage() {
   const [posts, setPosts] = useState<InstagramPost[]>([])
   const [isLoading, setIsLoading] = useState(true)
-  const [currentPage, setCurrentPage] = useState(1)
+  const [loadingMore, setLoadingMore] = useState(false)
   const [hasMore, setHasMore] = useState(true)
+  const [totalCount, setTotalCount] = useState(0)
   const postsPerPage = 12
 
   // Image carousel state
@@ -98,41 +99,56 @@ export default function InstagramPage() {
   }
 
   useEffect(() => {
-    async function fetchPosts() {
+    async function fetchInitialPosts() {
       console.log('Instagram posts çekiliyor...')
-      // Daha fazla post çekmek için limit artırıldı
-      const { success, posts: postsData } = await getInstagramPosts(100) // Tüm postları çek
-      console.log('Instagram posts result:', { success, postsData })
+      setIsLoading(true)
       
-      if (success && postsData) {
-        console.log('Posts bulundu:', postsData.length)
-        setPosts(postsData)
-        setHasMore(postsData.length > postsPerPage)
+      // İlk sayfa: 0-11 (12 post)
+      const result = await getInstagramPosts(postsPerPage, 0)
+      console.log('Instagram posts result:', result)
+      
+      if (result.success && result.posts) {
+        console.log('İlk posts bulundu:', result.posts.length)
+        setPosts(result.posts)
+        setTotalCount(result.totalCount)
+        setHasMore(result.hasMore)
       } else {
-        console.log('Instagram posts çekilemedi')
+        console.log('Instagram posts çekilemedi:', result.error)
+        setHasMore(false)
       }
       setIsLoading(false)
     }
 
-    fetchPosts()
+    fetchInitialPosts()
   }, [])
 
-  // Sayfalama için postları böl
-  const getCurrentPosts = () => {
-    const startIndex = 0
-    const endIndex = currentPage * postsPerPage
-    return posts.slice(startIndex, endIndex)
-  }
-
-  const loadMorePosts = () => {
-    const nextPage = currentPage + 1
-    const maxPosts = nextPage * postsPerPage
+  // Gerçek pagination ile daha fazla post yükle
+  const loadMorePosts = async () => {
+    if (loadingMore || !hasMore) return
     
-    if (maxPosts >= posts.length) {
+    setLoadingMore(true)
+    console.log('Daha fazla post yükleniyor...', { currentLength: posts.length, totalCount })
+    
+    try {
+      // Bir sonraki batch'i çek
+      const offset = posts.length
+      const result = await getInstagramPosts(postsPerPage, offset)
+      
+      if (result.success && result.posts && result.posts.length > 0) {
+        console.log('Yeni posts bulundu:', result.posts.length)
+        setPosts(prevPosts => [...prevPosts, ...result.posts])
+        setTotalCount(result.totalCount)
+        setHasMore(result.hasMore)
+      } else {
+        console.log('Daha fazla post bulunamadı')
+        setHasMore(false)
+      }
+    } catch (error) {
+      console.error('Daha fazla post yüklenirken hata:', error)
       setHasMore(false)
     }
     
-    setCurrentPage(nextPage)
+    setLoadingMore(false)
   }
 
   if (isLoading) {
@@ -153,7 +169,8 @@ export default function InstagramPage() {
     )
   }
 
-  const currentPosts = getCurrentPosts()
+  // Tüm yüklenen postları göster (artık client-side pagination gerek yok)
+  const currentPosts = posts
 
   return (
     <main className="flex min-h-screen flex-col">
@@ -172,7 +189,7 @@ export default function InstagramPage() {
                 <div>
                   <h1 className="text-3xl font-bold">Instagram Paylaşımları</h1>
                   <p className="text-muted-foreground">
-                    Kulüplerimizden {posts.length} paylaşım
+                    Kulüplerimizden {totalCount} paylaşım
                   </p>
                 </div>
               </div>
@@ -220,7 +237,7 @@ export default function InstagramPage() {
           ) : (
             <>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {currentPosts.map((post) => {
+                {currentPosts.map((post: InstagramPost) => {
                   const images = parseInstagramImages(post.image_links)
                   const mainImage = images.length > 0 ? images[0] : "/placeholder.svg"
                   
@@ -255,6 +272,8 @@ export default function InstagramPage() {
                                     alt={`Instagram post by ${post.name || 'Kulüp'}`}
                                     fill
                                     className="object-cover hover:scale-105 transition-transform duration-300"
+                                    loading="lazy"
+                                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
                                   />
                                   <div className="absolute top-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded-full">
                                     +{images.length - 1}
@@ -292,6 +311,8 @@ export default function InstagramPage() {
                               alt={`Instagram post by ${post.name || 'Kulüp'}`}
                               fill
                               className="object-cover"
+                              loading="lazy"
+                              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
                             />
                           )}
                         </div>
@@ -341,12 +362,13 @@ export default function InstagramPage() {
                 <div className="flex justify-center mt-12">
                   <Button 
                     onClick={loadMorePosts}
+                    disabled={loadingMore}
                     variant="outline"
                     size="lg"
                     className="gap-2"
                   >
                     <Instagram className="h-4 w-4" />
-                    Daha Fazla Yükle
+                    {loadingMore ? 'Yükleniyor...' : 'Daha Fazla Yükle'}
                   </Button>
                 </div>
               )}
@@ -354,7 +376,14 @@ export default function InstagramPage() {
               {/* Stats */}
               <div className="mt-12 text-center">
                 <p className="text-sm text-muted-foreground">
-                  {currentPosts.length} / {posts.length} paylaşım gösteriliyor
+                  {currentPosts.length} / {totalCount} paylaşım gösteriliyor
+                  {loadingMore && ' • Yeni postlar yükleniyor...'}
+                </p>
+                
+                {/* Performance bilgisi */}
+                <p className="text-xs text-muted-foreground mt-1">
+                  Gerçek database pagination ile optimize edilmiş yükleme
+                  {posts.length > postsPerPage && ` • Memory'de ${posts.length} post yüklü`}
                 </p>
               </div>
             </>
