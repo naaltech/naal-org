@@ -56,7 +56,7 @@ export default function Header() {
                 rel="noopener noreferrer" 
                 className="hidden md:flex text-muted-foreground hover:text-foreground transition-colors text-xs px-2 py-1 border border-muted-foreground/20 rounded-md hover:border-foreground/50"
               >
-                Yönetici Paneli
+                Yönetici Arayüzü
               </a>
               <div className="hidden md:block w-px h-4 bg-muted-foreground/20" />
               <a 
