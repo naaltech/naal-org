@@ -382,8 +382,7 @@ export default function InstagramPage() {
                 
                 {/* Performance bilgisi */}
                 <p className="text-xs text-muted-foreground mt-1">
-                  Gerçek database pagination ile optimize edilmiş yükleme
-                  {posts.length > postsPerPage && ` • Memory'de ${posts.length} post yüklü`}
+                  {posts.length > postsPerPage && `Memory'de ${posts.length} post yüklü`}
                 </p>
               </div>
             </>
