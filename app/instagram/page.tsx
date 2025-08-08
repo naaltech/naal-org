@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, Suspense } from "react"
 import { useSearchParams } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
@@ -14,7 +14,8 @@ import { getInstagramPosts, getInstagramPostById, parseInstagramImages, Instagra
 import { useToast } from "@/hooks/use-toast"
 import { Toaster } from "@/components/ui/toaster"
 
-export default function InstagramPage() {
+// Instagram page content component
+function InstagramPageContent() {
   const searchParams = useSearchParams()
   const sharedPostId = searchParams.get('post')
   const { toast } = useToast()
@@ -616,5 +617,33 @@ export default function InstagramPage() {
       <Footer />
       <Toaster />
     </main>
+  )
+}
+
+// Loading component
+function InstagramPageLoading() {
+  return (
+    <main className="flex min-h-screen flex-col">
+      <Header />
+      <div className="flex-1 py-12">
+        <div className="container max-w-7xl mx-auto px-4 md:px-6">
+          <div className="text-center">
+            <Instagram className="h-12 w-12 mx-auto mb-4" style={{ color: '#2ea5d5' }} />
+            <h1 className="text-3xl font-bold mb-2">Instagram Paylaşımları</h1>
+            <p className="text-muted-foreground">Yükleniyor...</p>
+          </div>
+        </div>
+      </div>
+      <Footer />
+    </main>
+  )
+}
+
+// Main export with Suspense wrapper
+export default function InstagramPage() {
+  return (
+    <Suspense fallback={<InstagramPageLoading />}>
+      <InstagramPageContent />
+    </Suspense>
   )
 }
