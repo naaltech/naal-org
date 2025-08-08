@@ -1,26 +1,79 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useSearchParams } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
-import { Instagram, ExternalLink, Calendar, ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react"
+import { Dialog, DialogContent, DialogTrigger, DialogTitle, DialogHeader } from "@/components/ui/dialog"
+import { Instagram, ExternalLink, Calendar, ArrowLeft, ChevronLeft, ChevronRight, Share, Copy } from "lucide-react"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
-import { getInstagramPosts, parseInstagramImages, InstagramPost } from "@/lib/supabase"
+import { getInstagramPosts, getInstagramPostById, parseInstagramImages, InstagramPost } from "@/lib/supabase"
+import { useToast } from "@/hooks/use-toast"
+import { Toaster } from "@/components/ui/toaster"
 
 export default function InstagramPage() {
+  const searchParams = useSearchParams()
+  const sharedPostId = searchParams.get('post')
+  const { toast } = useToast()
+  
   const [posts, setPosts] = useState<InstagramPost[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [loadingMore, setLoadingMore] = useState(false)
   const [hasMore, setHasMore] = useState(true)
   const [totalCount, setTotalCount] = useState(0)
+  const [loadedPostsFromDB, setLoadedPostsFromDB] = useState(0) // DB'den yüklenen gerçek post sayısı
+  const [removedPostForShared, setRemovedPostForShared] = useState(false) // Shared post için post çıkarıldı mı?
+  const [highlightedPostId, setHighlightedPostId] = useState<number | null>(
+    sharedPostId ? parseInt(sharedPostId) : null
+  )
+  const [hasScrolledToSharedPost, setHasScrolledToSharedPost] = useState(false)
   const postsPerPage = 12
 
   // Image carousel state
   const [selectedImageIndex, setSelectedImageIndex] = useState(0)
+
+  // Share functionality
+  const sharePost = async (post: InstagramPost, event?: React.MouseEvent) => {
+    if (event) {
+      event.preventDefault()
+      event.stopPropagation()
+    }
+
+    const shareUrl = `${window.location.origin}/instagram?post=${post.id}`
+    const shareData = {
+      title: `${post.name || 'NAAL Kulüp'} Instagram Paylaşımı`,
+      text: post.description ? post.description.substring(0, 100) + '...' : 'Instagram paylaşımını görüntüle',
+      url: shareUrl
+    }
+
+    // Try native sharing first (mobile devices)
+    if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+      try {
+        await navigator.share(shareData)
+        return
+      } catch (error) {
+        if ((error as Error).name !== 'AbortError') {
+          console.error('Share failed:', error)
+        }
+      }
+    }
+
+    // Fallback: copy to clipboard
+    try {
+      await navigator.clipboard.writeText(shareUrl)
+      toast({
+        title: "Link kopyalandı!",
+        description: "Paylaşım linki panoya kopyalandı.",
+      })
+    } catch (error) {
+      console.error('Copy failed:', error)
+      // Fallback: show the URL in a prompt
+      prompt('Link kopyalamak için Ctrl+C yapın:', shareUrl)
+    }
+  }
 
   // Image carousel component
   const ImageCarousel = ({ images, postName }: { images: string[], postName: string }) => {
@@ -103,7 +156,7 @@ export default function InstagramPage() {
       console.log('Instagram posts çekiliyor...')
       setIsLoading(true)
       
-      // İlk sayfa: 0-11 (12 post)
+      // İlk olarak normal postları yükle
       const result = await getInstagramPosts(postsPerPage, 0)
       console.log('Instagram posts result:', result)
       
@@ -112,6 +165,36 @@ export default function InstagramPage() {
         setPosts(result.posts)
         setTotalCount(result.totalCount)
         setHasMore(result.hasMore)
+        setLoadedPostsFromDB(result.posts.length) // DB'den yüklenen gerçek sayıyı kaydet
+        
+        // Eğer shared post ID varsa ve o post ilk yüklenen postlar arasında değilse
+        if (sharedPostId) {
+          const postId = parseInt(sharedPostId)
+          const foundPost = result.posts.find(post => post.id === postId)
+          
+          if (!foundPost) {
+            console.log('Shared post ilk 12 arasında değil, aranıyor:', postId)
+            // Shared post'u ayrıca getir ve listenin başına ekle
+            const sharedPostResult = await getInstagramPostById(postId)
+            if (sharedPostResult.success && sharedPostResult.post) {
+              console.log('Shared post bulundu, listenin başına ekleniyor')
+              // Shared post'u başa ekle, son postu çıkar (12 post kalsın)
+              setPosts(prevPosts => {
+                const filtered = prevPosts.filter(p => p.id !== sharedPostResult.post!.id)
+                const newPosts = [sharedPostResult.post!, ...filtered]
+                // Son postu çıkar ki 12 post kalsın
+                return newPosts.slice(0, postsPerPage)
+              })
+              // Shared post için bir post çıkardık, bunu işaretle
+              setLoadedPostsFromDB(prev => prev - 1)
+              setRemovedPostForShared(true)
+            } else {
+              console.log('Shared post veritabanında bulunamadı:', postId)
+            }
+          } else {
+            console.log('Shared post ilk 12 arasında bulundu:', postId)
+          }
+        }
       } else {
         console.log('Instagram posts çekilemedi:', result.error)
         setHasMore(false)
@@ -120,25 +203,91 @@ export default function InstagramPage() {
     }
 
     fetchInitialPosts()
-  }, [])
+  }, [sharedPostId])
+
+  // Scroll to shared post when loaded
+  useEffect(() => {
+    if (sharedPostId && posts.length > 0 && !hasScrolledToSharedPost) {
+      const postId = parseInt(sharedPostId)
+      const foundPost = posts.find(post => post.id === postId)
+      
+      if (foundPost) {
+        console.log('Shared post bulundu, scroll ediliyor:', postId)
+        // Hemen scroll attempt başlat
+        setHasScrolledToSharedPost(true) // Önce mark et ki tekrar çalışmasın
+        
+        const scrollToPost = () => {
+          const postElement = document.getElementById(`post-${postId}`)
+          if (postElement) {
+            postElement.scrollIntoView({ behavior: 'smooth', block: 'center' })
+            toast({
+              title: "Paylaşım bulundu!",
+              description: `${foundPost.name || 'Kulüp'} paylaşımı gösteriliyor.`,
+            })
+            // Remove highlight after 8 seconds
+            setTimeout(() => setHighlightedPostId(null), 8000)
+          } else {
+            // DOM element henüz hazır değil, biraz bekle
+            setTimeout(scrollToPost, 100)
+          }
+        }
+        
+        setTimeout(scrollToPost, 300) // İlk deneme
+      }
+      // Post bulunamadı durumunu artık burada handle etmiyoruz
+      // Çünkü post async olarak yüklenebilir
+    }
+  }, [posts, sharedPostId, toast, hasScrolledToSharedPost])
+
+  // Shared post için ayrı bir timeout effect - sadece post gerçekten bulunamazsa çalışır
+  useEffect(() => {
+    if (sharedPostId && !hasScrolledToSharedPost) {
+      const timeoutId = setTimeout(() => {
+        const postId = parseInt(sharedPostId)
+        const foundPost = posts.find(post => post.id === postId)
+        
+        if (!foundPost && !hasScrolledToSharedPost) {
+          console.log('Timeout: Shared post bulunamadı:', postId)
+          toast({
+            title: "Paylaşım bulunamadı",
+            description: "Aranan Instagram paylaşımı bulunamadı.",
+            variant: "destructive"
+          })
+          setHasScrolledToSharedPost(true)
+        }
+      }, 3000) // 3 saniye bekle, hala yoksa error göster
+
+      return () => clearTimeout(timeoutId)
+    }
+  }, [sharedPostId, posts, hasScrolledToSharedPost, toast])
 
   // Gerçek pagination ile daha fazla post yükle
   const loadMorePosts = async () => {
     if (loadingMore || !hasMore) return
     
     setLoadingMore(true)
-    console.log('Daha fazla post yükleniyor...', { currentLength: posts.length, totalCount })
+    console.log('Daha fazla post yükleniyor...', { currentLength: posts.length, loadedFromDB: loadedPostsFromDB, totalCount })
     
     try {
-      // Bir sonraki batch'i çek
-      const offset = posts.length
-      const result = await getInstagramPosts(postsPerPage, offset)
+      // Offset'i DB'den yüklenen gerçek post sayısına göre hesapla
+      // Eğer shared post için bir post çıkarıldıysa, her seferinde +1 fazla çek
+      const offset = loadedPostsFromDB
+      const loadLimit = removedPostForShared ? postsPerPage + 1 : postsPerPage
+      const result = await getInstagramPosts(loadLimit, offset)
       
       if (result.success && result.posts && result.posts.length > 0) {
         console.log('Yeni posts bulundu:', result.posts.length)
-        setPosts(prevPosts => [...prevPosts, ...result.posts])
+        // Duplicate posts'u önlemek için filter yap
+        setPosts(prevPosts => {
+          const existingIds = new Set(prevPosts.map(p => p.id))
+          const newUniquePosts = result.posts.filter(p => !existingIds.has(p.id))
+          // Eğer shared post için fazla yüklediyse, sadece postsPerPage kadar ekle
+          const postsToAdd = removedPostForShared ? newUniquePosts.slice(0, postsPerPage) : newUniquePosts
+          return [...prevPosts, ...postsToAdd]
+        })
         setTotalCount(result.totalCount)
         setHasMore(result.hasMore)
+        setLoadedPostsFromDB(prev => prev + result.posts.length) // DB'den yüklenen sayıyı güncelle
       } else {
         console.log('Daha fazla post bulunamadı')
         setHasMore(false)
@@ -242,7 +391,15 @@ export default function InstagramPage() {
                   const mainImage = images.length > 0 ? images[0] : "/placeholder.svg"
                   
                   return (
-                    <Card key={post.id} className="overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                    <Card 
+                      key={post.id} 
+                      id={`post-${post.id}`}
+                      className={`overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 ${
+                        highlightedPostId === post.id 
+                          ? 'ring-4 ring-blue-500 ring-offset-4 bg-blue-50 dark:bg-blue-950/30 shadow-xl transform scale-105' 
+                          : ''
+                      }`}
+                    >
                       <CardContent className="p-0">
                         {/* Header */}
                         <div className="p-4 border-b">
@@ -286,6 +443,11 @@ export default function InstagramPage() {
                                 </div>
                               </DialogTrigger>
                               <DialogContent className="max-w-[95vw] sm:max-w-3xl lg:max-w-4xl max-h-[95vh] overflow-y-auto p-3 sm:p-6">
+                                <DialogHeader>
+                                  <DialogTitle className="sr-only">
+                                    {post.name || 'Kulüp'} Instagram Paylaşımı
+                                  </DialogTitle>
+                                </DialogHeader>
                                 <div className="space-y-4">
                                   <div className="flex items-center gap-2 pb-3 border-b">
                                     <div className="w-8 h-8 rounded-full bg-gradient-to-br from-pink-500 to-orange-400 flex items-center justify-center">
@@ -325,17 +487,29 @@ export default function InstagramPage() {
                                       )}
                                     </div>
                                     
-                                    {post.post_link && (
-                                      <Link
-                                        href={post.post_link}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="inline-flex items-center gap-1 text-xs sm:text-sm text-primary hover:underline"
+                                    <div className="flex items-center gap-3">
+                                      <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={(e) => sharePost(post, e)}
+                                        className="gap-2 text-xs sm:text-sm"
                                       >
-                                        <ExternalLink className="h-3 w-3 sm:h-4 sm:w-4" />
-                                        Instagram'da Gör
-                                      </Link>
-                                    )}
+                                        <Share className="h-3 w-3 sm:h-4 sm:w-4" />
+                                        Paylaş
+                                      </Button>
+                                      
+                                      {post.post_link && (
+                                        <Link
+                                          href={post.post_link}
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                          className="inline-flex items-center gap-1 text-xs sm:text-sm text-primary hover:underline"
+                                        >
+                                          <ExternalLink className="h-3 w-3 sm:h-4 sm:w-4" />
+                                          Instagram'da Gör
+                                        </Link>
+                                      )}
+                                    </div>
                                   </div>
                                 </div>
                               </DialogContent>
@@ -361,29 +535,43 @@ export default function InstagramPage() {
                           )}
                           
                           <div className="flex items-center justify-between">
-                            {post.time && (
-                              <p className="text-xs text-muted-foreground">
-                                {new Date(post.time).toLocaleDateString('tr-TR', {
-                                  year: 'numeric',
-                                  month: 'long',
-                                  day: 'numeric',
-                                  hour: '2-digit',
-                                  minute: '2-digit'
-                                })}
-                              </p>
-                            )}
+                            <div className="flex items-center gap-3">
+                              {post.time && (
+                                <p className="text-xs text-muted-foreground">
+                                  {new Date(post.time).toLocaleDateString('tr-TR', {
+                                    year: 'numeric',
+                                    month: 'long',
+                                    day: 'numeric',
+                                    hour: '2-digit',
+                                    minute: '2-digit'
+                                  })}
+                                </p>
+                              )}
+                            </div>
                             
-                            {post.post_link && (
-                              <Link 
-                                href={post.post_link}
-                                style={{color: '#2ea5d5'}} 
-                                target="_blank" 
-                                rel="noopener noreferrer"
-                                className="text-xs font-medium"
+                            <div className="flex items-center gap-2">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={(e) => sharePost(post, e)}
+                                className="h-8 w-8 p-0 text-muted-foreground hover:text-foreground"
+                                title="Paylaşım linkini kopyala"
                               >
-                                Instagram'da Gör
-                              </Link>
-                            )}
+                                <Share className="h-4 w-4" />
+                              </Button>
+                              
+                              {post.post_link && (
+                                <Link 
+                                  href={post.post_link}
+                                  style={{color: '#2ea5d5'}} 
+                                  target="_blank" 
+                                  rel="noopener noreferrer"
+                                  className="text-xs font-medium hover:underline"
+                                >
+                                  Instagram'da Gör
+                                </Link>
+                              )}
+                            </div>
                           </div>
                         </div>
                       </CardContent>
@@ -426,6 +614,7 @@ export default function InstagramPage() {
       </div>
       
       <Footer />
+      <Toaster />
     </main>
   )
 }

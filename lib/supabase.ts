@@ -372,6 +372,32 @@ export async function getInstagramPosts(limit: number = 10, offset: number = 0) 
   }
 }
 
+// Tek bir Instagram postunu ID ile getir
+export async function getInstagramPostById(id: number) {
+  try {
+    const { data, error } = await supabase
+      .from('posts_instagram')
+      .select('*')
+      .eq('id', id)
+      .single()
+
+    if (error) {
+      throw error
+    }
+
+    return {
+      success: true,
+      post: data as InstagramPost
+    }
+  } catch (error) {
+    return {
+      success: false,
+      error: 'Instagram postu bulunamadı',
+      post: null
+    }
+  }
+}
+
 // Instagram post ekle
 export async function addInstagramPost(post: Omit<InstagramPost, 'id' | 'created_at'>) {
   try {
