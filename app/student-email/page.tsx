@@ -170,7 +170,7 @@ export default function StudentEmailRequestPage() {
       }
 
       // Send to API
-      const response = await fetch('https://form-to-discord-worker.naal.workers.dev/', {
+      const response = await fetch('https://forms.naal.org.tr/', {
         method: 'POST',
         body: formDataToSend
       })
