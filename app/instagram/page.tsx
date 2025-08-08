@@ -35,6 +35,8 @@ function InstagramPageContent() {
 
   // Image carousel state
   const [selectedImageIndex, setSelectedImageIndex] = useState(0)
+  const [selectedPostImages, setSelectedPostImages] = useState<{postId: number, imageIndex: number} | null>(null)
+  const [dialogImageIndex, setDialogImageIndex] = useState<{[postId: number]: number}>({}) // Her post için son görülen indeksi sakla
 
   // Share functionality
   const sharePost = async (post: InstagramPost, event?: React.MouseEvent) => {
@@ -77,15 +79,41 @@ function InstagramPageContent() {
   }
 
   // Image carousel component
-  const ImageCarousel = ({ images, postName }: { images: string[], postName: string }) => {
-    const [currentIndex, setCurrentIndex] = useState(0)
+  const ImageCarousel = ({ images, postName, initialIndex = 0, postId }: { images: string[], postName: string, initialIndex?: number, postId: number }) => {
+    const [currentIndex, setCurrentIndex] = useState(initialIndex)
+
+    // Update current index when initial index changes
+    useEffect(() => {
+      setCurrentIndex(initialIndex)
+    }, [initialIndex])
 
     const nextImage = () => {
-      setCurrentIndex((prev) => (prev + 1) % images.length)
+      const newIndex = (currentIndex + 1) % images.length
+      setCurrentIndex(newIndex)
+      // Save to parent state
+      setDialogImageIndex(prev => ({
+        ...prev,
+        [postId]: newIndex
+      }))
     }
 
     const prevImage = () => {
-      setCurrentIndex((prev) => (prev - 1 + images.length) % images.length)
+      const newIndex = (currentIndex - 1 + images.length) % images.length
+      setCurrentIndex(newIndex)
+      // Save to parent state
+      setDialogImageIndex(prev => ({
+        ...prev,
+        [postId]: newIndex
+      }))
+    }
+
+    const goToImage = (index: number) => {
+      setCurrentIndex(index)
+      // Save to parent state
+      setDialogImageIndex(prev => ({
+        ...prev,
+        [postId]: index
+      }))
     }
 
     return (
@@ -130,7 +158,7 @@ function InstagramPageContent() {
             {images.map((image, index) => (
               <button
                 key={index}
-                onClick={() => setCurrentIndex(index)}
+                onClick={() => goToImage(index)}
                 className={`flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 rounded-lg overflow-hidden border-2 transition-all ${
                   index === currentIndex 
                     ? 'border-pink-500 ring-2 ring-pink-500/50' 
@@ -422,7 +450,11 @@ function InstagramPageContent() {
                         {/* Image */}
                         <div className="relative aspect-square">
                           {images.length > 1 ? (
-                            <Dialog>
+                            <Dialog onOpenChange={(open) => {
+                              if (!open) {
+                                setSelectedPostImages(null)
+                              }
+                            }}>
                               <DialogTrigger asChild>
                                 <div className="cursor-pointer relative w-full h-full">
                                   <Image
@@ -432,6 +464,7 @@ function InstagramPageContent() {
                                     className="object-cover hover:scale-105 transition-transform duration-300"
                                     loading="lazy"
                                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
+                                    onClick={() => setSelectedPostImages({postId: post.id, imageIndex: 0})}
                                   />
                                   <div className="absolute top-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded-full">
                                     +{images.length - 1}
@@ -467,6 +500,8 @@ function InstagramPageContent() {
                                   <ImageCarousel 
                                     images={images} 
                                     postName={post.name || 'Kulüp'} 
+                                    postId={post.id}
+                                    initialIndex={dialogImageIndex[post.id] ?? (selectedPostImages?.postId === post.id ? selectedPostImages.imageIndex : 0)}
                                   />
                                   
                                   {post.description && (
