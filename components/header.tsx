@@ -51,7 +51,7 @@ export default function Header() {
             {/* Right side - Social Media & Admin */}
             <div className="flex items-center space-x-3">
               <a 
-                href="https://yonetici.naal.org.tr/" 
+                href="https://admin.naal.org.tr/" 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="hidden md:flex text-muted-foreground hover:text-foreground transition-colors text-xs px-2 py-1 border border-muted-foreground/20 rounded-md hover:border-foreground/50"
@@ -218,7 +218,7 @@ export default function Header() {
               {/* Admin Panel Link for Mobile */}
               <div className="pt-2 border-t">
                 <Button variant="outline" className="w-full" asChild>
-                  <a href="https://yonetici.naal.org.tr/" target="_blank" rel="noopener noreferrer">
+                  <a href="https://admin.naal.org.tr/" target="_blank" rel="noopener noreferrer">
                     Yönetici Arayüzü
                   </a>
                 </Button>
