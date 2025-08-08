@@ -26,7 +26,7 @@ export default function OfficialNewsSection() {
   useEffect(() => {
     async function fetchNews() {
       try {
-        const response = await fetch('https://nevzat-ayaz-haber-api.naal.workers.dev/api/haberler?format=json')
+        const response = await fetch('https://news.naal.org.tr/api/haberler?format=json')
         const data: NewsResponse = await response.json()
         
         if (data.success) {
