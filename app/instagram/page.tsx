@@ -35,7 +35,7 @@ export default function InstagramPage() {
     }
 
     return (
-      <div className="relative w-full max-w-2xl mx-auto">
+      <div className="relative w-full">
         <div className="relative aspect-square">
           <Image
             src={images[currentIndex]}
@@ -49,22 +49,22 @@ export default function InstagramPage() {
             <>
               <button
                 onClick={prevImage}
-                className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 transition-colors"
+                className="absolute left-1 sm:left-2 top-1/2 -translate-y-1/2 bg-black/50 text-white p-1.5 sm:p-2 rounded-full hover:bg-black/70 transition-colors"
               >
-                <ChevronLeft className="h-4 w-4" />
+                <ChevronLeft className="h-3 w-3 sm:h-4 sm:w-4" />
               </button>
               <button
                 onClick={nextImage}
-                className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 transition-colors"
+                className="absolute right-1 sm:right-2 top-1/2 -translate-y-1/2 bg-black/50 text-white p-1.5 sm:p-2 rounded-full hover:bg-black/70 transition-colors"
               >
-                <ChevronRight className="h-4 w-4" />
+                <ChevronRight className="h-3 w-3 sm:h-4 sm:w-4" />
               </button>
             </>
           )}
           
           {/* Image counter */}
           {images.length > 1 && (
-            <div className="absolute bottom-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded-full">
+            <div className="absolute bottom-1 sm:bottom-2 right-1 sm:right-2 bg-black/70 text-white text-xs px-2 py-1 rounded-full">
               {currentIndex + 1}/{images.length}
             </div>
           )}
@@ -72,12 +72,12 @@ export default function InstagramPage() {
         
         {/* Thumbnail navigation */}
         {images.length > 1 && (
-          <div className="flex justify-center gap-2 mt-4 overflow-x-auto pb-2">
+          <div className="flex justify-center gap-1 sm:gap-2 mt-3 sm:mt-4 overflow-x-auto pb-2">
             {images.map((image, index) => (
               <button
                 key={index}
                 onClick={() => setCurrentIndex(index)}
-                className={`flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all ${
+                className={`flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 rounded-lg overflow-hidden border-2 transition-all ${
                   index === currentIndex 
                     ? 'border-pink-500 ring-2 ring-pink-500/50' 
                     : 'border-gray-300 hover:border-pink-300'
@@ -285,23 +285,58 @@ export default function InstagramPage() {
                                   </div>
                                 </div>
                               </DialogTrigger>
-                              <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-                                <div className="p-4">
-                                  <div className="mb-4">
-                                    <h3 className="text-lg font-semibold">{post.name || 'Kulüp'}</h3>
-                                    <p className="text-sm text-muted-foreground">
-                                      {post.user_name ? `@${post.user_name}` : '@kulup'}
-                                    </p>
+                              <DialogContent className="max-w-[95vw] sm:max-w-3xl lg:max-w-4xl max-h-[95vh] overflow-y-auto p-3 sm:p-6">
+                                <div className="space-y-4">
+                                  <div className="flex items-center gap-2 pb-3 border-b">
+                                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-pink-500 to-orange-400 flex items-center justify-center">
+                                      <span className="text-xs font-bold text-white">
+                                        {post.name ? post.name.charAt(0).toUpperCase() : 'K'}
+                                      </span>
+                                    </div>
+                                    <div>
+                                      <h3 className="text-base sm:text-lg font-semibold">{post.name || 'Kulüp'}</h3>
+                                      <p className="text-xs sm:text-sm text-muted-foreground">
+                                        {post.user_name ? `@${post.user_name}` : '@kulup'}
+                                      </p>
+                                    </div>
                                   </div>
+                                  
                                   <ImageCarousel 
                                     images={images} 
                                     postName={post.name || 'Kulüp'} 
                                   />
+                                  
                                   {post.description && (
-                                    <div className="mt-4 p-4 bg-muted/50 rounded-lg">
-                                      <p className="text-sm leading-relaxed">{post.description}</p>
+                                    <div className="border-t pt-4">
+                                      <p className="text-sm sm:text-base text-muted-foreground whitespace-pre-wrap leading-relaxed">
+                                        {post.description}
+                                      </p>
                                     </div>
                                   )}
+                                  
+                                  {/* Post meta */}
+                                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 border-t">
+                                    <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
+                                      {post.time && (
+                                        <>
+                                          <Calendar className="h-3 w-3 sm:h-4 sm:w-4" />
+                                          <span>{new Date(post.time).toLocaleDateString('tr-TR')}</span>
+                                        </>
+                                      )}
+                                    </div>
+                                    
+                                    {post.post_link && (
+                                      <Link
+                                        href={post.post_link}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="inline-flex items-center gap-1 text-xs sm:text-sm text-primary hover:underline"
+                                      >
+                                        <ExternalLink className="h-3 w-3 sm:h-4 sm:w-4" />
+                                        Instagram'da Gör
+                                      </Link>
+                                    )}
+                                  </div>
                                 </div>
                               </DialogContent>
                             </Dialog>
