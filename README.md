@@ -19,7 +19,18 @@
 - **Deployment**: Vercel
 - **Icons**: Lucide React
 
-## 📦 Kurulum
+## � Bağlı Repositories
+
+Bu projenin tamamını anlamak için aşağıdaki repository'lere göz atabilirsiniz:
+
+🛠️ [Etkileşim Ağı Yönetici Arayüzü](https://github.com/naaltech/naal-org-yonet)
+
+📱 [Instagram Post Fetch](https://github.com/naaltech/instagram-post-fetch)
+
+📰 [News API](https://github.com/naaltech/news-api)
+
+
+## �📦 Kurulum
 
 ### Gereksinimler
 - Node.js 18+ 
