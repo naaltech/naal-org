@@ -1,4 +1,5 @@
-# 🏫 Nevzat Ayaz Anatolian High School Interaction Network
+[![Netlify Status](https://api.netlify.com/api/v1/badges/b2109aab-755a-4666-bec2-59ed81819d38/deploy-status)](https://app.netlify.com/projects/nevzatayaz-etkilesim-agi/deploys)
+# 🏫 Nevzat Ayaz Anatolian High School Interaction Network  
 
 **Nevzat Ayaz Anatolian High School** student interaction platform. A modern digital platform that connects students through activities, clubs, and shared interests.
 
@@ -55,8 +56,8 @@ To understand the complete project, you can check out the following repositories
 
 ## 🚀 Deployment
 
-### Vercel (Recommended)
-1. Connect your GitHub repository to Vercel
+### Netlify (Recommended)
+1. Connect your GitHub repository to Netlify
 2. Set up environment variables
 3. Automatic deployment will be active
 
