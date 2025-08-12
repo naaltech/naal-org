@@ -12,8 +12,6 @@ export const metadata: Metadata = {
     images: [
       {
         url: 'https://naal.org.tr/og-image.png',
-        width: 1200,
-        height: 630,
         alt: 'Nevzat Ayaz Anadolu Lisesi - İstanbul Ümraniye',
       }
     ],

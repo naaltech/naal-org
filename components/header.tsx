@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { ChevronDown, Menu, X, Mail, MapPin, Instagram, Twitter, Youtube } from "lucide-react"
+import { ChevronDown, Menu, X, Mail, MapPin, Instagram, Twitter, Youtube, Linkedin } from "lucide-react"
 import { useState, useEffect } from "react"
 import { getAllClubs, type Club } from "@/lib/supabase"
 
@@ -66,6 +66,14 @@ export default function Header() {
                 className="text-muted-foreground hover:text-foreground transition-colors"
               >
                 <Instagram className="h-4 w-4" />
+              </a>
+              <a 
+                href="https://www.linkedin.com/school/nevzatayazlisesi/" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <Linkedin className="h-4 w-4" />
               </a>
               <a 
                 href="https://x.com/NevzatAyazLise" 

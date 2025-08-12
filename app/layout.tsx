@@ -46,8 +46,6 @@ export const metadata: Metadata = {
     siteName: 'Nevzat Ayaz Anadolu Lisesi',
     images: [{
       url: '/og-image.png',
-      width: 1200,
-      height: 630,
       alt: 'Nevzat Ayaz Anadolu Lisesi'
     }]
   },
