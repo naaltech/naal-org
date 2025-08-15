@@ -3,6 +3,8 @@
 
 **Nevzat Ayaz Anatolian High School** student interaction platform. A modern digital platform that connects students through activities, clubs, and shared interests.
 
+<img width="1280" height="640" alt="Untitled design" src="https://github.com/user-attachments/assets/a9c8386e-21ee-479a-85c1-a0ebcb48a3fa" />
+
 ## 🌟 Features
 
 ### 📱 **Main Platform**
