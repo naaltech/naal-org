@@ -4,9 +4,9 @@ import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
-import { Calendar, User, BookOpen, Shield, FileCheck2, Download, ExternalLink, ArrowLeft, Linkedin } from "lucide-react"
+import { Calendar, User, BookOpen, Shield, FileCheck2, Download, ExternalLink, ArrowLeft } from "lucide-react"
 import { SiX, SiFacebook } from '@icons-pack/react-simple-icons';
-
+import Linkedin from '@/components/icons/linkedin-icon';
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"

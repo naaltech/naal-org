@@ -7,6 +7,15 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   
+  // SVG as React components support
+  webpack(config) {
+    config.module.rules.push({
+      test: /\.svg$/,
+      use: ['@svgr/webpack']
+    });
+    return config;
+  },
+  
   // Performance and SEO optimizations
   compress: true,
   poweredByHeader: false,

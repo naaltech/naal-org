@@ -3,7 +3,8 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { ChevronDown, Menu, X, Mail, MapPin, Linkedin } from "lucide-react"
+import { ChevronDown, Menu, X, Mail, MapPin } from "lucide-react"
+import Linkedin from '@/components/icons/linkedin-icon';
 import { SiInstagram, SiX, SiYoutube, SiFacebook } from '@icons-pack/react-simple-icons';
 import { useState, useEffect } from "react"
 import { getAllClubs, type Club } from "@/lib/supabase"
