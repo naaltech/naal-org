@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
-import { Calendar, User, BookOpen, Shield, Share2, Download, ExternalLink, ArrowLeft, Linkedin } from "lucide-react"
+import { Calendar, User, BookOpen, Shield, Download, FileCheck2, ExternalLink, ArrowLeft, Linkedin } from "lucide-react"
 import { SiX, SiFacebook } from '@icons-pack/react-simple-icons';
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -334,7 +334,7 @@ export default function LegacyCertificateDetailPage() {
                 <Dialog>
                   <DialogTrigger asChild>
                     <Button variant="outline" className="w-full">
-                      <Share2 className="mr-2 h-4 w-4" />
+                      <FileCheck2 className="mr-2 h-4 w-4" />
                       Başka Sertifika Doğrula
                     </Button>
                   </DialogTrigger>
