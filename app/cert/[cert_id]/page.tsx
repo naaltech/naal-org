@@ -236,10 +236,6 @@ export default function LegacyCertificateDetailPage() {
                       </div>
                     )}
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Sertifika ID:</span>
-                      <span className="font-mono">{certificate.id}</span>
-                    </div>
-                    <div className="flex justify-between">
                       <span className="text-muted-foreground">Oluşturma Tarihi:</span>
                       <span>{new Date(certificate.created_at).toLocaleDateString('tr-TR')}</span>
                     </div>
