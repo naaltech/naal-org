@@ -4,7 +4,8 @@ import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
-import { Calendar, User, BookOpen, Shield, Share2, Download, ExternalLink, ArrowLeft, Linkedin, Twitter, Facebook } from "lucide-react"
+import { Calendar, User, BookOpen, Shield, Share2, Download, ExternalLink, ArrowLeft, Linkedin } from "lucide-react"
+import { SiX, SiFacebook } from '@icons-pack/react-simple-icons';
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -63,7 +64,7 @@ export default function LegacyCertificateDetailPage() {
   const getTwitterShareUrl = () => {
     const text = encodeURIComponent(`${certificate?.cert_name || certificate?.head || 'Sertifika'} - Nevzat Ayaz Etkileşim Ağı üzerinden doğrulandı`)
     const url = encodeURIComponent(shareUrl)
-    return `https://twitter.com/intent/tweet?text=${text}&url=${url}`
+    return `https://x.com/intent/tweet?text=${text}&url=${url}`
   }
 
   const getFacebookShareUrl = () => {
@@ -303,7 +304,7 @@ export default function LegacyCertificateDetailPage() {
                     asChild
                   >
                     <a href={getTwitterShareUrl()} target="_blank" rel="noopener noreferrer">
-                      <Twitter className="h-4 w-4" />
+                      <SiX className="h-4 w-4" />
                     </a>
                   </Button>
                   <Button
@@ -312,7 +313,7 @@ export default function LegacyCertificateDetailPage() {
                     asChild
                   >
                     <a href={getFacebookShareUrl()} target="_blank" rel="noopener noreferrer">
-                      <Facebook className="h-4 w-4" />
+                      <SiFacebook className="h-4 w-4" />
                     </a>
                   </Button>
                 </div>

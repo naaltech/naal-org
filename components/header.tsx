@@ -3,7 +3,8 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { ChevronDown, Menu, X, Mail, MapPin, Instagram, Twitter, Youtube, Linkedin } from "lucide-react"
+import { ChevronDown, Menu, X, Mail, MapPin, Linkedin } from "lucide-react"
+import { SiInstagram, SiX, SiYoutube, SiFacebook } from '@icons-pack/react-simple-icons';
 import { useState, useEffect } from "react"
 import { getAllClubs, type Club } from "@/lib/supabase"
 
@@ -60,12 +61,20 @@ export default function Header() {
               </a>
               <div className="hidden md:block w-px h-4 bg-muted-foreground/20" />
               <a 
+                href="https://www.facebook.com/nevzatayaz.al.14" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <SiFacebook className="h-4 w-4" />
+              </a>
+              <a 
                 href="https://www.instagram.com/nevzatayazanadolulisesi_/" 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="text-muted-foreground hover:text-foreground transition-colors"
               >
-                <Instagram className="h-4 w-4" />
+                <SiInstagram className="h-4 w-4" />
               </a>
               <a 
                 href="https://www.linkedin.com/school/nevzatayazlisesi/" 
@@ -81,7 +90,7 @@ export default function Header() {
                 rel="noopener noreferrer" 
                 className="text-muted-foreground hover:text-foreground transition-colors"
               >
-                <Twitter className="h-4 w-4" />
+                <SiX className="h-4 w-4" />
               </a>
               <a 
                 href="https://www.youtube.com/@NaalRec" 
@@ -89,7 +98,7 @@ export default function Header() {
                 rel="noopener noreferrer" 
                 className="text-muted-foreground hover:text-foreground transition-colors"
               >
-                <Youtube className="h-4 w-4" />
+                <SiYoutube className="h-4 w-4" />
               </a>
             </div>
           </div>

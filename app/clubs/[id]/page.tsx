@@ -1,6 +1,7 @@
 import Link from "next/link"
 import Image from "next/image"
-import { ArrowLeft, Users, ExternalLink, Instagram, Globe } from "lucide-react"
+import { ArrowLeft, Users, ExternalLink, Globe } from "lucide-react"
+import { SiInstagram } from '@icons-pack/react-simple-icons'
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
@@ -91,7 +92,7 @@ export default async function ClubPage({ params }: ClubPageProps) {
               
               {instagrams.length > 0 && (
                 <div className="flex items-center gap-2">
-                  <Instagram className="h-5 w-5 text-muted-foreground" />
+                  <SiInstagram className="h-5 w-5 text-muted-foreground" />
                   <span className="font-medium">Instagram:</span>
                   <div className="flex flex-wrap gap-2">
                     {instagrams.map((ig, index) => (
@@ -143,7 +144,7 @@ export default async function ClubPage({ params }: ClubPageProps) {
           <TabsContent value="instagram" className="mt-6">
             <div className="space-y-6">
               <div className="flex items-center gap-2 mb-4">
-                <Instagram className="h-5 w-5 text-muted-foreground" />
+                <SiInstagram className="h-5 w-5 text-muted-foreground" />
                 <h3 className="text-xl font-semibold">Instagram Postları</h3>
               </div>
               
@@ -156,7 +157,7 @@ export default async function ClubPage({ params }: ClubPageProps) {
                 </div>
               ) : (
                 <div className="text-center py-12">
-                  <Instagram className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                  <SiInstagram className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
                   <p className="text-muted-foreground">
                     Bu kulübün Instagram hesabı henüz eklenmemiş.
                   </p>
@@ -189,7 +190,7 @@ export default async function ClubPage({ params }: ClubPageProps) {
 
                 {instagrams.length > 0 && (
                   <div className="flex items-start gap-3 p-4 bg-muted rounded-lg">
-                    <Instagram className="h-5 w-5 text-muted-foreground mt-0.5" />
+                    <SiInstagram className="h-5 w-5 text-muted-foreground mt-0.5" />
                     <div>
                       <h4 className="font-medium">Instagram</h4>
                       <div className="space-y-1">

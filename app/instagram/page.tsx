@@ -7,7 +7,8 @@ import Link from "next/link"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogTrigger, DialogTitle, DialogHeader } from "@/components/ui/dialog"
-import { Instagram, ExternalLink, Calendar, ArrowLeft, ChevronLeft, ChevronRight, Share, Copy } from "lucide-react"
+import { ExternalLink, Calendar, ArrowLeft, ChevronLeft, ChevronRight, Share, Copy } from "lucide-react"
+import { SiInstagram } from '@icons-pack/react-simple-icons'
 import Header from "@/components/header"
 import Footer from "@/components/footer"
 import { getInstagramPosts, getInstagramPostById, parseInstagramImages, InstagramPost } from "@/lib/supabase"
@@ -336,7 +337,7 @@ function InstagramPageContent() {
         <div className="flex-1 py-12">
           <div className="container max-w-7xl mx-auto px-4 md:px-6">
             <div className="text-center">
-              <Instagram className="h-12 w-12 mx-auto mb-4" style={{ color: '#2ea5d5' }} />
+              <SiInstagram className="h-12 w-12 mx-auto mb-4" style={{ color: '#2ea5d5' }} />
               <h1 className="text-3xl font-bold mb-2">Instagram Paylaşımları</h1>
               <p className="text-muted-foreground">Yükleniyor...</p>
             </div>
@@ -363,7 +364,7 @@ function InstagramPageContent() {
                 <ArrowLeft className="h-5 w-5" />
               </Link>
               <div className="flex items-center gap-3">
-                <Instagram className="h-8 w-8" style={{ color: '#2ea5d5' }} />
+                <SiInstagram className="h-8 w-8" style={{ color: '#2ea5d5' }} />
                 <div>
                   <h1 className="text-3xl font-bold">Instagram Paylaşımları</h1>
                   <p className="text-muted-foreground">
@@ -378,7 +379,7 @@ function InstagramPageContent() {
                 href="/instagram/accounts"
                 className="inline-flex items-center gap-2 px-4 py-2 bg-black text-white rounded-full hover:bg-black/80 transition-all"
               >
-                <Instagram className="h-4 w-4" />
+                <SiInstagram className="h-4 w-4" />
                 Kulüp Instagram Hesapları
               </Link>
               <Link
@@ -387,7 +388,7 @@ function InstagramPageContent() {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-4 py-2 bg-black text-white rounded-full hover:bg-black/80 transition-all"
               >
-                <Instagram className="h-4 w-4" />
+                <SiInstagram className="h-4 w-4" />
                 Resmi Instagram Hesabımız
               </Link>
             </div>
@@ -396,7 +397,7 @@ function InstagramPageContent() {
           {/* Posts Grid */}
           {currentPosts.length === 0 ? (
             <div className="text-center py-16">
-              <Instagram className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+              <SiInstagram className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
               <h2 className="text-xl font-semibold mb-2">Henüz paylaşım bulunmuyor</h2>
               <p className="text-muted-foreground mb-6">
                 Kulüplerimizin paylaşımları burada görünecek
@@ -407,7 +408,7 @@ function InstagramPageContent() {
                 rel="noopener noreferrer"
               >
                 <Button>
-                  <Instagram className="h-4 w-4 mr-2" />
+                  <SiInstagram className="h-4 w-4 mr-2" />
                   Instagram'da Takip Et
                 </Button>
               </Link>
@@ -626,7 +627,7 @@ function InstagramPageContent() {
                     size="lg"
                     className="gap-2"
                   >
-                    <Instagram className="h-4 w-4" />
+                    <SiInstagram className="h-4 w-4" />
                     {loadingMore ? 'Yükleniyor...' : 'Daha Fazla Yükle'}
                   </Button>
                 </div>
@@ -663,7 +664,7 @@ function InstagramPageLoading() {
       <div className="flex-1 py-12">
         <div className="container max-w-7xl mx-auto px-4 md:px-6">
           <div className="text-center">
-            <Instagram className="h-12 w-12 mx-auto mb-4" style={{ color: '#2ea5d5' }} />
+            <SiInstagram className="h-12 w-12 mx-auto mb-4" style={{ color: '#2ea5d5' }} />
             <h1 className="text-3xl font-bold mb-2">Instagram Paylaşımları</h1>
             <p className="text-muted-foreground">Yükleniyor...</p>
           </div>

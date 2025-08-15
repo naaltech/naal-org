@@ -1,6 +1,7 @@
 import Link from "next/link"
 import Image from "next/image"
-import { ArrowLeft, ArrowRight, Users, Globe, Instagram } from "lucide-react"
+import { ArrowLeft, ArrowRight, Users, Globe } from "lucide-react"
+import { SiInstagram } from '@icons-pack/react-simple-icons'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -81,7 +82,7 @@ export default async function ClubsPage() {
                     )}
                     {instagrams.length > 0 && (
                       <div className="flex items-center gap-1">
-                        <Instagram className="h-3 w-3" />
+                        <SiInstagram className="h-3 w-3" />
                         <span className="truncate">@{instagrams[0].replace(/^@/, '')}</span>
                       </div>
                     )}

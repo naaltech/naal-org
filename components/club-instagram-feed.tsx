@@ -5,7 +5,9 @@ import Image from "next/image"
 import Link from "next/link"
 import { Card, CardContent } from "@/components/ui/card"
 import { Dialog, DialogContent, DialogTrigger, DialogTitle, DialogHeader } from "@/components/ui/dialog"
-import { Instagram, ExternalLink, ChevronLeft, ChevronRight, Heart, MessageCircle, Share } from "lucide-react"
+import { ExternalLink, ChevronLeft, ChevronRight, Heart, MessageCircle, Share } from "lucide-react"
+import { SiInstagram, SiX, SiYoutube, SiFacebook } from '@icons-pack/react-simple-icons';
+
 import { getInstagramPostsByClub, InstagramPost } from "@/lib/supabase"
 
 interface ClubInstagramFeedProps {
@@ -115,7 +117,7 @@ export default function ClubInstagramFeed({ clubInstagramAccounts }: ClubInstagr
   if (posts.length === 0) {
     return (
       <div className="text-center py-12">
-        <Instagram className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+        <SiInstagram className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
         <h3 className="text-lg font-medium mb-2">Henüz post yok</h3>
         <p className="text-muted-foreground">
           Bu kulübün Instagram hesaplarından henüz post bulunamadı.
@@ -149,7 +151,7 @@ export default function ClubInstagramFeed({ clubInstagramAccounts }: ClubInstagr
                       {/* Overlay on hover */}
                       <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                         <div className="text-white text-center">
-                          <Instagram className="h-8 w-8 mx-auto mb-2" />
+                          <SiInstagram className="h-8 w-8 mx-auto mb-2" />
                           <p className="text-sm">Görüntüle</p>
                         </div>
                       </div>
@@ -168,7 +170,7 @@ export default function ClubInstagramFeed({ clubInstagramAccounts }: ClubInstagr
               <DialogContent className="max-w-4xl w-full max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                   <DialogTitle className="flex items-center gap-2">
-                    <Instagram className="h-5 w-5" />
+                    <SiInstagram className="h-5 w-5" />
                     @{post.user_name}
                   </DialogTitle>
                 </DialogHeader>

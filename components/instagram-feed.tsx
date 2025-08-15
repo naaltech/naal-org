@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Dialog, DialogContent, DialogTrigger, DialogTitle, DialogHeader } from "@/components/ui/dialog"
 import { Instagram, ExternalLink, ChevronLeft, ChevronRight } from "lucide-react"
 import { getInstagramPosts, parseInstagramImages, InstagramPost } from "@/lib/supabase"
+import { SiInstagram } from '@icons-pack/react-simple-icons';
 
 export default function InstagramFeed() {
   const [posts, setPosts] = useState<InstagramPost[]>([])
@@ -204,7 +205,7 @@ export default function InstagramFeed() {
                         <DialogContent className="max-w-[95vw] sm:max-w-3xl lg:max-w-4xl max-h-[95vh] overflow-y-auto p-3 sm:p-6">
                           <DialogHeader>
                             <DialogTitle className="flex items-center gap-2 text-base sm:text-lg">
-                              <Instagram className="h-4 w-4 sm:h-5 sm:w-5" />
+                              <SiInstagram className="h-4 w-4 sm:h-5 sm:w-5" />
                               {post.name || 'Kulüp'}
                             </DialogTitle>
                           </DialogHeader>
@@ -279,14 +280,14 @@ export default function InstagramFeed() {
               href="/instagram"
               className="inline-flex items-center gap-2 px-4 py-2 bg-black text-white rounded-lg hover:bg-black/80 transition-colors"
             >
-              <Instagram className="h-4 w-4" />
+              <SiInstagram className="h-4 w-4" />
               Tüm Paylaşımları Gör
             </Link>
             <Link
               href="/instagram/accounts"
               className="inline-flex items-center gap-2 px-4 py-2 bg-black text-white rounded-lg hover:bg-black/80 transition-all"
             >
-              <Instagram className="h-4 w-4" />
+              <SiInstagram className="h-4 w-4" />
               Kulüp Hesapları
             </Link>
           </div>
