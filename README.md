@@ -26,7 +26,7 @@
 
 To understand the complete project, you can check out the following repositories:
 
-🛠️ [Interaction Network Admin Interface](https://github.com/naaltech/naal-org-admin)
+🛠️ [Club Admin Interface](https://github.com/naaltech/naal-org-admin)
 📱 [Instagram Post Fetch](https://github.com/naaltech/instagram-post-fetch)
 📰 [News API](https://github.com/naaltech/news-api)
 
