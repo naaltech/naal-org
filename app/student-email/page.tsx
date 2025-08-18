@@ -31,7 +31,7 @@ export default function StudentEmailRequestPage() {
   const PrivacyPolicyDialog = () => (
     <Dialog>
       <DialogTrigger asChild>
-        <button className="text-blue-600 hover:underline">
+        <button className=" hover:underline" style={{ color: '#2ea5d5' }}>
           Gizlilik Politikası
         </button>
       </DialogTrigger>
@@ -253,7 +253,7 @@ export default function StudentEmailRequestPage() {
       <div className="container max-w-2xl mx-auto px-4 py-12">
         <div className="text-center mb-8">
           <div className="flex items-center justify-center mb-4">
-            <Mail className="h-8 w-8 text-blue-600 mr-2" />
+            <Mail className="h-8 w-8 mr-2" style={{ color: '#2ea5d5' }}/>
             <h1 className="text-3xl font-bold">Öğrenci E-posta Talebi</h1>
           </div>
           <p className="text-muted-foreground max-w-lg mx-auto">

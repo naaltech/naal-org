@@ -71,8 +71,8 @@ export default function OfficialNewsSection() {
             <Card key={index} className="hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
               <CardHeader className="pb-3">
                 <div className="flex items-start justify-between gap-2 mb-2">
-                  <span className="text-xs font-medium text-muted-foreground bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
-                    Resmi Haber
+                  <span className="text-xs font-medium text-muted-foreground px-2 py-1 rounded-full" style={{ backgroundColor: '#cbebf7', color: '#226882' }}>
+                    Resmi Haber 
                   </span>
                 </div>
                 <CardTitle className="text-lg leading-tight line-clamp-3">
