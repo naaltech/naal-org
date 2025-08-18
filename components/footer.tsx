@@ -15,7 +15,7 @@ export default function Footer() {
           </div>
           <div className="text-center md:text-right">
             <p className="text-xs text-muted-foreground">
-              İmza: <Link href="https://www.instagram.com/erdemhglu/" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">@erdemhglu</Link>
+              Geliştirici: <Link href="https://www.instagram.com/erdemhglu/" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">github.com/ta2edh</Link>
             </p>
           </div>
         </div>
