@@ -7,6 +7,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Badge } from "@/components/ui/badge"
 import Header from "@/components/header"
 import { getAllClubs, parseClubInstagram } from "@/lib/supabase"
+import Footer from "@/components/footer"
 
 export default async function ClubsPage() {
   const { success, clubs } = await getAllClubs()
@@ -113,7 +114,9 @@ export default async function ClubsPage() {
             </p>
           </div>
         )}
+        
       </main>
+      <Footer/>
     </div>
   )
 }

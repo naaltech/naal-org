@@ -7,7 +7,7 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="text-center md:text-left">
             <p className="text-sm text-muted-foreground">
-              © 2025 Nevzat Ayaz Etkileşim Ağı. Tüm hakları saklıdır.
+              © {new Date().getFullYear()} Nevzat Ayaz Etkileşim Ağı. | Bu proje <Link href="https://raw.githubusercontent.com/naaltech/naal-org/refs/heads/main/LICENSE" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">GPLv3</Link> ile lisanslanmıştır.
             </p>
             <p className="text-xs text-muted-foreground mt-1">
               Açık Kaynak: <Link href="https://github.com/naaltech/naal-org" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">GitHub</Link>

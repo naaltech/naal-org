@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { AlertTriangle, Home, ArrowLeft, Search } from "lucide-react"
 import Header from "@/components/header"
+import Footer from "@/components/footer"
 
 export default function NotFound() {
   return (
@@ -126,6 +127,7 @@ export default function NotFound() {
           </Card>
         </div>
       </main>
+      <Footer/>
     </div>
   )
 } 

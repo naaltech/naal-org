@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
 import Header from "@/components/header"
+import Footer from "@/components/footer"
+
 import ClubInstagramFeed from "@/components/club-instagram-feed"
 import { getClubById, parseClubUrls, parseClubInstagram } from "@/lib/supabase"
 import { notFound } from "next/navigation"
@@ -236,6 +238,7 @@ export default async function ClubPage({ params }: ClubPageProps) {
           </TabsContent>
         </Tabs>
       </main>
+      <Footer/>
     </div>
   )
 }

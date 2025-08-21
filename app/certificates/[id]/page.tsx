@@ -15,6 +15,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import Header from "@/components/header"
+import Footer from "@/components/footer"
+
 import { verifyCertificateUnified, UnifiedCertificate } from "@/lib/supabase"
 
 export default function CertificateDetailPage() {
@@ -364,6 +366,7 @@ export default function CertificateDetailPage() {
           </div>
         </div>
       </div>
+      <Footer/>
     </main>
   )
 }
