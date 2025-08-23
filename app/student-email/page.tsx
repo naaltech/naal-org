@@ -262,6 +262,27 @@ export default function StudentEmailRequestPage() {
           </p>
         </div>
 
+        <Card className="mb-6">
+          <CardContent className="pt-6">
+            <div className="text-center mb-4">
+              <Info className="h-5 w-5 text-blue-600 mx-auto mb-2" />
+              <h3 className="font-semibold text-lg">Başvuru İşleme Süreci</h3>
+            </div>
+            <div className="text-sm text-muted-foreground space-y-3 leading-relaxed">
+              <p>
+              Form üzerinden iletilen veriler, <a href="https://eytrix.com" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors"><strong>Eytrix Inc.</strong></a> tarafından geliştirilen Llama 3.2 tabanlı başvuru işleme modülü tarafından işlenmektedir. Doğrulanan başvurular için, <a href="https://developers.google.com/workspace?hl=tr" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors"><strong>Google Workspace API</strong></a> kullanılarak öğrenci e-posta hesapları otomatik olarak oluşturulur. Öğrencilerin hesap bilgileri ve başvuru durumu, sistem tarafından yapay zekâ tarafından oluşturulmuş sonuç yazısı ile <a href="mailto:mail@naal.org.tr" className="hover:text-foreground transition-colors"><strong>mail@naal.org.tr</strong></a> e-posta adresi üzerinden öğrencinin belirttiği e-posta adresine bildirilir.
+              </p>
+              <p>Başvuru işleme modülü, <strong>Yukarı Dudullu Mah. 3. Cad. No:4, Ümraniye/İstanbul</strong> adresinde bulunan <a href="https://www.equinix.com/data-centers/europe-colocation/turkey-colocation/istanbul-data-centers/il2" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors"><strong>Equinix IL2 Data Center</strong></a>’da barındırılmaktadır. Sunucu erişimleri kayda alınmakta olup, gerektiğinde erişim <strong>SSH anahtarı</strong> ile sağlanmaktadır. Bu yapı sayesinde öğrenci verileri üçüncü taraflarla paylaşılmamaktadır ve veri güvenliği sağlanmaktadır.</p>
+            </div>
+          </CardContent>
+        </Card>
+
+        {submitError && (
+          <Alert variant="destructive" className="mb-6">
+            <AlertTitle>Hata</AlertTitle>
+            <AlertDescription>{submitError}</AlertDescription>
+          </Alert>
+        )}
         <Alert className="mb-6">
           <Info className="h-4 w-4" />
           <AlertTitle>Önemli Bilgiler</AlertTitle>
@@ -272,13 +293,7 @@ export default function StudentEmailRequestPage() {
             <p>• Öğrencilik belgesi zorunlu değildir ancak işlemi hızlandırabilir.</p>
           </AlertDescription>
         </Alert>
-
-        {submitError && (
-          <Alert variant="destructive" className="mb-6">
-            <AlertTitle>Hata</AlertTitle>
-            <AlertDescription>{submitError}</AlertDescription>
-          </Alert>
-        )}
+        
 
         <Card>
           <CardHeader>
