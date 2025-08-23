@@ -265,8 +265,7 @@ export default function StudentEmailRequestPage() {
         <Card className="mb-6">
           <CardContent className="pt-6">
             <div className="text-center mb-4">
-              <Info className="h-5 w-5 text-blue-600 mx-auto mb-2" />
-              <h3 className="font-semibold text-lg">Başvuru İşleme Süreci</h3>
+              <h3 className="font-semibold text-2xl">Başvuru İşleme Süreci</h3>
             </div>
             <div className="text-sm text-muted-foreground space-y-3 leading-relaxed">
               <p>
