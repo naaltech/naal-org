@@ -1,16 +1,25 @@
 import { createClient } from '@supabase/supabase-js'
 
 // Supabase konfigürasyonu
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co'
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder-key'
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
 
-// Check if we have valid credentials
-const hasValidCredentials = 
-  process.env.NEXT_PUBLIC_SUPABASE_URL && 
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY &&
-  process.env.NEXT_PUBLIC_SUPABASE_URL.startsWith('http')
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    persistSession: false
+  }
+})
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+// Helper function to check credentials before making requests
+function checkCredentials() {
+  if (!hasValidCredentials) {
+    return {
+      success: false,
+      error: 'Supabase bağlantısı yapılandırılmamış'
+    }
+  }
+  return null
+}
 
 // PDF'li sertifika tipi tanımı
 export interface CertificatePDF {
