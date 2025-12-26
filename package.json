@@ -63,6 +63,7 @@
     "zod": "^4.1.13"
   },
   "devDependencies": {
+    "@netlify/plugin-nextjs": "^5.7.5",
     "@svgr/webpack": "^8.1.0",
     "@types/node": "^22",
     "@types/react": "^19",

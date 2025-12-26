@@ -4,7 +4,17 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   
-  // SVG as React components support
+  // Turbopack configuration for SVG support
+  turbopack: {
+    rules: {
+      '*.svg': {
+        loaders: ['@svgr/webpack'],
+        as: '*.js',
+      },
+    },
+  },
+  
+  // SVG as React components support (webpack fallback)
   webpack(config) {
     config.module.rules.push({
       test: /\.svg$/,
