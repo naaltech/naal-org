@@ -12,6 +12,9 @@ import ClubInstagramFeed from "@/components/club-instagram-feed"
 import { getClubById, parseClubUrls, parseClubInstagram } from "@/lib/supabase"
 import { notFound } from "next/navigation"
 
+// Use Node.js runtime to avoid Edge runtime issues with Supabase
+export const runtime = 'nodejs'
+
 interface ClubPageProps {
   params: {
     id: string

@@ -9,6 +9,9 @@ import Header from "@/components/header"
 import { getAllClubs, parseClubInstagram } from "@/lib/supabase"
 import Footer from "@/components/footer"
 
+// Use Node.js runtime to avoid Edge runtime issues with Supabase
+export const runtime = 'nodejs'
+
 export default async function ClubsPage() {
   const { success, clubs } = await getAllClubs()
   const clubsData = success && clubs ? clubs : []
