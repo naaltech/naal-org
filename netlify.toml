@@ -7,10 +7,6 @@
 
 [build.environment]
   NODE_VERSION = "22"
-  # Environment variables will be passed from Netlify UI
-  NEXT_PUBLIC_SUPABASE_URL = "${NEXT_PUBLIC_SUPABASE_URL}"
-  NEXT_PUBLIC_SUPABASE_ANON_KEY = "${NEXT_PUBLIC_SUPABASE_ANON_KEY}"
-  NEXT_PUBLIC_GA_ID = "${NEXT_PUBLIC_GA_ID}"
 
 [[headers]]
   for = "/_next/static/*"
