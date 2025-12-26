@@ -280,7 +280,7 @@ export default function StudentEmailRequestPage() {
           <Info className="h-4 w-4" />
           <AlertTitle>Başvurular Devre Dışı</AlertTitle>
           <AlertDescription>
-            Başvurular sistem bakımı sebebi ile süresiz olarak devre dışı bırakılmıştır. Taleplerinizi acil ise meclis@naal.org.tr adresine email göndererek gerçekleştirebilirsiniz.
+            Başvurular sistem bakımı sebebi ile süresiz olarak devre dışı bırakılmıştır. Taleplerinizi acil ise mail@naal.org.tr adresine e-posta göndererek gerçekleştirebilirsiniz.
           </AlertDescription>
         </Alert>
 
