@@ -276,6 +276,14 @@ export default function StudentEmailRequestPage() {
           </CardContent>
         </Card>
 
+        <Alert variant="destructive" className="mb-6">
+          <Info className="h-4 w-4" />
+          <AlertTitle>Başvurular Devre Dışı</AlertTitle>
+          <AlertDescription>
+            Başvurular sistem bakımı sebebi ile süresiz olarak devre dışı bırakılmıştır. Taleplerinizi acil ise meclis@naal.org.tr adresine email göndererek gerçekleştirebilirsiniz.
+          </AlertDescription>
+        </Alert>
+
         {submitError && (
           <Alert variant="destructive" className="mb-6">
             <AlertTitle>Hata</AlertTitle>
@@ -294,7 +302,8 @@ export default function StudentEmailRequestPage() {
         </Alert>
         
 
-        <Card>
+        <Card className="relative">
+          <div className="absolute inset-0 backdrop-blur-sm bg-white/30 dark:bg-black/30 rounded-lg z-10 pointer-events-none"></div>
           <CardHeader>
             <CardTitle>Başvuru Formu</CardTitle>
             <CardDescription>
