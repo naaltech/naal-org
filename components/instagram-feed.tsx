@@ -5,7 +5,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { Card, CardContent } from "@/components/ui/card"
 import { Dialog, DialogContent, DialogTrigger, DialogTitle, DialogHeader } from "@/components/ui/dialog"
-import { Instagram, ExternalLink, ChevronLeft, ChevronRight } from "lucide-react"
+import { ExternalLink, ChevronLeft, ChevronRight } from "lucide-react"
 import { getInstagramPosts, parseInstagramImages, InstagramPost } from "@/lib/supabase"
 import { SiInstagram } from '@icons-pack/react-simple-icons';
 

@@ -10,6 +10,8 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   }
 })
 
+const hasValidCredentials = Boolean(supabaseUrl && supabaseAnonKey)
+
 // Helper function to check credentials before making requests
 function checkCredentials() {
   if (!hasValidCredentials) {

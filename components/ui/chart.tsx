@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import * as RechartsPrimitive from "recharts"
+import type { LegendPayload, TooltipContentProps } from "recharts"
 
 import { cn } from "@/lib/utils"
 
@@ -104,8 +105,8 @@ const ChartTooltip = RechartsPrimitive.Tooltip
 
 const ChartTooltipContent = React.forwardRef<
   HTMLDivElement,
-  React.ComponentProps<typeof RechartsPrimitive.Tooltip> &
-    React.ComponentProps<"div"> & {
+  Partial<TooltipContentProps> &
+    Omit<React.ComponentProps<"div">, "ref"> & {
       hideLabel?: boolean
       hideIndicator?: boolean
       indicator?: "line" | "dot" | "dashed"
@@ -192,7 +193,7 @@ const ChartTooltipContent = React.forwardRef<
 
             return (
               <div
-                key={item.dataKey}
+                key={index}
                 className={cn(
                   "flex w-full flex-wrap items-stretch gap-2 [&>svg]:h-2.5 [&>svg]:w-2.5 [&>svg]:text-muted-foreground",
                   indicator === "dot" && "items-center"
@@ -260,11 +261,12 @@ const ChartLegend = RechartsPrimitive.Legend
 
 const ChartLegendContent = React.forwardRef<
   HTMLDivElement,
-  React.ComponentProps<"div"> &
-    Pick<RechartsPrimitive.LegendProps, "payload" | "verticalAlign"> & {
-      hideIcon?: boolean
-      nameKey?: string
-    }
+  Omit<React.ComponentProps<"div">, "ref"> & {
+    hideIcon?: boolean
+    nameKey?: string
+    payload?: ReadonlyArray<LegendPayload>
+    verticalAlign?: "top" | "bottom" | "middle"
+  }
 >(
   (
     { className, hideIcon = false, payload, verticalAlign = "bottom", nameKey },
