@@ -1,103 +1,126 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
+import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 
-// Supabase konfigürasyonu
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
-const supabase = createClient(supabaseUrl, supabaseAnonKey)
+// Next.js 16'da middleware.ts yerine proxy.ts kullanılıyor (aynı işlev, yeni isim)
+
+const MAIN_SITE_URL = 'https://naal.org.tr'
+
+// Club code olarak değerlendirilmeyecek subdomain'ler
+const RESERVED_SUBDOMAINS = new Set(['www', 'cert'])
+
+// Supabase istemcisini sadece gerektiğinde ve bilgiler varsa oluştur
+// (modül seviyesinde boş URL ile createClient hata fırlatır ve tüm istekleri bozar)
+let supabase: SupabaseClient | null = null
+function getSupabase() {
+  if (supabase) return supabase
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  if (!supabaseUrl || !supabaseAnonKey) return null
+  supabase = createClient(supabaseUrl, supabaseAnonKey, {
+    auth: { persistSession: false },
+  })
+  return supabase
+}
+
+// Host'tan subdomain'i çıkar (örn: ieee.naal.org.tr -> ieee). Ana domain için null döner.
+function getSubdomain(hostname: string) {
+  const host = hostname.split(':')[0].toLowerCase()
+  const labels = host.split('.')
+  // localhost'ta da test edilebilsin: ieee.localhost
+  if (labels.length === 2 && labels[1] === 'localhost') return labels[0]
+  // naal.org.tr gibi 3 parçalı domain'de subdomain yok
+  if (labels.length <= 3) return null
+  return labels[0]
+}
+
+// URL kısaltıcı: <club_code>.naal.org.tr/<path> -> url tablosundaki redirect adresi
+async function handleShortUrl(clubCode: string, pathname: string) {
+  const client = getSupabase()
+  if (!client) return null
+
+  try {
+    const { data: club, error: clubError } = await client
+      .from('clubs')
+      .select('code')
+      .eq('code', clubCode)
+      .maybeSingle()
+
+    // Böyle bir kulüp yoksa normal akışa devam et
+    if (clubError || !club) return null
+
+    // Path'i düzelt: başındaki /'yi kaldır
+    const cleanPath = pathname.replace(/^\/+/, '')
+
+    const { data: urlData, error: urlError } = await client
+      .from('url')
+      .select('redirect')
+      .eq('club_code', clubCode)
+      .eq('path', cleanPath)
+      .maybeSingle()
+
+    if (!urlError && urlData?.redirect) {
+      return NextResponse.redirect(urlData.redirect)
+    }
+
+    // URL bulunamazsa ana siteye yönlendir
+    return NextResponse.redirect(MAIN_SITE_URL)
+  } catch (error) {
+    console.error('URL kısaltıcı hatası:', error)
+    return null
+  }
+}
+
+// cert.naal.org.tr -> sertifika doğrulama sayfaları
+function handleCertSubdomain(request: NextRequest) {
+  const pathname = request.nextUrl.pathname
+
+  // /certificates ve eski sistem /cert URL'leri doğrudan geçer
+  if (pathname.startsWith('/cert')) {
+    return NextResponse.next()
+  }
+
+  const url = request.nextUrl.clone()
+
+  // Direkt ID ile geliyorsa (örn: /1234), /certificates/<id>'ye yönlendir
+  const idPattern = /^\/([0-9a-zA-Z-]+)$/
+  if (idPattern.test(pathname)) {
+    url.pathname = `/certificates${pathname}`
+    return NextResponse.redirect(url)
+  }
+
+  // Root ve diğer tüm path'ler için sertifika doğrulama sayfasına yönlendir
+  url.pathname = '/certificates'
+  return NextResponse.redirect(url)
+}
 
 export async function proxy(request: NextRequest) {
   const hostname = request.headers.get('host')
-  const pathname = request.nextUrl.pathname
-  
-  // URL kısaltıcı entegrasyonu - Önce bunu kontrol et
-  if (hostname) {
-    try {
-      // Tüm club code'larını getir
-      const { data: clubsData, error: clubsError } = await supabase
-        .from('clubs')
-        .select('code')
-        .not('code', 'is', null)
-      
-      if (!clubsError && clubsData) {
-        const clubCodes = clubsData.map((club: { code: string | null }) => club.code).filter(Boolean) as string[]
-        
-        // Hostname'in herhangi bir club code'unu içerip içermediğini kontrol et
-        const matchedClubCode = clubCodes.find(code => 
-          hostname.includes(code) || hostname.startsWith(`${code}.`)
-        )
-        
-        if (matchedClubCode) {
-          // Path'i düzelt: başındaki /'yi kaldır
-          const cleanPath = pathname.startsWith('/') ? pathname.slice(1) : pathname
-          
-          // URL tablosundan redirect URL'yi bul
-          const { data: urlData, error: urlError } = await supabase
-            .from('url')
-            .select('redirect')
-            .eq('club_code', matchedClubCode)
-            .eq('path', cleanPath)
-            .single()
-          
-          if (!urlError && urlData && urlData.redirect) {
-            // Redirect URL'ye yönlendir
-            return NextResponse.redirect(urlData.redirect)
-          } else {
-            // URL bulunamazsa, ana siteye yönlendir
-            return NextResponse.redirect('https://naal.org.tr')
-          }
-        }
-      }
-    } catch (error) {
-      console.error('URL kısaltıcı hatası:', error)
-    }
+  if (!hostname) return NextResponse.next()
+
+  const subdomain = getSubdomain(hostname)
+  if (!subdomain) return NextResponse.next()
+
+  if (subdomain === 'cert') {
+    return handleCertSubdomain(request)
   }
-  
-  // Eğer subdomain cert. ile başlıyorsa
-  if (hostname?.startsWith('cert.')) {
-    const url = request.nextUrl.clone()
-    
-    // Eğer zaten /certificates ile başlıyorsa, doğrudan geç
-    if (pathname.startsWith('/certificates')) {
-      return NextResponse.next()
-    }
-    
-    // Eğer /cert ile başlıyorsa, doğrudan geç (eski sistem URL'leri için)
-    if (pathname.startsWith('/cert')) {
-      return NextResponse.next()
-    }
-    
-    // Root path ise sertifika doğrulama sayfasına yönlendir
-    if (pathname === '/') {
-      url.pathname = '/certificates'
-      return NextResponse.redirect(url)
-    }
-    
-    // Eğer direkt ID ile geliyorsa (örn: /1234 gibi), certificates/id'ye yönlendir
-    const idPattern = /^\/([0-9a-zA-Z-]+)$/
-    if (idPattern.test(pathname)) {
-      url.pathname = `/certificates${pathname}`
-      return NextResponse.redirect(url)
-    }
-    
-    // Diğer tüm path'ler için sertifika doğrulama sayfasına yönlendir
-    url.pathname = '/certificates'
-    return NextResponse.redirect(url)
+
+  if (!RESERVED_SUBDOMAINS.has(subdomain)) {
+    const response = await handleShortUrl(subdomain, request.nextUrl.pathname)
+    if (response) return response
   }
-  
+
   return NextResponse.next()
 }
 
 export const config = {
   matcher: [
     /*
-     * Match all request paths except for the ones starting with:
-     * - api (API routes)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
+     * Aşağıdakiler hariç tüm path'ler:
+     * - api (API route'ları)
+     * - _next/static, _next/image (Next.js dosyaları)
+     * - uzantılı dosyalar (favicon.ico, logo.png, robots.txt vb. public dosyaları)
      */
-    '/((?!api|_next/static|_next/image|favicon.ico).*)',
+    '/((?!api|_next/static|_next/image|.*\\.[^/]+$).*)',
   ],
 }
