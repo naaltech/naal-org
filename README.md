@@ -11,7 +11,6 @@
 - **Instagram Feed**: View school clubs' Instagram posts in a single platform
 - **Club Pages**: Dedicated pages for each club with detailed information
 - **Certificate Verification**: Certificate validation system
-- **Student Email**: Google Workspace student email account requests
 
 ## 🚀 Technology Stack
 
@@ -44,8 +43,7 @@ To understand the complete project, you can check out the following repositories
 ├── app/                    # Next.js App Router
 │   ├── certificates/       # Certificate verification
 │   ├── clubs/              # Club pages
-│   ├── instagram/          # Instagram feed
-│   └── student-email/      # Student email requests
+│   └── instagram/          # Instagram feed
 ├── components/             # React components
 │   ├── ui/                 # Shadcn/ui components
 │   └── ...                 # Custom components

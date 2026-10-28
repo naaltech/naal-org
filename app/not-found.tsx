@@ -92,12 +92,6 @@ export default function NotFound() {
                   Instagram Akışı
                 </Link>
               </Button>
-              <Button variant="ghost" asChild>
-                <Link href="/student-email">
-                  <ArrowLeft className="mr-2 h-4 w-4" />
-                  Öğrenci E-posta
-                </Link>
-              </Button>
             </div>
           </div>
 

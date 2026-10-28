@@ -79,14 +79,7 @@ export default function StructuredData() {
         "position": 4,
         "name": "Kulüp İnstagram Hesapları",
         "item": "https://naal.org.tr/instagram/accounts"
-      },
-      {
-        "@type": "ListItem",
-        "position": 5,
-        "name": "Öğrenci E-Posta Talebi",
-        "item": "https://naal.org.tr/student-email"
-      },
-
+      }
     ]
   }
 

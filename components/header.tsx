@@ -123,14 +123,9 @@ export default function Header() {
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center space-x-4">
           {!isCertSubdomain && (
-            <>
-              <Link href="/instagram" passHref>
-                <Button variant="ghost">Instagram Akışı</Button>
-              </Link>
-              <Link href="/student-email" passHref>
-                <Button variant="ghost">Öğrenci E-posta</Button>
-              </Link>
-            </>
+            <Link href="/instagram" passHref>
+              <Button variant="ghost">Instagram Akışı</Button>
+            </Link>
           )}
           <Link href="/certificates" passHref>
             <Button variant="ghost">Sertifika Doğrula</Button>
@@ -174,18 +169,11 @@ export default function Header() {
           <div className="absolute top-20 left-0 right-0 bg-background border-b md:hidden">
             <div className="container py-4 space-y-2">
               {!isCertSubdomain && (
-                <>
-                  <Link href="/instagram" passHref className="block">
-                    <Button variant="ghost" className="w-full justify-start">
-                      Instagram Akışı
-                    </Button>
-                  </Link>
-                  <Link href="/student-email" passHref className="block">
-                    <Button variant="ghost" className="w-full justify-start">
-                      Öğrenci E-posta
-                    </Button>
-                  </Link>
-                </>
+                <Link href="/instagram" passHref className="block">
+                  <Button variant="ghost" className="w-full justify-start">
+                    Instagram Akışı
+                  </Button>
+                </Link>
               )}
               <Link href="/certificates" passHref className="block">
                 <Button variant="ghost" className="w-full justify-start">
