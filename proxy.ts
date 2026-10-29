@@ -42,7 +42,7 @@ async function handleShortUrl(clubCode: string, pathname: string) {
   try {
     const { data: club, error: clubError } = await client
       .from('clubs')
-      .select('code')
+      .select('id')
       .eq('code', clubCode)
       .maybeSingle()
 
@@ -63,8 +63,8 @@ async function handleShortUrl(clubCode: string, pathname: string) {
       return NextResponse.redirect(urlData.redirect)
     }
 
-    // URL bulunamazsa ana siteye yönlendir
-    return NextResponse.redirect(MAIN_SITE_URL)
+    // Kısa URL yoksa (kök dahil) kulübün kendi sayfasına yönlendir
+    return NextResponse.redirect(`${MAIN_SITE_URL}/clubs/${club.id}`)
   } catch (error) {
     console.error('URL kısaltıcı hatası:', error)
     return null
