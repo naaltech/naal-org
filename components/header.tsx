@@ -122,11 +122,13 @@ export default function Header() {
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center space-x-4">
+          {/* Instagram akışı şimdilik gizli.
           {!isCertSubdomain && (
             <Link href="/instagram" passHref>
               <Button variant="ghost">Instagram Akışı</Button>
             </Link>
           )}
+          */}
           <Link href="/certificates" passHref>
             <Button variant="ghost">Sertifika Doğrula</Button>
           </Link>
@@ -168,6 +170,7 @@ export default function Header() {
         {isMenuOpen && (
           <div className="absolute top-20 left-0 right-0 bg-background border-b md:hidden">
             <div className="container py-4 space-y-2">
+              {/* Instagram akışı şimdilik gizli.
               {!isCertSubdomain && (
                 <Link href="/instagram" passHref className="block">
                   <Button variant="ghost" className="w-full justify-start">
@@ -175,6 +178,7 @@ export default function Header() {
                   </Button>
                 </Link>
               )}
+              */}
               <Link href="/certificates" passHref className="block">
                 <Button variant="ghost" className="w-full justify-start">
                   Sertifika Doğrula

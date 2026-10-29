@@ -8,7 +8,8 @@ import { Badge } from "@/components/ui/badge"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
 
-import ClubInstagramFeed from "@/components/club-instagram-feed"
+// Instagram postları şimdilik gizli.
+// import ClubInstagramFeed from "@/components/club-instagram-feed"
 import { getClubById, parseClubUrls, parseClubInstagram } from "@/lib/supabase"
 import { notFound } from "next/navigation"
 
@@ -140,12 +141,15 @@ export default async function ClubPage({ params }: ClubPageProps) {
         </div>
 
         {/* Content Tabs */}
-        <Tabs defaultValue="instagram" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
+        <Tabs defaultValue="contact" className="w-full">
+          <TabsList className="grid w-full grid-cols-1">
+            {/* Instagram postları şimdilik gizli.
             <TabsTrigger value="instagram">Instagram</TabsTrigger>
+            */}
             <TabsTrigger value="contact">İletişim</TabsTrigger>
           </TabsList>
           
+          {/* Instagram postları şimdilik gizli.
           <TabsContent value="instagram" className="mt-6">
             <div className="space-y-6">
               <div className="flex items-center gap-2 mb-4">
@@ -177,7 +181,8 @@ export default async function ClubPage({ params }: ClubPageProps) {
               )}
             </div>
           </TabsContent>
-          
+          */}
+
           <TabsContent value="contact" className="mt-6">
             <div className="space-y-6">
               <h3 className="text-xl font-semibold">İletişim Bilgileri</h3>

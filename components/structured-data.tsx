@@ -67,19 +67,20 @@ export default function StructuredData() {
         "position": 2,
         "name": "Sertifika Doğrulama",
         "item": "https://naal.org.tr/certificates"
-      },
-      {
-        "@type": "ListItem",
-        "position": 3,
-        "name": "İnstagram Akışı",
-        "item": "https://naal.org.tr/instagram"
-      },
-      {
-        "@type": "ListItem",
-        "position": 4,
-        "name": "Kulüp İnstagram Hesapları",
-        "item": "https://naal.org.tr/instagram/accounts"
       }
+      // Instagram sayfaları şimdilik gizli.
+      // {
+      //   "@type": "ListItem",
+      //   "position": 3,
+      //   "name": "İnstagram Akışı",
+      //   "item": "https://naal.org.tr/instagram"
+      // },
+      // {
+      //   "@type": "ListItem",
+      //   "position": 4,
+      //   "name": "Kulüp İnstagram Hesapları",
+      //   "item": "https://naal.org.tr/instagram/accounts"
+      // }
     ]
   }
 

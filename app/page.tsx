@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
-import InstagramFeed from "@/components/instagram-feed"
+// Instagram akışı şimdilik gizli.
+// import InstagramFeed from "@/components/instagram-feed"
 import BannerSlider from "@/components/banner-slider"
 import OfficialNewsSection from "@/components/official-news-section"
 import StructuredData from "@/components/structured-data"
@@ -35,8 +36,9 @@ export default function Home() {
       {/* Banner Slider replacing Logo Scroller */}
       <BannerSlider />
 
-      {/* Instagram Feed Section */}
+      {/* Instagram akışı şimdilik gizli.
       <InstagramFeed />
+      */}
 
       {/* Official News Section */}
       <OfficialNewsSection />

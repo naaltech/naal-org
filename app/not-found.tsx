@@ -86,12 +86,14 @@ export default function NotFound() {
                   Kulüpler
                 </Link>
               </Button>
+              {/* Instagram akışı şimdilik gizli.
               <Button variant="ghost" asChild>
                 <Link href="/instagram">
                   <ArrowLeft className="mr-2 h-4 w-4" />
                   Instagram Akışı
                 </Link>
               </Button>
+              */}
             </div>
           </div>
 
