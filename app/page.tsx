@@ -54,7 +54,7 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-12 w-full max-w-6xl">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 w-full max-w-4xl">
               <Card className="hover:shadow-lg transition-shadow duration-300">
                 <CardHeader>
                   <CardTitle className="text-xl text-center">
@@ -104,24 +104,6 @@ export default function Home() {
                   <Link href="https://fbc.naal.org.tr" target="_blank" rel="noopener noreferrer">
                     <Button variant="outline" className="w-full">
                       fbc.naal.org.tr
-                    </Button>
-                  </Link>
-                </CardContent>
-              </Card>
-
-              <Card className="hover:shadow-lg transition-shadow duration-300">
-                <CardHeader>
-                  <CardTitle className="text-xl text-center">
-                    Meclis Simülasyonu
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="text-center">
-                  <p className="text-muted-foreground mb-4">
-                    Nevzat Ayaz Anadolu Lisesi Meclis Simülasyonu
-                  </p>
-                  <Link href="https://meclis.naal.org.tr" target="_blank" rel="noopener noreferrer">
-                    <Button variant="outline" className="w-full">
-                      meclis.naal.org.tr
                     </Button>
                   </Link>
                 </CardContent>
