@@ -5,9 +5,9 @@ import Image from "next/image"
 import Link from "next/link"
 import { Card, CardContent } from "@/components/ui/card"
 import { Dialog, DialogContent, DialogTrigger, DialogTitle, DialogHeader } from "@/components/ui/dialog"
-import { ExternalLink, ChevronLeft, ChevronRight } from "lucide-react"
+import { ArrowTopRightOnSquareIcon, ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline"
 import { getInstagramPosts, parseInstagramImages, InstagramPost } from "@/lib/supabase"
-import { SiInstagram } from '@icons-pack/react-simple-icons';
+import { InstagramIcon } from '@/components/icons/brand-icons';
 
 export default function InstagramFeed() {
   const [posts, setPosts] = useState<InstagramPost[]>([])
@@ -42,13 +42,13 @@ export default function InstagramFeed() {
                 onClick={prevImage}
                 className="absolute left-1 sm:left-2 top-1/2 -translate-y-1/2 bg-black/50 text-white p-1.5 sm:p-2 rounded-full hover:bg-black/70 transition-colors"
               >
-                <ChevronLeft className="h-3 w-3 sm:h-4 sm:w-4" />
+                <ChevronLeftIcon className="h-3 w-3 sm:h-4 sm:w-4" />
               </button>
               <button
                 onClick={nextImage}
                 className="absolute right-1 sm:right-2 top-1/2 -translate-y-1/2 bg-black/50 text-white p-1.5 sm:p-2 rounded-full hover:bg-black/70 transition-colors"
               >
-                <ChevronRight className="h-3 w-3 sm:h-4 sm:w-4" />
+                <ChevronRightIcon className="h-3 w-3 sm:h-4 sm:w-4" />
               </button>
             </>
           )}
@@ -166,7 +166,7 @@ export default function InstagramFeed() {
                           rel="noopener noreferrer"
                           className="text-muted-foreground hover:text-foreground"
                         >
-                          <ExternalLink className="h-4 w-4" />
+                          <ArrowTopRightOnSquareIcon className="h-4 w-4" />
                         </Link>
                       )}
                     </div>
@@ -205,7 +205,7 @@ export default function InstagramFeed() {
                         <DialogContent className="max-w-[95vw] sm:max-w-3xl lg:max-w-4xl max-h-[95vh] overflow-y-auto p-3 sm:p-6">
                           <DialogHeader>
                             <DialogTitle className="flex items-center gap-2 text-base sm:text-lg">
-                              <SiInstagram className="h-4 w-4 sm:h-5 sm:w-5" />
+                              <InstagramIcon className="h-4 w-4 sm:h-5 sm:w-5" />
                               {post.name || 'Kulüp'}
                             </DialogTitle>
                           </DialogHeader>
@@ -246,7 +246,7 @@ export default function InstagramFeed() {
                                     rel="noopener noreferrer"
                                     className="inline-flex items-center gap-1 text-xs sm:text-sm text-primary hover:underline"
                                   >
-                                    <ExternalLink className="h-3 w-3 sm:h-4 sm:w-4" />
+                                    <ArrowTopRightOnSquareIcon className="h-3 w-3 sm:h-4 sm:w-4" />
                                     Instagram'da Gör
                                   </Link>
                                 )}
@@ -280,14 +280,14 @@ export default function InstagramFeed() {
               href="/instagram"
               className="inline-flex items-center gap-2 px-4 py-2 bg-black text-white rounded-lg hover:bg-black/80 transition-colors"
             >
-              <SiInstagram className="h-4 w-4" />
+              <InstagramIcon className="h-4 w-4" />
               Tüm Paylaşımları Gör
             </Link>
             <Link
               href="/instagram/accounts"
               className="inline-flex items-center gap-2 px-4 py-2 bg-black text-white rounded-lg hover:bg-black/80 transition-all"
             >
-              <SiInstagram className="h-4 w-4" />
+              <InstagramIcon className="h-4 w-4" />
               Kulüp Hesapları
             </Link>
           </div>

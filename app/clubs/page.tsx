@@ -1,7 +1,7 @@
 import Link from "next/link"
 import Image from "next/image"
-import { ArrowLeft, ArrowRight, Users, Globe } from "lucide-react"
-import { SiInstagram } from '@icons-pack/react-simple-icons'
+import { ArrowLeftIcon, ArrowRightIcon, UsersIcon, GlobeAltIcon } from "@heroicons/react/24/outline"
+import { InstagramIcon } from '@/components/icons/brand-icons'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -25,7 +25,7 @@ export default async function ClubsPage() {
         <div className="mb-6">
           <Link href="/">
             <Button variant="ghost" className="gap-2">
-              <ArrowLeft className="h-4 w-4" />
+              <ArrowLeftIcon className="h-4 w-4" />
               Ana Sayfaya Dön
             </Button>
           </Link>
@@ -80,25 +80,25 @@ export default async function ClubsPage() {
                   <div className="flex items-center gap-3 mt-3 text-sm text-muted-foreground">
                     {club.owners && (
                       <div className="flex items-center gap-1">
-                        <Users className="h-3 w-3" />
+                        <UsersIcon className="h-3 w-3" />
                         <span className="truncate">{club.owners.split(',')[0]}</span>
                       </div>
                     )}
                     {instagrams.length > 0 && (
                       <div className="flex items-center gap-1">
-                        <SiInstagram className="h-3 w-3" />
+                        <InstagramIcon className="h-3 w-3" />
                         <span className="truncate">@{instagrams[0].replace(/^@/, '')}</span>
                       </div>
                     )}
                     {club.urls && (
-                      <Globe className="h-3 w-3" />
+                      <GlobeAltIcon className="h-3 w-3" />
                     )}
                   </div>
                 </CardContent>
                 <CardFooter className="pt-0">
                   <Link href={`/clubs/${club.id}`} passHref className="w-full">
                     <Button variant="outline" className="w-full">
-                      Detayları Gör <ArrowRight className="ml-2 h-4 w-4" />
+                      Detayları Gör <ArrowRightIcon className="ml-2 h-4 w-4" />
                     </Button>
                   </Link>
                 </CardFooter>
@@ -109,7 +109,7 @@ export default async function ClubsPage() {
         ) : (
           <div className="flex flex-col items-center justify-center py-16 text-center">
             <div className="rounded-full bg-muted p-6 mb-4">
-              <Users className="h-12 w-12 text-muted-foreground" />
+              <UsersIcon className="h-12 w-12 text-muted-foreground" />
             </div>
             <h3 className="text-xl font-semibold mb-2">Henüz Kulüp Yok</h3>
             <p className="text-muted-foreground max-w-md">

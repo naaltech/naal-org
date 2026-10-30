@@ -19,7 +19,7 @@
 - **Backend**: Supabase (PostgreSQL)
 - **Authentication**: Supabase Auth
 - **Deployment**: Netlify
-- **Icons**: Lucide React
+- **Icons**: Heroicons
 
 ## 🔗 Related Repositories
 

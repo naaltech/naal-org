@@ -3,7 +3,7 @@
 import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { Search, CheckCircle, XCircle, Calendar, User, BookOpen, Hash, Shield } from "lucide-react"
+import { MagnifyingGlassIcon, CheckCircleIcon, XCircleIcon, CalendarIcon, UserIcon, BookOpenIcon, ShieldCheckIcon } from "@heroicons/react/24/outline"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -78,7 +78,7 @@ export default function CertificateVerificationPage() {
 
               <div className="w-full max-w-md space-y-4">
                 <div className="relative">
-                  <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                  <MagnifyingGlassIcon className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                   <Input
                     type="text"
                     placeholder="Sertifika UID veya File ID girin..."
@@ -102,7 +102,7 @@ export default function CertificateVerificationPage() {
             <div className="max-w-4xl mx-auto">
               {error && (
                 <Alert className="mb-6 border-destructive">
-                  <XCircle className="h-4 w-4" />
+                  <XCircleIcon className="h-4 w-4" />
                   <AlertDescription className="text-destructive">
                     {error}
                   </AlertDescription>
@@ -114,7 +114,7 @@ export default function CertificateVerificationPage() {
                   <CardHeader className="text-center space-y-4">
                     <div className="flex justify-center">
                       <div className="rounded-full bg-green-100 p-3">
-                        <CheckCircle className="h-8 w-8 text-green-600" />
+                        <CheckCircleIcon className="h-8 w-8 text-green-600" />
                       </div>
                     </div>
                     <div>
@@ -155,7 +155,7 @@ export default function CertificateVerificationPage() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="space-y-4">
                         <div className="flex items-center gap-3">
-                          <User className="h-5 w-5 text-muted-foreground" />
+                          <UserIcon className="h-5 w-5 text-muted-foreground" />
                           <div>
                             <p className="text-sm font-medium text-muted-foreground">
                               {certificate.type === 'pdf' ? 'Verilen Kişi' : 'Verilen Kişi'}
@@ -165,7 +165,7 @@ export default function CertificateVerificationPage() {
                         </div>
 
                         <div className="flex items-center gap-3">
-                          <BookOpen className="h-5 w-5 text-muted-foreground" />
+                          <BookOpenIcon className="h-5 w-5 text-muted-foreground" />
                           <div>
                             <p className="text-sm font-medium text-muted-foreground">
                               {certificate.type === 'pdf' ? 'Sertifika Adı' : 'Başlık'}
@@ -177,7 +177,7 @@ export default function CertificateVerificationPage() {
                         </div>
 
                         <div className="flex items-center gap-3">
-                          <Calendar className="h-5 w-5 text-muted-foreground" />
+                          <CalendarIcon className="h-5 w-5 text-muted-foreground" />
                           <div>
                             <p className="text-sm font-medium text-muted-foreground">
                               Tarih
@@ -191,7 +191,7 @@ export default function CertificateVerificationPage() {
 
                       <div className="space-y-4">
                         <div className="flex items-center gap-3">
-                          <Shield className="h-5 w-5 text-muted-foreground" />
+                          <ShieldCheckIcon className="h-5 w-5 text-muted-foreground" />
                           <div>
                             <p className="text-sm font-medium text-muted-foreground">
                               {certificate.type === 'pdf' ? 'UID' : 'File ID'}
@@ -204,7 +204,7 @@ export default function CertificateVerificationPage() {
 
                         {certificate.type === 'pdf' && certificate.from && (
                           <div className="flex items-center gap-3">
-                            <User className="h-5 w-5 text-muted-foreground" />
+                            <UserIcon className="h-5 w-5 text-muted-foreground" />
                             <div>
                               <p className="text-sm font-medium text-muted-foreground">
                                 Veren Kurum
@@ -216,7 +216,7 @@ export default function CertificateVerificationPage() {
 
                         {certificate.type === 'standard' && certificate.creator && (
                           <div className="flex items-center gap-3">
-                            <User className="h-5 w-5 text-muted-foreground" />
+                            <UserIcon className="h-5 w-5 text-muted-foreground" />
                             <div>
                               <p className="text-sm font-medium text-muted-foreground">
                                 Oluşturan
@@ -227,7 +227,7 @@ export default function CertificateVerificationPage() {
                         )}
 
                         <div className="flex items-center gap-3">
-                          <Calendar className="h-5 w-5 text-muted-foreground" />
+                          <CalendarIcon className="h-5 w-5 text-muted-foreground" />
                           <div>
                             <p className="text-sm font-medium text-muted-foreground">
                               Oluşturulma Tarihi
@@ -273,7 +273,7 @@ export default function CertificateVerificationPage() {
                 <div className="text-center py-12">
                   <div className="mx-auto max-w-sm">
                     <div className="mx-auto mb-4 w-48 h-32 bg-muted rounded-lg flex items-center justify-center">
-                      <Shield className="h-16 w-16 text-muted-foreground/50" />
+                      <ShieldCheckIcon className="h-16 w-16 text-muted-foreground/50" />
                     </div>
                     <h3 className="text-lg font-semibold mb-2">
                       Sertifika Doğrulama
@@ -294,7 +294,7 @@ export default function CertificateVerificationPage() {
                   <Card>
                     <CardHeader className="text-center">
                       <div className="mx-auto rounded-full bg-primary/10 p-2 w-fit">
-                        <Search className="h-6 w-6 text-primary" />
+                        <MagnifyingGlassIcon className="h-6 w-6 text-primary" />
                       </div>
                       <CardTitle className="text-lg">1. Sertifika Bilgisi</CardTitle>
                     </CardHeader>
@@ -308,7 +308,7 @@ export default function CertificateVerificationPage() {
                   <Card>
                     <CardHeader className="text-center">
                       <div className="mx-auto rounded-full bg-primary/10 p-2 w-fit">
-                        <Shield className="h-6 w-6 text-primary" />
+                        <ShieldCheckIcon className="h-6 w-6 text-primary" />
                       </div>
                       <CardTitle className="text-lg">2. Doğrulama</CardTitle>
                     </CardHeader>
@@ -322,7 +322,7 @@ export default function CertificateVerificationPage() {
                   <Card>
                     <CardHeader className="text-center">
                       <div className="mx-auto rounded-full bg-primary/10 p-2 w-fit">
-                        <CheckCircle className="h-6 w-6 text-primary" />
+                        <CheckCircleIcon className="h-6 w-6 text-primary" />
                       </div>
                       <CardTitle className="text-lg">3. Sonuç</CardTitle>
                     </CardHeader>

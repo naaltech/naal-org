@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { ArrowRight } from "lucide-react"
+import { ArrowRightIcon } from "@heroicons/react/24/outline"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import Header from "@/components/header"
@@ -150,7 +150,7 @@ export default function Home() {
             <div className="mt-12">
               <Link href="/certificates" passHref>
                 <Button size="lg" className="gap-2 px-8 py-4 text-lg">
-                  Sertifika Doğrula <ArrowRight className="h-5 w-5" />
+                  Sertifika Doğrula <ArrowRightIcon className="h-5 w-5" />
                 </Button>
               </Link>
             </div>

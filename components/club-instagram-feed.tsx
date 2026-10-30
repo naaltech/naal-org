@@ -5,8 +5,8 @@ import Image from "next/image"
 import Link from "next/link"
 import { Card, CardContent } from "@/components/ui/card"
 import { Dialog, DialogContent, DialogTrigger, DialogTitle, DialogHeader } from "@/components/ui/dialog"
-import { ExternalLink, ChevronLeft, ChevronRight, Heart, MessageCircle, Share } from "lucide-react"
-import { SiInstagram, SiX, SiYoutube, SiFacebook } from '@icons-pack/react-simple-icons';
+import { ArrowTopRightOnSquareIcon, ChevronLeftIcon, ChevronRightIcon, HeartIcon } from "@heroicons/react/24/outline"
+import { InstagramIcon } from '@/components/icons/brand-icons';
 
 import { getInstagramPostsByClub, InstagramPost } from "@/lib/supabase"
 
@@ -47,13 +47,13 @@ export default function ClubInstagramFeed({ clubInstagramAccounts }: ClubInstagr
                 onClick={prevImage}
                 className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 transition-colors"
               >
-                <ChevronLeft className="h-4 w-4" />
+                <ChevronLeftIcon className="h-4 w-4" />
               </button>
               <button
                 onClick={nextImage}
                 className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 transition-colors"
               >
-                <ChevronRight className="h-4 w-4" />
+                <ChevronRightIcon className="h-4 w-4" />
               </button>
             </>
           )}
@@ -117,7 +117,7 @@ export default function ClubInstagramFeed({ clubInstagramAccounts }: ClubInstagr
   if (posts.length === 0) {
     return (
       <div className="text-center py-12">
-        <SiInstagram className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+        <InstagramIcon className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
         <h3 className="text-lg font-medium mb-2">Henüz post yok</h3>
         <p className="text-muted-foreground">
           Bu kulübün Instagram hesaplarından henüz post bulunamadı.
@@ -151,7 +151,7 @@ export default function ClubInstagramFeed({ clubInstagramAccounts }: ClubInstagr
                       {/* Overlay on hover */}
                       <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                         <div className="text-white text-center">
-                          <SiInstagram className="h-8 w-8 mx-auto mb-2" />
+                          <InstagramIcon className="h-8 w-8 mx-auto mb-2" />
                           <p className="text-sm">Görüntüle</p>
                         </div>
                       </div>
@@ -170,7 +170,7 @@ export default function ClubInstagramFeed({ clubInstagramAccounts }: ClubInstagr
               <DialogContent className="max-w-4xl w-full max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                   <DialogTitle className="flex items-center gap-2">
-                    <SiInstagram className="h-5 w-5" />
+                    <InstagramIcon className="h-5 w-5" />
                     @{post.user_name}
                   </DialogTitle>
                 </DialogHeader>
@@ -195,7 +195,7 @@ export default function ClubInstagramFeed({ clubInstagramAccounts }: ClubInstagr
                     <div className="flex items-center justify-between pt-4 border-t">
                       <div className="flex items-center gap-4 text-sm text-muted-foreground">
                         <span className="flex items-center gap-1">
-                          <Heart className="h-4 w-4" />
+                          <HeartIcon className="h-4 w-4" />
                           Instagram'da gör
                         </span>
                       </div>
@@ -206,7 +206,7 @@ export default function ClubInstagramFeed({ clubInstagramAccounts }: ClubInstagr
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-1 text-sm text-primary hover:underline"
                       >
-                        <ExternalLink className="h-4 w-4" />
+                        <ArrowTopRightOnSquareIcon className="h-4 w-4" />
                         @{post.user_name}
                       </Link>
                     </div>

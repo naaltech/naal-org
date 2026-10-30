@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { AlertTriangle, Home, ArrowLeft, Search } from "lucide-react"
+import { ExclamationTriangleIcon, HomeIcon, ArrowLeftIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
 
@@ -15,7 +15,7 @@ export default function NotFound() {
           {/* 404 Icon */}
           <div className="relative">
             <div className="w-32 h-32 bg-muted rounded-full flex items-center justify-center mb-4">
-              <AlertTriangle className="h-16 w-16 text-muted-foreground" />
+              <ExclamationTriangleIcon className="h-16 w-16 text-muted-foreground" />
             </div>
             <div className="absolute -top-2 -right-2 w-12 h-12 bg-primary rounded-full flex items-center justify-center">
               <span className="text-primary-foreground font-bold text-lg">404</span>
@@ -38,7 +38,7 @@ export default function NotFound() {
             <Card className="hover:shadow-lg transition-shadow">
               <CardHeader className="text-center pb-4">
                 <div className="mx-auto w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-2">
-                  <Home className="h-6 w-6 text-primary" />
+                  <HomeIcon className="h-6 w-6 text-primary" />
                 </div>
                 <CardTitle>Ana Sayfaya Dön</CardTitle>
                 <CardDescription>
@@ -48,7 +48,7 @@ export default function NotFound() {
               <CardContent>
                 <Button asChild className="w-full">
                   <Link href="/">
-                    <Home className="mr-2 h-4 w-4" />
+                    <HomeIcon className="mr-2 h-4 w-4" />
                     Ana Sayfa
                   </Link>
                 </Button>
@@ -58,7 +58,7 @@ export default function NotFound() {
             <Card className="hover:shadow-lg transition-shadow">
               <CardHeader className="text-center pb-4">
                 <div className="mx-auto w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-2">
-                  <Search className="h-6 w-6 text-primary" />
+                  <MagnifyingGlassIcon className="h-6 w-6 text-primary" />
                 </div>
                 <CardTitle>Sertifika Ara</CardTitle>
                 <CardDescription>
@@ -68,7 +68,7 @@ export default function NotFound() {
               <CardContent>
                 <Button variant="outline" asChild className="w-full">
                   <Link href="/certificates">
-                    <Search className="mr-2 h-4 w-4" />
+                    <MagnifyingGlassIcon className="mr-2 h-4 w-4" />
                     Sertifika Doğrula
                   </Link>
                 </Button>
@@ -82,14 +82,14 @@ export default function NotFound() {
             <div className="flex flex-wrap justify-center gap-3">
               <Button variant="ghost" asChild>
                 <Link href="/clubs">
-                  <ArrowLeft className="mr-2 h-4 w-4" />
+                  <ArrowLeftIcon className="mr-2 h-4 w-4" />
                   Kulüpler
                 </Link>
               </Button>
               {/* Instagram akışı şimdilik gizli.
               <Button variant="ghost" asChild>
                 <Link href="/instagram">
-                  <ArrowLeft className="mr-2 h-4 w-4" />
+                  <ArrowLeftIcon className="mr-2 h-4 w-4" />
                   Instagram Akışı
                 </Link>
               </Button>

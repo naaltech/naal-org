@@ -3,9 +3,9 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { ChevronDown, Menu, X, Mail, MapPin } from "lucide-react"
+import { ChevronDownIcon, Bars3Icon, XMarkIcon, EnvelopeIcon, MapPinIcon } from "@heroicons/react/24/outline"
 import Linkedin from '@/components/icons/linkedin-icon';
-import { SiInstagram, SiX, SiYoutube, SiFacebook } from '@icons-pack/react-simple-icons';
+import { InstagramIcon, XIcon, YoutubeIcon, FacebookIcon } from '@/components/icons/brand-icons';
 import { useState, useEffect } from "react"
 import { getAllClubs, type Club } from "@/lib/supabase"
 
@@ -41,11 +41,11 @@ export default function Header() {
             {/* Left side - Contact Info */}
             <div className="hidden md:flex items-center space-x-6 text-muted-foreground">
               <div className="flex items-center space-x-2">
-                <Mail className="h-4 w-4" />
+                <EnvelopeIcon className="h-4 w-4" />
                 <span>E-Posta: <a href="mailto:iletisim@naal.org.tr" className="hover:text-foreground transition-colors">iletisim@naal.org.tr</a></span>
               </div>
               <div className="flex items-center space-x-2">
-                <MapPin className="h-4 w-4" />
+                <MapPinIcon className="h-4 w-4" />
                 <span>Konum: <a href="https://www.google.com/maps?q=İnkılap+Mah.+Yelkenciler+Sok.+NO:1+Ümraniye/İstanbul" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">İnkılap Mah. Yelkenciler Sok. NO:1 Ümraniye/İstanbul</a></span>
               </div>
             </div>
@@ -67,7 +67,7 @@ export default function Header() {
                 rel="noopener noreferrer" 
                 className="text-muted-foreground hover:text-foreground transition-colors"
               >
-                <SiFacebook className="h-4 w-4" />
+                <FacebookIcon className="h-4 w-4" />
               </a>
               <a 
                 href="https://www.instagram.com/nevzatayazanadolulisesi_/" 
@@ -75,7 +75,7 @@ export default function Header() {
                 rel="noopener noreferrer" 
                 className="text-muted-foreground hover:text-foreground transition-colors"
               >
-                <SiInstagram className="h-4 w-4" />
+                <InstagramIcon className="h-4 w-4" />
               </a>
               <a 
                 href="https://www.linkedin.com/school/nevzatayazlisesi/" 
@@ -91,7 +91,7 @@ export default function Header() {
                 rel="noopener noreferrer" 
                 className="text-muted-foreground hover:text-foreground transition-colors"
               >
-                <SiX className="h-4 w-4" />
+                <XIcon className="h-4 w-4" />
               </a>
               <a 
                 href="https://www.youtube.com/@NaalRec" 
@@ -99,7 +99,7 @@ export default function Header() {
                 rel="noopener noreferrer" 
                 className="text-muted-foreground hover:text-foreground transition-colors"
               >
-                <SiYoutube className="h-4 w-4" />
+                <YoutubeIcon className="h-4 w-4" />
               </a>
             </div>
           </div>
@@ -117,7 +117,7 @@ export default function Header() {
 
         {/* Mobile Menu Button */}
         <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-          {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          {isMenuOpen ? <XMarkIcon className="h-6 w-6" /> : <Bars3Icon className="h-6 w-6" />}
         </Button>
 
         {/* Desktop Navigation */}
@@ -137,7 +137,7 @@ export default function Header() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="flex items-center gap-1">
-                  Okul Kulüpleri <ChevronDown className="h-4 w-4" />
+                  Okul Kulüpleri <ChevronDownIcon className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
@@ -193,7 +193,7 @@ export default function Header() {
                     onClick={() => setIsClubsOpen(!isClubsOpen)}
                   >
                     Okul Kulüpleri
-                    <ChevronDown className={`h-4 w-4 transition-transform ${isClubsOpen ? 'rotate-180' : ''}`} />
+                    <ChevronDownIcon className={`h-4 w-4 transition-transform ${isClubsOpen ? 'rotate-180' : ''}`} />
                   </Button>
                   
                   {isClubsOpen && (

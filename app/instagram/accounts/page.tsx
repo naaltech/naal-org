@@ -5,8 +5,8 @@ import Image from "next/image"
 import Link from "next/link"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { ExternalLink, ArrowLeft, Users, LinkIcon } from "lucide-react"
-import { SiInstagram } from '@icons-pack/react-simple-icons';
+import { ArrowTopRightOnSquareIcon, ArrowLeftIcon, UsersIcon, LinkIcon } from "@heroicons/react/24/outline"
+import { InstagramIcon } from '@/components/icons/brand-icons';
 
 import Header from "@/components/header"
 import Footer from "@/components/footer"
@@ -46,7 +46,7 @@ export default function InstagramAccountsPage() {
         <div className="flex-1 py-12">
           <div className="container max-w-4xl mx-auto px-4 md:px-6">
             <div className="text-center">
-              <SiInstagram className="h-12 w-12 mx-auto mb-4" style={{ color: '#2ea5d5' }} />
+              <InstagramIcon className="h-12 w-12 mx-auto mb-4" style={{ color: '#2ea5d5' }} />
               <h1 className="text-3xl font-bold mb-2">Kulüp Instagram Hesapları</h1>
               <p className="text-muted-foreground">Yükleniyor...</p>
             </div>
@@ -67,7 +67,7 @@ export default function InstagramAccountsPage() {
           <div className="mb-12">
             <div className="flex items-center gap-4 mb-6">
               <Link href="/instagram" className="text-muted-foreground hover:text-foreground">
-                <ArrowLeft className="h-5 w-5" />
+                <ArrowLeftIcon className="h-5 w-5" />
               </Link>
               <div className="flex items-center gap-3">
                 <LinkIcon className="h-8 w-8" style={{ color: '#2ea5d5' }} />
@@ -81,7 +81,7 @@ export default function InstagramAccountsPage() {
             </div>
             
             <div className="text-center bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-950/20 dark:to-cyan-950/20 rounded-lg p-6 border">
-              <SiInstagram className="h-12 w-12 mx-auto mb-4" style={{ color: '#2ea5d5' }} />
+              <InstagramIcon className="h-12 w-12 mx-auto mb-4" style={{ color: '#2ea5d5' }} />
               <h2 className="text-xl font-semibold mb-2">Tüm Kulüplerimizi Takip Edin</h2>
               <p className="text-muted-foreground mb-4">
                 Okulumuzun aktif kulüplerinin Instagram hesaplarını keşfedin ve takip edin
@@ -93,7 +93,7 @@ export default function InstagramAccountsPage() {
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-pink-500 to-orange-400 text-white rounded-full hover:from-pink-600 hover:to-orange-500 transition-all"
                 >
-                  <SiInstagram className="h-4 w-4" />
+                  <InstagramIcon className="h-4 w-4" />
                   Resmi Okul Hesabımız
                 </Link>
               </div>
@@ -103,14 +103,14 @@ export default function InstagramAccountsPage() {
           {/* Clubs List */}
           {clubs.length === 0 ? (
             <div className="text-center py-16">
-              <SiInstagram className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+              <InstagramIcon className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
               <h2 className="text-xl font-semibold mb-2">Henüz Instagram hesabı bulunmuyor</h2>
               <p className="text-muted-foreground mb-6">
                 Kulüplerimizin Instagram hesapları burada görünecek
               </p>
               <Link href="/clubs">
                 <Button variant="outline">
-                  <Users className="h-4 w-4 mr-2" />
+                  <UsersIcon className="h-4 w-4 mr-2" />
                   Tüm Kulüpleri Gör
                 </Button>
               </Link>
@@ -169,9 +169,9 @@ export default function InstagramAccountsPage() {
                                     rel="noopener noreferrer"
                                     className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-full text-sm font-medium hover:from-pink-600 hover:to-purple-700 transition-all hover:scale-105"
                                   >
-                                    <SiInstagram className="h-4 w-4" />
+                                    <InstagramIcon className="h-4 w-4" />
                                     @{username}
-                                    <ExternalLink className="h-3 w-3" />
+                                    <ArrowTopRightOnSquareIcon className="h-3 w-3" />
                                   </Link>
                                 )
                               })}
@@ -183,7 +183,7 @@ export default function InstagramAccountsPage() {
                         <div className="flex-shrink-0">
                           <Link href={`/clubs/${club.id}`}>
                             <Button variant="outline" size="sm" className="gap-2">
-                              <Users className="h-4 w-4" />
+                              <UsersIcon className="h-4 w-4" />
                               Kulüp Sayfası
                             </Button>
                           </Link>
@@ -206,13 +206,13 @@ export default function InstagramAccountsPage() {
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                 <Link href="/clubs">
                   <Button variant="outline" className="gap-2">
-                    <Users className="h-4 w-4" />
+                    <UsersIcon className="h-4 w-4" />
                     Tüm Kulüpler
                   </Button>
                 </Link>
                 <Link href="/instagram">
                   <Button className="gap-2">
-                    <SiInstagram className="h-4 w-4" />
+                    <InstagramIcon className="h-4 w-4" />
                     Instagram Paylaşımları
                   </Button>
                 </Link>

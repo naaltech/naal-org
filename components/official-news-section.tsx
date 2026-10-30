@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import Link from "next/link"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { ExternalLink } from "lucide-react"
+import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline"
 
 interface OfficialNews {
   baslik: string
@@ -92,7 +92,7 @@ export default function OfficialNewsSection() {
                       className="gap-1"
                     >
                       Devamını Oku
-                      <ExternalLink className="h-3 w-3" />
+                      <ArrowTopRightOnSquareIcon className="h-3 w-3" />
                     </a>
                   </Button>
                 </div>

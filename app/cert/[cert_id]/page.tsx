@@ -4,9 +4,9 @@ import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
-import { Calendar, User, BookOpen, Shield, Download, FileCheck2, ExternalLink, ArrowLeft } from "lucide-react"
+import { CalendarIcon, UserIcon, BookOpenIcon, ShieldCheckIcon, ArrowDownTrayIcon, DocumentCheckIcon, ArrowLeftIcon } from "@heroicons/react/24/outline"
 import Linkedin from '@/components/icons/linkedin-icon';
-import { SiX, SiFacebook } from '@icons-pack/react-simple-icons';
+import { XIcon, FacebookIcon } from '@/components/icons/brand-icons';
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -96,7 +96,7 @@ export default function LegacyCertificateDetailPage() {
         <Header />
         <div className="container max-w-4xl mx-auto px-4 py-16">
           <div className="text-center">
-            <Shield className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+            <ShieldCheckIcon className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
             <h1 className="text-2xl font-bold mb-2">Sertifika Bulunamadı</h1>
             <p className="text-muted-foreground mb-8">
               Aradığınız sertifika bulunamadı veya geçersiz.
@@ -104,7 +104,7 @@ export default function LegacyCertificateDetailPage() {
             <div className="space-x-4">
               <Link href="/certificates">
                 <Button>
-                  <ArrowLeft className="mr-2 h-4 w-4" />
+                  <ArrowLeftIcon className="mr-2 h-4 w-4" />
                   Sertifika Doğrulamaya Geri Dön
                 </Button>
               </Link>
@@ -127,7 +127,7 @@ export default function LegacyCertificateDetailPage() {
         <div className="mb-6">
           <Link href="/certificates">
             <Button variant="outline" size="sm">
-              <ArrowLeft className="mr-2 h-4 w-4" />
+              <ArrowLeftIcon className="mr-2 h-4 w-4" />
               Sertifika Doğrulamaya Geri Dön
             </Button>
           </Link>
@@ -135,7 +135,7 @@ export default function LegacyCertificateDetailPage() {
 
         {/* Success Alert */}
         <Alert className="mb-8 border-green-200 bg-green-50">
-          <Shield className="h-4 w-4 text-green-600" />
+          <ShieldCheckIcon className="h-4 w-4 text-green-600" />
           <AlertDescription className="text-green-800">
             Bu sertifika başarıyla doğrulandı ve geçerlidir.
           </AlertDescription>
@@ -172,7 +172,7 @@ export default function LegacyCertificateDetailPage() {
                     <div className="p-4 text-center bg-background border-t">
                       <Button asChild>
                         <a href={certificate.pdf_link} target="_blank" rel="noopener noreferrer">
-                          <Download className="mr-2 h-4 w-4" />
+                          <ArrowDownTrayIcon className="mr-2 h-4 w-4" />
                           PDF İndir
                         </a>
                       </Button>
@@ -183,7 +183,7 @@ export default function LegacyCertificateDetailPage() {
                 {/* Certificate Details */}
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div className="flex items-center space-x-3">
-                    <User className="h-5 w-5 text-muted-foreground flex-shrink-0" />
+                    <UserIcon className="h-5 w-5 text-muted-foreground flex-shrink-0" />
                     <div>
                       <p className="text-sm font-medium">Alıcı</p>
                       <p className="text-sm text-muted-foreground">{certificate.given}</p>
@@ -191,7 +191,7 @@ export default function LegacyCertificateDetailPage() {
                   </div>
                   
                   <div className="flex items-center space-x-3">
-                    <Calendar className="h-5 w-5 text-muted-foreground flex-shrink-0" />
+                    <CalendarIcon className="h-5 w-5 text-muted-foreground flex-shrink-0" />
                     <div>
                       <p className="text-sm font-medium">Tarih</p>
                       <p className="text-sm text-muted-foreground">
@@ -202,7 +202,7 @@ export default function LegacyCertificateDetailPage() {
 
                   {certificate.from && (
                     <div className="flex items-center space-x-3">
-                      <BookOpen className="h-5 w-5 text-muted-foreground flex-shrink-0" />
+                      <BookOpenIcon className="h-5 w-5 text-muted-foreground flex-shrink-0" />
                       <div>
                         <p className="text-sm font-medium">Veren Kurum</p>
                         <p className="text-sm text-muted-foreground">{certificate.from}</p>
@@ -212,7 +212,7 @@ export default function LegacyCertificateDetailPage() {
 
                   {certificate.creator && (
                     <div className="flex items-center space-x-3">
-                      <User className="h-5 w-5 text-muted-foreground flex-shrink-0" />
+                      <UserIcon className="h-5 w-5 text-muted-foreground flex-shrink-0" />
                       <div>
                         <p className="text-sm font-medium">Oluşturan</p>
                         <p className="text-sm text-muted-foreground">{certificate.creator}</p>
@@ -256,7 +256,7 @@ export default function LegacyCertificateDetailPage() {
               </CardHeader>
               <CardContent>
                 <div className="flex items-center space-x-3 text-green-600">
-                  <Shield className="h-5 w-5" />
+                  <ShieldCheckIcon className="h-5 w-5" />
                   <span className="font-medium">Doğrulandı</span>
                 </div>
                 <p className="text-sm text-muted-foreground mt-2">
@@ -302,7 +302,7 @@ export default function LegacyCertificateDetailPage() {
                     asChild
                   >
                     <a href={getTwitterShareUrl()} target="_blank" rel="noopener noreferrer">
-                      <SiX className="h-4 w-4" />
+                      <XIcon className="h-4 w-4" />
                     </a>
                   </Button>
                   <Button
@@ -311,7 +311,7 @@ export default function LegacyCertificateDetailPage() {
                     asChild
                   >
                     <a href={getFacebookShareUrl()} target="_blank" rel="noopener noreferrer">
-                      <SiFacebook className="h-4 w-4" />
+                      <FacebookIcon className="h-4 w-4" />
                     </a>
                   </Button>
                 </div>
@@ -327,7 +327,7 @@ export default function LegacyCertificateDetailPage() {
                 {certificate.pdf_link && (
                   <Button className="w-full" asChild>
                     <a href={certificate.pdf_link} target="_blank" rel="noopener noreferrer">
-                      <Download className="mr-2 h-4 w-4" />
+                      <ArrowDownTrayIcon className="mr-2 h-4 w-4" />
                       PDF İndir
                     </a>
                   </Button>
@@ -336,7 +336,7 @@ export default function LegacyCertificateDetailPage() {
                 <Dialog>
                   <DialogTrigger asChild>
                     <Button variant="outline" className="w-full">
-                      <FileCheck2 className="mr-2 h-4 w-4" />
+                      <DocumentCheckIcon className="mr-2 h-4 w-4" />
                       Başka Sertifika Doğrula
                     </Button>
                   </DialogTrigger>

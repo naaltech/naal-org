@@ -7,8 +7,8 @@ import Link from "next/link"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogTrigger, DialogTitle, DialogHeader } from "@/components/ui/dialog"
-import { ExternalLink, Calendar, ArrowLeft, ChevronLeft, ChevronRight, Share, Copy } from "lucide-react"
-import { SiInstagram } from '@icons-pack/react-simple-icons'
+import { ArrowTopRightOnSquareIcon, CalendarIcon, ArrowLeftIcon, ChevronLeftIcon, ChevronRightIcon, ArrowUpOnSquareIcon } from "@heroicons/react/24/outline"
+import { InstagramIcon } from '@/components/icons/brand-icons'
 import Header from "@/components/header"
 import Footer from "@/components/footer"
 import { getInstagramPosts, getInstagramPostById, parseInstagramImages, InstagramPost } from "@/lib/supabase"
@@ -134,13 +134,13 @@ function InstagramPageContent() {
                 onClick={prevImage}
                 className="absolute left-1 sm:left-2 top-1/2 -translate-y-1/2 bg-black/50 text-white p-1.5 sm:p-2 rounded-full hover:bg-black/70 transition-colors"
               >
-                <ChevronLeft className="h-3 w-3 sm:h-4 sm:w-4" />
+                <ChevronLeftIcon className="h-3 w-3 sm:h-4 sm:w-4" />
               </button>
               <button
                 onClick={nextImage}
                 className="absolute right-1 sm:right-2 top-1/2 -translate-y-1/2 bg-black/50 text-white p-1.5 sm:p-2 rounded-full hover:bg-black/70 transition-colors"
               >
-                <ChevronRight className="h-3 w-3 sm:h-4 sm:w-4" />
+                <ChevronRightIcon className="h-3 w-3 sm:h-4 sm:w-4" />
               </button>
             </>
           )}
@@ -337,7 +337,7 @@ function InstagramPageContent() {
         <div className="flex-1 py-12">
           <div className="container max-w-7xl mx-auto px-4 md:px-6">
             <div className="text-center">
-              <SiInstagram className="h-12 w-12 mx-auto mb-4" style={{ color: '#2ea5d5' }} />
+              <InstagramIcon className="h-12 w-12 mx-auto mb-4" style={{ color: '#2ea5d5' }} />
               <h1 className="text-3xl font-bold mb-2">Instagram Paylaşımları</h1>
               <p className="text-muted-foreground">Yükleniyor...</p>
             </div>
@@ -361,10 +361,10 @@ function InstagramPageContent() {
           <div className="mb-8">
             <div className="flex items-center gap-4 mb-6">
               <Link href="/" className="text-muted-foreground hover:text-foreground">
-                <ArrowLeft className="h-5 w-5" />
+                <ArrowLeftIcon className="h-5 w-5" />
               </Link>
               <div className="flex items-center gap-3">
-                <SiInstagram className="h-8 w-8" style={{ color: '#2ea5d5' }} />
+                <InstagramIcon className="h-8 w-8" style={{ color: '#2ea5d5' }} />
                 <div>
                   <h1 className="text-3xl font-bold">Instagram Paylaşımları</h1>
                   <p className="text-muted-foreground">
@@ -379,7 +379,7 @@ function InstagramPageContent() {
                 href="/instagram/accounts"
                 className="inline-flex items-center gap-2 px-4 py-2 bg-black text-white rounded-full hover:bg-black/80 transition-all"
               >
-                <SiInstagram className="h-4 w-4" />
+                <InstagramIcon className="h-4 w-4" />
                 Kulüp Instagram Hesapları
               </Link>
               <Link
@@ -388,7 +388,7 @@ function InstagramPageContent() {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-4 py-2 bg-black text-white rounded-full hover:bg-black/80 transition-all"
               >
-                <SiInstagram className="h-4 w-4" />
+                <InstagramIcon className="h-4 w-4" />
                 Resmi Instagram Hesabımız
               </Link>
             </div>
@@ -397,7 +397,7 @@ function InstagramPageContent() {
           {/* Posts Grid */}
           {currentPosts.length === 0 ? (
             <div className="text-center py-16">
-              <SiInstagram className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+              <InstagramIcon className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
               <h2 className="text-xl font-semibold mb-2">Henüz paylaşım bulunmuyor</h2>
               <p className="text-muted-foreground mb-6">
                 Kulüplerimizin paylaşımları burada görünecek
@@ -408,7 +408,7 @@ function InstagramPageContent() {
                 rel="noopener noreferrer"
               >
                 <Button>
-                  <SiInstagram className="h-4 w-4 mr-2" />
+                  <InstagramIcon className="h-4 w-4 mr-2" />
                   Instagram'da Takip Et
                 </Button>
               </Link>
@@ -518,7 +518,7 @@ function InstagramPageContent() {
                                     <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
                                       {post.time && (
                                         <>
-                                          <Calendar className="h-3 w-3 sm:h-4 sm:w-4" />
+                                          <CalendarIcon className="h-3 w-3 sm:h-4 sm:w-4" />
                                           <span>{new Date(post.time).toLocaleDateString('tr-TR')}</span>
                                         </>
                                       )}
@@ -531,7 +531,7 @@ function InstagramPageContent() {
                                         onClick={(e) => sharePost(post, e)}
                                         className="gap-2 text-xs sm:text-sm"
                                       >
-                                        <Share className="h-3 w-3 sm:h-4 sm:w-4" />
+                                        <ArrowUpOnSquareIcon className="h-3 w-3 sm:h-4 sm:w-4" />
                                         Paylaş
                                       </Button>
                                       
@@ -542,7 +542,7 @@ function InstagramPageContent() {
                                           rel="noopener noreferrer"
                                           className="inline-flex items-center gap-1 text-xs sm:text-sm text-primary hover:underline"
                                         >
-                                          <ExternalLink className="h-3 w-3 sm:h-4 sm:w-4" />
+                                          <ArrowTopRightOnSquareIcon className="h-3 w-3 sm:h-4 sm:w-4" />
                                           Instagram'da Gör
                                         </Link>
                                       )}
@@ -594,7 +594,7 @@ function InstagramPageContent() {
                                 className="h-8 w-8 p-0 text-muted-foreground hover:text-foreground"
                                 title="Paylaşım linkini kopyala"
                               >
-                                <Share className="h-4 w-4" />
+                                <ArrowUpOnSquareIcon className="h-4 w-4" />
                               </Button>
                               
                               {post.post_link && (
@@ -627,7 +627,7 @@ function InstagramPageContent() {
                     size="lg"
                     className="gap-2"
                   >
-                    <SiInstagram className="h-4 w-4" />
+                    <InstagramIcon className="h-4 w-4" />
                     {loadingMore ? 'Yükleniyor...' : 'Daha Fazla Yükle'}
                   </Button>
                 </div>
@@ -664,7 +664,7 @@ function InstagramPageLoading() {
       <div className="flex-1 py-12">
         <div className="container max-w-7xl mx-auto px-4 md:px-6">
           <div className="text-center">
-            <SiInstagram className="h-12 w-12 mx-auto mb-4" style={{ color: '#2ea5d5' }} />
+            <InstagramIcon className="h-12 w-12 mx-auto mb-4" style={{ color: '#2ea5d5' }} />
             <h1 className="text-3xl font-bold mb-2">Instagram Paylaşımları</h1>
             <p className="text-muted-foreground">Yükleniyor...</p>
           </div>
