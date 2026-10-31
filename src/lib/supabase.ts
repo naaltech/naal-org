@@ -242,7 +242,11 @@ export interface Club {
   logo: string | null
   title: string | null
   urls: string | null
+  /** Dizinde kapatılan kulüp sitede gösterilmez. */
+  is_active?: boolean
 }
+
+export const isOpenClub = (club: Pick<Club, 'is_active'>) => club.is_active !== false
 
 // Instagram post tipi tanımı
 export interface InstagramPost {
@@ -270,7 +274,7 @@ export async function getAllClubs() {
 
     return {
       success: true,
-      clubs: data as Club[]
+      clubs: (data as Club[]).filter(isOpenClub)
     }
   } catch (error) {
     return {
@@ -291,6 +295,10 @@ export async function getClubById(id: number) {
 
     if (error) {
       throw error
+    }
+
+    if (!isOpenClub(data as Club)) {
+      return { success: false, error: 'Kulüp bulunamadı' }
     }
 
     return {
