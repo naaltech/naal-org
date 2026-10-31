@@ -3,8 +3,7 @@ import ArrowTopRightOnSquareIcon from "heroicons/24/outline/arrow-top-right-on-s
 import UsersIcon from "heroicons/24/outline/users.svg"
 import InstagramIcon from "@/components/icons/instagram.svg"
 
-// Instagram postları şimdilik gizli.
-// import ClubInstagramFeed from "@/components/ClubInstagramFeed.astro"
+import ClubInstagramFeed from "@/components/ClubInstagramFeed.astro"
 
 interface Props {
   code: string | null
@@ -20,14 +19,11 @@ const tabPanelClass = "mt-6 ring-offset-background focus-visible:outline-none fo
 ---
 
 <div class="w-full" data-club-tabs>
-  <div role="tablist" class="grid h-10 w-full grid-cols-1 items-center justify-center rounded-md bg-muted p-1 text-muted-foreground">
-    {/* Instagram postları şimdilik gizli. Açarken tablist'teki grid-cols-1'i grid-cols-2 yap.
+  <div role="tablist" class="grid h-10 w-full grid-cols-2 items-center justify-center rounded-md bg-muted p-1 text-muted-foreground">
     <button type="button" role="tab" aria-selected="false" tabindex="-1" class={tabTriggerClass} data-tab="instagram">Instagram</button>
-    */}
     <button type="button" role="tab" aria-selected="true" class={tabTriggerClass} data-tab="contact">İletişim</button>
   </div>
 
-  {/* Instagram postları şimdilik gizli.
   <div role="tabpanel" tabindex="0" class:list={[tabPanelClass, "hidden"]} data-tab-panel="instagram">
     <div class="space-y-6">
       <div class="flex items-center gap-2 mb-4">
@@ -59,7 +55,6 @@ const tabPanelClass = "mt-6 ring-offset-background focus-visible:outline-none fo
       )}
     </div>
   </div>
-  */}
 
   <div role="tabpanel" tabindex="0" class={tabPanelClass} data-tab-panel="contact">
     <div class="space-y-6">

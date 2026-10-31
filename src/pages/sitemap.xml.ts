@@ -4,9 +4,8 @@ const baseUrl = 'https://naal.org.tr'
 
 const entries = [
   { url: baseUrl, changeFrequency: 'daily', priority: 1 },
-  // Instagram sayfaları şimdilik gizli.
-  // { url: `${baseUrl}/instagram`, changeFrequency: 'daily', priority: 0.8 },
-  // { url: `${baseUrl}/instagram/accounts`, changeFrequency: 'weekly', priority: 0.7 },
+  { url: `${baseUrl}/instagram`, changeFrequency: 'daily', priority: 0.8 },
+  { url: `${baseUrl}/instagram/accounts`, changeFrequency: 'weekly', priority: 0.7 },
   { url: `${baseUrl}/certificates`, changeFrequency: 'monthly', priority: 0.7 },
   { url: `${baseUrl}/clubs`, changeFrequency: 'weekly', priority: 0.6 },
 ]

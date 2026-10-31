@@ -81,11 +81,9 @@ const isCertSubdomain = host.startsWith("cert.")
 
       {/* Desktop Navigation */}
       <nav class="hidden md:flex items-center space-x-4">
-        {/* Instagram akışı şimdilik gizli.
         {!isCertSubdomain && (
           <Button href="/instagram" variant="ghost">Instagram Akışı</Button>
         )}
-        */}
         <Button href="/certificates" variant="ghost">Sertifika Doğrula</Button>
 
         {!isCertSubdomain && (
@@ -117,11 +115,9 @@ const isCertSubdomain = host.startsWith("cert.")
       {/* Mobile Navigation */}
       <div class="absolute top-20 left-0 right-0 hidden bg-background border-b md:hidden" data-mobile-menu>
         <div class="container py-4 space-y-2">
-          {/* Instagram akışı şimdilik gizli.
           {!isCertSubdomain && (
             <Button href="/instagram" variant="ghost" class="w-full justify-start">Instagram Akışı</Button>
           )}
-          */}
           <Button href="/certificates" variant="ghost" class="w-full justify-start">
             Sertifika Doğrula
           </Button>
