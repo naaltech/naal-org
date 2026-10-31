@@ -57,12 +57,12 @@ async function handleShortUrl(clubCode: string, pathname: string) {
   try {
     const { data: club, error: clubError } = await client
       .from('clubs')
-      .select('id')
+      .select('*')
       .eq('code', clubCode)
       .maybeSingle()
 
-    // Böyle bir kulüp yoksa normal akışa devam et
-    if (clubError || !club) return null
+    // Böyle bir kulüp yoksa ya da dizinde kapatıldıysa normal akışa devam et
+    if (clubError || !club || club.is_active === false) return null
 
     // Path'i düzelt: başındaki /'yi kaldır
     const cleanPath = pathname.replace(/^\/+/, '')

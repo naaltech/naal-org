@@ -48,9 +48,10 @@ To understand the complete project, you can check out the following repositories
 │   ├── scripts/            # Client-side TypeScript
 │   ├── lib/                # Utility functions
 │   └── middleware.ts       # Subdomain redirects
-├── public/                 # Static files
-└── supabase/              # Database schemas
+└── public/                 # Static files
 ```
+
+The database schema lives in the [admin repository](https://github.com/naaltech/naal-org-admin).
 
 ## 🚀 Deployment
 

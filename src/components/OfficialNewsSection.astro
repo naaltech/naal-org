@@ -19,8 +19,8 @@ interface NewsResponse {
   data: OfficialNews[]
 }
 
-// Haber servisi yavaşsa ana sayfa beklemesin
-const NEWS_TIMEOUT = 3000
+// Bölüm sonradan yüklenir (server:defer); yavaş haber servisi ana sayfayı bekletmez
+const NEWS_TIMEOUT = 15000
 
 let news: OfficialNews[] = []
 
