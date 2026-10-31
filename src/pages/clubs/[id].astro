@@ -1,0 +1,123 @@
+---
+import ArrowLeftIcon from "heroicons/24/outline/arrow-left.svg"
+import ArrowTopRightOnSquareIcon from "heroicons/24/outline/arrow-top-right-on-square.svg"
+import UsersIcon from "heroicons/24/outline/users.svg"
+import BaseLayout from "@/layouts/BaseLayout.astro"
+import SiteHeader from "@/components/SiteHeader.astro"
+import ClubTabs from "@/components/ClubTabs.astro"
+import Footer from "@/components/Footer.astro"
+import InstagramIcon from "@/components/icons/instagram.svg"
+import Badge from "@/components/ui/Badge.astro"
+import Button from "@/components/ui/Button.astro"
+import { getClubById, parseClubInstagram, parseClubUrls } from "@/lib/supabase"
+
+const clubId = parseInt(Astro.params.id ?? "")
+const { success, club } = isNaN(clubId) ? { success: false, club: null } : await getClubById(clubId)
+
+if (!success || !club) {
+  return Astro.rewrite("/404")
+}
+
+const urls = parseClubUrls(club.urls)
+const instagrams = parseClubInstagram(club.instagram)
+
+const logoPath = club.logo || "/placeholder.svg"
+---
+
+<BaseLayout>
+  <div class="min-h-screen bg-background">
+    <SiteHeader />
+    
+    <main class="container max-w-7xl mx-auto px-4 md:px-6 py-8">
+      {/* Back Button */}
+      <div class="mb-6">
+        <Button href="/" variant="ghost" class="gap-2">
+            <ArrowLeftIcon class="h-4 w-4" />
+            Ana Sayfaya Dön
+          </Button>
+      </div>
+
+      {/* Club Header */}
+      <div class="grid md:grid-cols-3 gap-8 mb-8">
+        {/* Club Logo */}
+        <div class="md:col-span-1">
+          <div class="aspect-square relative rounded-lg overflow-hidden bg-muted">
+            <img src={logoPath}
+              alt={club.title || "Kulüp Logosu"} class="absolute inset-0 h-full w-full object-cover" loading="lazy" />
+          </div>
+        </div>
+
+        {/* Club Info */}
+        <div class="md:col-span-2 space-y-4">
+          <div>
+            <h1 class="text-3xl md:text-4xl font-bold mb-2">
+              {club.title || "Kulüp Adı"}
+            </h1>
+            {club.code && (
+              <Badge variant="secondary" class="mb-4">
+                Kod: {club.code}
+              </Badge>
+            )}
+            <p class="text-lg text-muted-foreground leading-relaxed">
+              {club.description || "Kulüp açıklaması mevcut değil."}
+            </p>
+          </div>
+
+          {/* Contact Info */}
+          <div class="space-y-3">
+            {club.owners && (
+              <div class="flex items-center gap-2">
+                <UsersIcon class="h-5 w-5 text-muted-foreground" />
+                <span class="font-medium">Yöneticiler:</span>
+                <span>{club.owners}</span>
+              </div>
+            )}
+            
+            {instagrams.length > 0 && (
+              <div class="flex items-center gap-2">
+                <InstagramIcon class="h-5 w-5 text-muted-foreground" />
+                <span class="font-medium">Instagram:</span>
+                <div class="flex flex-wrap gap-2">
+                  {instagrams.map((ig) => (
+                    <a
+                      href={ig.startsWith('http') ? ig : `https://instagram.com/${ig}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="text-primary hover:underline"
+                    >
+                      @{ig.replace(/^@/, '')}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Additional Links */}
+          {urls.length > 0 && (
+            <div class="space-y-2">
+              <h3 class="font-medium">Ek Bağlantılar:</h3>
+              <div class="flex flex-wrap gap-2">
+                {urls.map((url, index) => (
+                  <a
+                    href={url.startsWith('http') ? url : `https://${url}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center gap-1 text-sm text-primary hover:underline"
+                  >
+                    <ArrowTopRightOnSquareIcon class="h-3 w-3" />
+                    Bağlantı {index + 1}
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Content Tabs */}
+      <ClubTabs code={club.code} owners={club.owners} instagrams={instagrams} urls={urls} />
+    </main>
+    <Footer/>
+  </div>
+</BaseLayout>

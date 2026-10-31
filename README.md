@@ -14,11 +14,11 @@
 
 ## 🚀 Technology Stack
 
-- **Frontend**: Next.js 15, React 19, TypeScript
-- **Styling**: Tailwind CSS, Shadcn/ui
+- **Frontend**: Astro, TypeScript
+- **Styling**: Tailwind CSS
 - **Backend**: Supabase (PostgreSQL)
 - **Authentication**: Supabase Auth
-- **Deployment**: Netlify
+- **Deployment**: Netlify (server islands, CDN cache)
 - **Icons**: Heroicons
 
 ## 🔗 Related Repositories
@@ -33,21 +33,21 @@ To understand the complete project, you can check out the following repositories
 ## 📦 Installation
 
 ### Requirements
-- Node.js 18+ 
+- Node.js 22.23+
 - pnpm (recommended)
 - Supabase account
 
 ## 📁 Project Structure
 
 ```
-├── app/                    # Next.js App Router
-│   ├── certificates/       # Certificate verification
-│   ├── clubs/              # Club pages
-│   └── instagram/          # Instagram feed
-├── components/             # React components
-│   ├── ui/                 # Shadcn/ui components
-│   └── ...                 # Custom components
-├── lib/                    # Utility functions
+├── src/
+│   ├── pages/              # Astro routes
+│   ├── layouts/            # Page layouts
+│   ├── components/         # Astro components
+│   │   └── ui/             # UI primitives
+│   ├── scripts/            # Client-side TypeScript
+│   ├── lib/                # Utility functions
+│   └── middleware.ts       # Subdomain redirects
 ├── public/                 # Static files
 └── supabase/              # Database schemas
 ```
@@ -62,7 +62,7 @@ To understand the complete project, you can check out the following repositories
 ### Manual Deployment
 ```bash
 pnpm build
-pnpm start
+pnpm preview
 ```
 
 ## 📄 License

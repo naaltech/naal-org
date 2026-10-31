@@ -1,0 +1,58 @@
+---
+import ChevronLeftIcon from "heroicons/24/outline/chevron-left.svg"
+import ChevronRightIcon from "heroicons/24/outline/chevron-right.svg"
+
+interface Props {
+  images: string[]
+  postName: string
+}
+
+const { images, postName } = Astro.props
+---
+
+<div class="relative w-full" data-carousel data-post-name={postName}>
+  <div class="relative aspect-square">
+    <img
+      src={images[0]}
+      alt={`${postName} - 1/${images.length}`}
+      class="absolute inset-0 h-full w-full object-cover rounded-lg"
+      loading="lazy"
+      data-carousel-image
+    />
+
+    {/* Navigation buttons */}
+    <button type="button" aria-label="Önceki fotoğraf" class="absolute left-1 sm:left-2 top-1/2 -translate-y-1/2 bg-black/50 text-white p-1.5 sm:p-2 rounded-full hover:bg-black/70 transition-colors" data-carousel-prev>
+      <ChevronLeftIcon class="h-3 w-3 sm:h-4 sm:w-4" />
+    </button>
+    <button type="button" aria-label="Sonraki fotoğraf" class="absolute right-1 sm:right-2 top-1/2 -translate-y-1/2 bg-black/50 text-white p-1.5 sm:p-2 rounded-full hover:bg-black/70 transition-colors" data-carousel-next>
+      <ChevronRightIcon class="h-3 w-3 sm:h-4 sm:w-4" />
+    </button>
+
+    {/* Image counter */}
+    <div class="absolute bottom-1 sm:bottom-2 right-1 sm:right-2 bg-black/70 text-white text-xs px-2 py-1 rounded-full" data-carousel-counter>
+      1/{images.length}
+    </div>
+  </div>
+
+  {/* Thumbnail navigation */}
+  <div class="flex justify-center gap-1 sm:gap-2 mt-3 sm:mt-4 overflow-x-auto pb-2">
+    {images.map((image, index) => (
+      <button
+        type="button"
+        aria-label={`${index + 1}. fotoğraf`}
+        class="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 rounded-lg overflow-hidden border-2 border-gray-300 hover:border-pink-300 transition-all data-[active]:border-pink-500 data-[active]:ring-2 data-[active]:ring-pink-500/50"
+        data-carousel-thumb
+        data-src={image}
+      >
+        <img
+          src={image}
+          alt={`Thumbnail ${index + 1}`}
+          width={64}
+          height={64}
+          class="w-full h-full object-cover"
+          loading="lazy"
+        />
+      </button>
+    ))}
+  </div>
+</div>

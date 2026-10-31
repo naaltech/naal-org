@@ -1,0 +1,16 @@
+---
+// "Daha Fazla Yükle" butonunun çektiği HTML parçası.
+import InstagramPostCard from "@/components/instagram/InstagramPostCard.astro"
+import { getInstagramPosts } from "@/lib/supabase"
+
+export const partial = true
+
+const POSTS_PER_PAGE = 12
+
+const offset = Math.max(parseInt(Astro.url.searchParams.get("offset") ?? "") || 0, 0)
+const { posts, totalCount, hasMore } = await getInstagramPosts(POSTS_PER_PAGE, offset)
+---
+
+<div data-has-more={String(hasMore)} data-total-count={totalCount}>
+  {posts.map((post) => <InstagramPostCard post={post} />)}
+</div>

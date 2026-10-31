@@ -1,0 +1,24 @@
+---
+import type { HTMLAttributes } from "astro/types"
+import type { VariantProps } from "class-variance-authority"
+import { buttonVariants } from "@/components/ui/variants"
+import { cn } from "@/lib/utils"
+
+type Props = VariantProps<typeof buttonVariants> &
+  Omit<HTMLAttributes<"button">, "type"> & {
+    // href verilirse buton yerine link olarak render edilir.
+    href?: string
+    target?: string
+    rel?: string
+    type?: "button" | "submit"
+  }
+
+const { variant, size, class: className, href, type = "button", ...props } = Astro.props
+const classes = cn(buttonVariants({ variant, size }), className)
+---
+
+{href ? (
+  <a href={href} class={classes} {...props}><slot /></a>
+) : (
+  <button type={type} class={classes} {...props}><slot /></button>
+)}

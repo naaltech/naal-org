@@ -1,0 +1,182 @@
+---
+import ArrowTopRightOnSquareIcon from "heroicons/24/outline/arrow-top-right-on-square.svg"
+import ArrowUpOnSquareIcon from "heroicons/24/outline/arrow-up-on-square.svg"
+import CalendarIcon from "heroicons/24/outline/calendar.svg"
+import Button from "@/components/ui/Button.astro"
+import Card from "@/components/ui/Card.astro"
+import CardContent from "@/components/ui/CardContent.astro"
+import InstagramCarousel from "@/components/instagram/InstagramCarousel.astro"
+import { parseInstagramImages, type InstagramPost } from "@/lib/supabase"
+import { formatDate } from "@/lib/utils"
+
+interface Props {
+  post: InstagramPost
+  highlighted?: boolean
+}
+
+const { post, highlighted = false } = Astro.props
+
+const images = parseInstagramImages(post.image_links)
+const mainImage = images.length > 0 ? images[0] : "/placeholder.svg"
+const clubName = post.name || 'Kulüp'
+const userName = post.user_name ? `@${post.user_name}` : '@kulup'
+const initial = post.name ? post.name.charAt(0).toUpperCase() : 'K'
+
+const shareData = {
+  "data-share-path": `/instagram?post=${post.id}`,
+  "data-share-title": `${post.name || 'NAAL Kulüp'} Instagram Paylaşımı`,
+  "data-share-text": post.description ? post.description.substring(0, 100) + '...' : 'Instagram paylaşımını görüntüle',
+}
+---
+
+<Card
+  id={`post-${post.id}`}
+  data-post={post.id}
+  data-highlighted={highlighted ? "" : undefined}
+  class="overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 data-[highlighted]:ring-4 data-[highlighted]:ring-blue-500 data-[highlighted]:ring-offset-4 data-[highlighted]:bg-blue-50 data-[highlighted]:dark:bg-blue-950/30 data-[highlighted]:shadow-xl data-[highlighted]:scale-105"
+>
+  <CardContent class="p-0">
+    {/* Header */}
+    <div class="p-4 border-b">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-pink-500 to-orange-400 flex items-center justify-center">
+          <span class="text-sm font-bold text-white">{initial}</span>
+        </div>
+        <div>
+          <p class="text-sm font-semibold">{clubName}</p>
+          <p class="text-xs text-muted-foreground">{userName}</p>
+        </div>
+      </div>
+    </div>
+
+    {/* Image */}
+    <div class="relative aspect-square">
+      {images.length > 1 ? (
+        <button type="button" class="relative block h-full w-full cursor-pointer" aria-haspopup="dialog" data-post-dialog-trigger>
+          <img
+            src={mainImage}
+            alt={`Instagram post by ${clubName}`}
+            class="absolute inset-0 h-full w-full object-cover hover:scale-105 transition-transform duration-300"
+            loading="lazy"
+          />
+          <span class="absolute top-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded-full">
+            +{images.length - 1}
+          </span>
+          <span class="absolute inset-0 bg-black/0 hover:bg-black/10 transition-colors duration-300 flex items-center justify-center">
+            <span class="opacity-0 hover:opacity-100 transition-opacity duration-300 bg-black/50 text-white px-3 py-1 rounded-full text-sm">
+              {images.length} fotoğraf
+            </span>
+          </span>
+        </button>
+      ) : (
+        <img
+          src={mainImage}
+          alt={`Instagram post by ${clubName}`}
+          class="absolute inset-0 h-full w-full object-cover"
+          loading="lazy"
+        />
+      )}
+    </div>
+
+    {images.length > 1 && (
+      <template data-dialog-class="max-w-[95vw] sm:max-w-3xl lg:max-w-4xl max-h-[95vh] overflow-y-auto p-3 sm:p-6">
+        <h2 data-dialog-title class="sr-only">{clubName} Instagram Paylaşımı</h2>
+        <div class="space-y-4">
+          <div class="flex items-center gap-2 pb-3 border-b">
+            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-pink-500 to-orange-400 flex items-center justify-center">
+              <span class="text-xs font-bold text-white">{initial}</span>
+            </div>
+            <div>
+              <h3 class="text-base sm:text-lg font-semibold">{clubName}</h3>
+              <p class="text-xs sm:text-sm text-muted-foreground">{userName}</p>
+            </div>
+          </div>
+
+          <InstagramCarousel images={images} postName={clubName} />
+
+          {post.description && (
+            <div class="border-t pt-4">
+              <p class="text-sm sm:text-base text-muted-foreground whitespace-pre-wrap leading-relaxed">
+                {post.description}
+              </p>
+            </div>
+          )}
+
+          {/* Post meta */}
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 border-t">
+            <div class="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
+              {post.time && (
+                <Fragment>
+                  <CalendarIcon class="h-3 w-3 sm:h-4 sm:w-4" />
+                  <span>{formatDate(post.time)}</span>
+                </Fragment>
+              )}
+            </div>
+
+            <div class="flex items-center gap-3">
+              <Button variant="outline" size="sm" class="gap-2 text-xs sm:text-sm" {...shareData}>
+                <ArrowUpOnSquareIcon class="h-3 w-3 sm:h-4 sm:w-4" />
+                Paylaş
+              </Button>
+
+              {post.post_link && (
+                <a
+                  href={post.post_link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center gap-1 text-xs sm:text-sm text-primary hover:underline"
+                >
+                  <ArrowTopRightOnSquareIcon class="h-3 w-3 sm:h-4 sm:w-4" />
+                  Instagram'da Gör
+                </a>
+              )}
+            </div>
+          </div>
+        </div>
+      </template>
+    )}
+
+    {/* Content */}
+    <div class="p-4">
+      {post.description && (
+        <p class="text-sm line-clamp-4 mb-3 leading-relaxed">
+          {post.description}
+        </p>
+      )}
+
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          {post.time && (
+            <p class="text-xs text-muted-foreground">
+              {formatDate(post.time, { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+            </p>
+          )}
+        </div>
+
+        <div class="flex items-center gap-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            class="h-8 w-8 p-0 text-muted-foreground hover:text-foreground"
+            title="Paylaşım linkini kopyala"
+            {...shareData}
+          >
+            <ArrowUpOnSquareIcon class="h-4 w-4" />
+          </Button>
+
+          {post.post_link && (
+            <a
+              href={post.post_link}
+              style={{ color: '#2ea5d5' }}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-xs font-medium hover:underline"
+            >
+              Instagram'da Gör
+            </a>
+          )}
+        </div>
+      </div>
+    </div>
+  </CardContent>
+</Card>

@@ -1,0 +1,167 @@
+---
+import ArrowTopRightOnSquareIcon from "heroicons/24/outline/arrow-top-right-on-square.svg"
+import ChevronLeftIcon from "heroicons/24/outline/chevron-left.svg"
+import ChevronRightIcon from "heroicons/24/outline/chevron-right.svg"
+import HeartIcon from "heroicons/24/outline/heart.svg"
+import InstagramIcon from "@/components/icons/instagram.svg"
+import Card from "@/components/ui/Card.astro"
+import CardContent from "@/components/ui/CardContent.astro"
+import { getInstagramPostsByClub } from "@/lib/supabase"
+
+interface Props {
+  clubInstagramAccounts: string[]
+}
+
+const { clubInstagramAccounts } = Astro.props
+
+const { success, posts: postsData } = await getInstagramPostsByClub(clubInstagramAccounts, 8)
+const posts = success && postsData ? postsData : []
+---
+
+{posts.length === 0 ? (
+  <div class="text-center py-12">
+    <InstagramIcon class="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+    <h3 class="text-lg font-medium mb-2">Henüz post yok</h3>
+    <p class="text-muted-foreground">
+      Bu kulübün Instagram hesaplarından henüz post bulunamadı.
+    </p>
+  </div>
+) : (
+  <div class="space-y-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      {posts.map((post) => {
+        const images = post.image_links?.links || []
+        const firstImage = images[0]
+        const postName = post.name || "Instagram Post"
+
+        return (
+          <Card class="overflow-hidden cursor-pointer hover:shadow-lg transition-shadow group" data-post={post.id}>
+            <CardContent class="p-0">
+              <button type="button" class="block w-full" aria-haspopup="dialog" data-post-dialog-trigger>
+                <span class="relative block aspect-square">
+                  {firstImage && (
+                    <img
+                      src={firstImage}
+                      alt={postName}
+                      class="absolute inset-0 h-full w-full object-cover transition-transform group-hover:scale-105"
+                      loading="lazy"
+                    />
+                  )}
+
+                  {/* Overlay on hover */}
+                  <span class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <span class="text-white text-center">
+                      <InstagramIcon class="h-8 w-8 mx-auto mb-2" />
+                      <span class="block text-sm">Görüntüle</span>
+                    </span>
+                  </span>
+
+                  {/* Multiple images indicator */}
+                  {images.length > 1 && (
+                    <span class="absolute top-2 right-2 bg-black/70 text-white px-2 py-1 rounded text-xs">
+                      1/{images.length}
+                    </span>
+                  )}
+                </span>
+              </button>
+            </CardContent>
+
+            <template data-dialog-class="max-w-4xl max-h-[90vh] overflow-y-auto p-6">
+              <div class="flex flex-col space-y-1.5 text-center sm:text-left">
+                <h2 data-dialog-title class="flex items-center gap-2 text-lg font-semibold leading-none tracking-tight">
+                  <InstagramIcon class="h-5 w-5" />
+                  @{post.user_name}
+                </h2>
+              </div>
+
+              <div class="space-y-4">
+                {/* Images */}
+                {images.length > 0 && (
+                  <div class="relative w-full max-w-2xl mx-auto" data-carousel data-post-name={postName}>
+                    <div class="relative aspect-square">
+                      <img
+                        src={firstImage}
+                        alt={`${postName} - 1/${images.length}`}
+                        class="absolute inset-0 h-full w-full object-cover rounded-lg"
+                        loading="lazy"
+                        data-carousel-image
+                      />
+
+                      {images.length > 1 && (
+                        <Fragment>
+                          {/* Navigation buttons */}
+                          <button type="button" aria-label="Önceki fotoğraf" class="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 transition-colors" data-carousel-prev>
+                            <ChevronLeftIcon class="h-4 w-4" />
+                          </button>
+                          <button type="button" aria-label="Sonraki fotoğraf" class="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 transition-colors" data-carousel-next>
+                            <ChevronRightIcon class="h-4 w-4" />
+                          </button>
+
+                          {/* Image indicators */}
+                          <div class="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1">
+                            {images.map((image, index) => (
+                              <button
+                                type="button"
+                                aria-label={`${index + 1}. fotoğraf`}
+                                class="w-2 h-2 rounded-full bg-white/50 transition-colors data-[active]:bg-white"
+                                data-carousel-thumb
+                                data-src={image}
+                              ></button>
+                            ))}
+                          </div>
+                        </Fragment>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Post content */}
+                <div class="space-y-3">
+                  {post.name && (
+                    <h3 class="font-semibold text-lg">{post.name}</h3>
+                  )}
+
+                  {post.description && (
+                    <p class="text-muted-foreground whitespace-pre-wrap">{post.description}</p>
+                  )}
+
+                  {/* Post meta */}
+                  <div class="flex items-center justify-between pt-4 border-t">
+                    <div class="flex items-center gap-4 text-sm text-muted-foreground">
+                      <span class="flex items-center gap-1">
+                        <HeartIcon class="h-4 w-4" />
+                        Instagram'da gör
+                      </span>
+                    </div>
+
+                    <a
+                      href={post.post_link || `https://instagram.com/${post.user_name}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="inline-flex items-center gap-1 text-sm text-primary hover:underline"
+                    >
+                      <ArrowTopRightOnSquareIcon class="h-4 w-4" />
+                      @{post.user_name}
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </template>
+          </Card>
+        )
+      })}
+    </div>
+
+    {posts.length >= 8 && (
+      <div class="text-center">
+        <p class="text-sm text-muted-foreground">
+          Daha fazla post için Instagram hesaplarını ziyaret edin
+        </p>
+      </div>
+    )}
+  </div>
+)}
+
+<script>
+  import "@/scripts/post-dialog"
+</script>

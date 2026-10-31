@@ -1,0 +1,165 @@
+---
+import ArrowRightIcon from "heroicons/24/outline/arrow-right.svg"
+import BaseLayout from "@/layouts/BaseLayout.astro"
+import BannerSlider from "@/components/BannerSlider.astro"
+import SiteHeader from "@/components/SiteHeader.astro"
+import StructuredData from "@/components/StructuredData.astro"
+import Footer from "@/components/Footer.astro"
+import OfficialNewsSection from "@/components/OfficialNewsSection.astro"
+import Button from "@/components/ui/Button.astro"
+import Card from "@/components/ui/Card.astro"
+import CardContent from "@/components/ui/CardContent.astro"
+import CardHeader from "@/components/ui/CardHeader.astro"
+import CardTitle from "@/components/ui/CardTitle.astro"
+// Instagram akışı şimdilik gizli.
+// import InstagramFeed from "@/components/InstagramFeed.astro"
+---
+
+<BaseLayout>
+  <StructuredData slot="head" />
+  <main class="flex min-h-screen flex-col">
+    <SiteHeader />
+
+    {/* Hero Section */}
+    <section class="w-full py-16 md:py-24 lg:py-32 bg-gradient-to-b from-background to-muted">
+      <div class="container max-w-7xl mx-auto px-4 md:px-6">
+        <div class="flex flex-col items-center justify-center space-y-6 text-center">
+          <div class="space-y-4 max-w-5xl">
+            <h1 class="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl">
+              <span style={{ color: '#2ea5d5' }}>Nevzat Ayaz Anadolu Lisesi</span><br/> Etkileşim Ağı
+            </h1>
+            <p class="max-w-3xl mx-auto text-muted-foreground text-lg md:text-xl lg:text-2xl">
+              Öğrencileri etkinlikler, kulüpler ve ortak ilgi alanları aracılığıyla birbirine bağlıyoruz.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {/* Banner Slider replacing Logo Scroller */}
+    <BannerSlider />
+
+    {/* Instagram akışı şimdilik gizli.
+    <InstagramFeed />
+    */}
+
+    {/* Official News Section */}
+    <OfficialNewsSection server:defer>
+      <section slot="fallback" class="w-full py-12 md:py-16 bg-muted/50">
+        <div class="container max-w-7xl mx-auto px-4 md:px-6">
+          <div class="text-center mb-8">
+            <h2 class="text-2xl md:text-3xl font-bold mb-4">Okuldan Resmi Haberler</h2>
+            <p class="text-muted-foreground">Haberler yükleniyor...</p>
+          </div>
+        </div>
+      </section>
+    </OfficialNewsSection>
+    
+    {/* Other Websites Section */}
+    <section class="w-full py-12 md:py-24 bg-background">
+      <div class="container max-w-7xl mx-auto px-4 md:px-6">
+        <div class="flex flex-col items-center justify-center space-y-6 text-center">
+          <div class="space-y-4 max-w-4xl">
+            <h2 class="text-3xl font-bold tracking-tighter sm:text-4xl">
+              Diğer Websitelerimiz
+            </h2>
+            <p class="max-w-3xl mx-auto text-muted-foreground text-lg md:text-xl">
+              Okulumuzun farklı alanlardaki projelerini ve etkinliklerini keşfedin.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-12 w-full max-w-4xl">
+            <Card class="hover:shadow-lg transition-shadow duration-300">
+              <CardHeader>
+                <CardTitle class="text-xl text-center">
+                  Teknoloji Kulübü
+                </CardTitle>
+              </CardHeader>
+              <CardContent class="text-center">
+                <p class="text-muted-foreground mb-4">
+                  Nevzat Ayaz Anadolu Lisesi Teknoloji Kulübü
+                </p>
+                <Button href="https://tech.naal.org.tr" target="_blank" rel="noopener noreferrer" variant="outline" class="w-full">
+                    tech.naal.org.tr
+                  </Button>
+              </CardContent>
+            </Card>
+
+            <Card class="hover:shadow-lg transition-shadow duration-300">
+              <CardHeader>
+                <CardTitle class="text-xl text-center">
+                  Hackathon Turnuvası
+                </CardTitle>
+              </CardHeader>
+              <CardContent class="text-center">
+                <p class="text-muted-foreground mb-4">
+                  Nevzat Ayaz Anadolu Lisesi Hackathon Turnuvası
+                </p>
+                <Button href="https://hack.naal.org.tr" target="_blank" rel="noopener noreferrer" variant="outline" class="w-full">
+                    hack.naal.org.tr
+                  </Button>
+              </CardContent>
+            </Card>
+
+            <Card class="hover:shadow-lg transition-shadow duration-300">
+              <CardHeader>
+                <CardTitle class="text-xl text-center">
+                  Fen Bilimleri Çalıştayı
+                </CardTitle>
+              </CardHeader>
+              <CardContent class="text-center">
+                <p class="text-muted-foreground mb-4">
+                  Nevzat Ayaz Anadolu Lisesi Fen Bilimleri Çalıştayı
+                </p>
+                <Button href="https://fbc.naal.org.tr" target="_blank" rel="noopener noreferrer" variant="outline" class="w-full">
+                    fbc.naal.org.tr
+                  </Button>
+              </CardContent>
+            </Card>
+
+            <Card class="hover:shadow-lg transition-shadow duration-300">
+              <CardHeader>
+                <CardTitle class="text-xl text-center">
+                  Bilim Kulübü
+                </CardTitle>
+              </CardHeader>
+              <CardContent class="text-center">
+                <p class="text-muted-foreground mb-4">
+                  Nevzat Ayaz Anadolu Lisesi Bilim Kulübü
+                </p>
+                <Button href="https://bilim.naal.org.tr" target="_blank" rel="noopener noreferrer" variant="outline" class="w-full">
+                    bilim.naal.org.tr
+                  </Button>
+              </CardContent>
+            </Card>
+
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    {/* Certificate Verification Section */}
+    <section class="w-full py-12 md:py-24 bg-muted">
+      <div class="container max-w-7xl mx-auto px-4 md:px-6">
+        <div class="flex flex-col items-center justify-center space-y-6 text-center">
+          <div class="space-y-4 max-w-4xl">
+            <h2 class="text-3xl font-bold tracking-tighter sm:text-4xl">
+              Sertifika Sistemi
+            </h2>
+            <p class="max-w-3xl mx-auto text-muted-foreground text-lg md:text-xl">
+              Öğrenci sertifikalarının geçerliliğini hızlı ve güvenli bir şekilde doğrulayın.
+            </p>
+          </div>
+
+          <div class="mt-12">
+            <Button href="/certificates" size="lg" class="gap-2 px-8 py-4 text-lg">
+                Sertifika Doğrula <ArrowRightIcon class="h-5 w-5" />
+              </Button>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <Footer />
+  </main>
+</BaseLayout>

@@ -1,0 +1,185 @@
+---
+import ArrowTopRightOnSquareIcon from "heroicons/24/outline/arrow-top-right-on-square.svg"
+import InstagramIcon from "@/components/icons/instagram.svg"
+import InstagramCarousel from "@/components/instagram/InstagramCarousel.astro"
+import Card from "@/components/ui/Card.astro"
+import CardContent from "@/components/ui/CardContent.astro"
+import { getInstagramPosts, parseInstagramImages } from "@/lib/supabase"
+import { formatDate } from "@/lib/utils"
+
+const { success, posts: postsData } = await getInstagramPosts(4)
+const posts = success && postsData ? postsData : []
+---
+
+<section class="w-full py-12 md:py-24 bg-background">
+  <div class="container max-w-7xl mx-auto px-4 md:px-6">
+    <div class="flex flex-col items-center justify-center space-y-4 text-center mb-10">
+      <div class="flex items-center space-x-2">
+        <h2 class="text-3xl font-bold tracking-tighter sm:text-4xl">Kulüp Güncellemeleri</h2>
+      </div>
+      <p class="max-w-[700px] text-muted-foreground">Okul kulüplerimizden en son paylaşımları görün.</p>
+    </div>
+
+    {posts.length === 0 ? (
+      <div class="text-center py-8">
+        <p class="text-muted-foreground">Henüz paylaşım bulunmuyor.</p>
+      </div>
+    ) : (
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {posts.map((post) => {
+          const images = parseInstagramImages(post.image_links)
+          const mainImage = images.length > 0 ? images[0] : "/placeholder.svg"
+
+          return (
+            <Card class="overflow-hidden hover:shadow-lg transition-shadow" data-post={post.id}>
+              <CardContent class="p-0">
+                <div class="p-3 flex items-center justify-between border-b">
+                  <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-pink-500 to-orange-400 flex items-center justify-center">
+                      <span class="text-xs font-bold text-white">
+                        {post.name ? post.name.charAt(0).toUpperCase() : 'K'}
+                      </span>
+                    </div>
+                    <div>
+                      <p class="text-sm font-medium">{post.name || 'Kulüp'}</p>
+                      <p class="text-xs text-muted-foreground">
+                        {post.user_name ? `@${post.user_name}` : '@kulup'}
+                      </p>
+                    </div>
+                  </div>
+                  {post.post_link && (
+                    <a
+                      href={post.post_link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="text-muted-foreground hover:text-foreground"
+                    >
+                      <ArrowTopRightOnSquareIcon class="h-4 w-4" />
+                    </a>
+                  )}
+                </div>
+
+                {images.length > 1 ? (
+                  <Fragment>
+                    <button type="button" class="w-full" aria-haspopup="dialog" data-post-dialog-trigger>
+                      <span class="relative block aspect-square cursor-pointer group">
+                        <img
+                          src={mainImage}
+                          alt={`Instagram post by ${post.name || 'Kulüp'}`}
+                          class="absolute inset-0 h-full w-full object-cover group-hover:opacity-90 transition-opacity"
+                          loading="lazy"
+                        />
+                        {/* Multiple photos indicator */}
+                        <span class="absolute top-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded-full">
+                          {images.length} Fotoğraf
+                        </span>
+                        {/* Hover overlay */}
+                        <span class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                          <span class="text-white text-sm font-medium">Fotoğrafları Görüntüle</span>
+                        </span>
+                      </span>
+                    </button>
+
+                    <template data-dialog-class="max-w-[95vw] sm:max-w-3xl lg:max-w-4xl max-h-[95vh] overflow-y-auto p-3 sm:p-6">
+                      <div class="flex flex-col space-y-1.5 text-center sm:text-left">
+                        <h2 data-dialog-title class="flex items-center gap-2 text-base sm:text-lg font-semibold leading-none tracking-tight">
+                          <InstagramIcon class="h-4 w-4 sm:h-5 sm:w-5" />
+                          {post.name || 'Kulüp'}
+                        </h2>
+                      </div>
+                      <div class="mt-4 space-y-4">
+                        <InstagramCarousel images={images} postName={post.name || 'Instagram Post'} />
+
+                        {/* Post content */}
+                        <div class="space-y-3">
+                          {post.description && (
+                            <div class="border-t pt-4">
+                              <p class="text-sm sm:text-base text-muted-foreground whitespace-pre-wrap">
+                                {post.description}
+                              </p>
+                            </div>
+                          )}
+
+                          {/* Post meta */}
+                          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 border-t">
+                            <div class="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
+                              <div class="w-6 h-6 rounded-full bg-gradient-to-br from-pink-500 to-orange-400 flex items-center justify-center">
+                                <span class="text-xs font-bold text-white">
+                                  {post.user_name ? post.user_name.charAt(0).toUpperCase() : 'K'}
+                                </span>
+                              </div>
+                              <span>@{post.user_name || 'kulup'}</span>
+                              {post.time && (
+                                <Fragment>
+                                  <span>•</span>
+                                  <span>{formatDate(post.time)}</span>
+                                </Fragment>
+                              )}
+                            </div>
+
+                            {post.post_link && (
+                              <a
+                                href={post.post_link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="inline-flex items-center gap-1 text-xs sm:text-sm text-primary hover:underline"
+                              >
+                                <ArrowTopRightOnSquareIcon class="h-3 w-3 sm:h-4 sm:w-4" />
+                                Instagram'da Gör
+                              </a>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </template>
+                  </Fragment>
+                ) : (
+                  <div class="relative aspect-square">
+                    <img
+                      src={mainImage}
+                      alt={`Instagram post by ${post.name || 'Kulüp'}`}
+                      class="absolute inset-0 h-full w-full object-cover"
+                      loading="lazy"
+                    />
+                  </div>
+                )}
+
+                <div class="p-3">
+                  {post.description && (
+                    <p class="text-sm line-clamp-3 mb-2">{post.description}</p>
+                  )}
+                  {post.time && (
+                    <p class="text-xs text-muted-foreground">{formatDate(post.time)}</p>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          )
+        })}
+      </div>
+    )}
+
+    <div class="flex flex-col items-center gap-4 mt-10">
+      <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
+        <a
+          href="/instagram"
+          class="inline-flex items-center gap-2 px-4 py-2 bg-black text-white rounded-lg hover:bg-black/80 transition-colors"
+        >
+          <InstagramIcon class="h-4 w-4" />
+          Tüm Paylaşımları Gör
+        </a>
+        <a
+          href="/instagram/accounts"
+          class="inline-flex items-center gap-2 px-4 py-2 bg-black text-white rounded-lg hover:bg-black/80 transition-all"
+        >
+          <InstagramIcon class="h-4 w-4" />
+          Kulüp Hesapları
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import "@/scripts/post-dialog"
+</script>

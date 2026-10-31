@@ -1,0 +1,190 @@
+---
+import ArrowLeftIcon from "heroicons/24/outline/arrow-left.svg"
+import ArrowTopRightOnSquareIcon from "heroicons/24/outline/arrow-top-right-on-square.svg"
+import LinkIcon from "heroicons/24/outline/link.svg"
+import UsersIcon from "heroicons/24/outline/users.svg"
+import BaseLayout from "@/layouts/BaseLayout.astro"
+import SiteHeader from "@/components/SiteHeader.astro"
+import Footer from "@/components/Footer.astro"
+import InstagramIcon from "@/components/icons/instagram.svg"
+import Button from "@/components/ui/Button.astro"
+import Card from "@/components/ui/Card.astro"
+import CardContent from "@/components/ui/CardContent.astro"
+import { getAllClubs, parseClubInstagram } from "@/lib/supabase"
+
+const { success, clubs: clubsData } = await getAllClubs()
+
+// Sadece Instagram hesabı olan kulüpleri filtrele
+const clubs = success && clubsData
+  ? clubsData.filter((club) => parseClubInstagram(club.instagram).length > 0)
+  : []
+---
+
+<BaseLayout
+  title="Kulüp Instagram Hesapları - Nevzat Ayaz Etkileşim Ağı"
+  description="Nevzat Ayaz Anadolu Lisesi kulüplerinin resmi Instagram hesapları. Tüm kulüpleri takip edin."
+  keywords="instagram hesapları, kulüp sosyal medya, NAAL kulüpler, instagram takip"
+  ogDescription="Okulumuzun tüm kulüplerinin Instagram hesaplarını keşfedin"
+>
+  <div class="flex min-h-screen flex-col">
+    <SiteHeader />
+    <main class="flex flex-1 flex-col">
+      <div class="flex-1 py-12">
+        <div class="container max-w-4xl mx-auto px-4 md:px-6">
+          {/* Header Section */}
+          <div class="mb-12">
+            <div class="flex items-center gap-4 mb-6">
+              <a href="/instagram" class="text-muted-foreground hover:text-foreground">
+                <ArrowLeftIcon class="h-5 w-5" />
+              </a>
+              <div class="flex items-center gap-3">
+                <LinkIcon class="h-8 w-8" style={{ color: '#2ea5d5' }} />
+                <div>
+                  <h1 class="text-3xl font-bold">Kulüp Instagram Hesapları</h1>
+                  <p class="text-muted-foreground">
+                    {clubs.length} kulübün Instagram hesapları
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="text-center bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-950/20 dark:to-cyan-950/20 rounded-lg p-6 border">
+              <InstagramIcon class="h-12 w-12 mx-auto mb-4" style={{ color: '#2ea5d5' }} />
+              <h2 class="text-xl font-semibold mb-2">Tüm Kulüplerimizi Takip Edin</h2>
+              <p class="text-muted-foreground mb-4">
+                Okulumuzun aktif kulüplerinin Instagram hesaplarını keşfedin ve takip edin
+              </p>
+              <div class="flex justify-center">
+                <a
+                  href="https://www.instagram.com/nevzatayazanadolulisesi_/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-pink-500 to-orange-400 text-white rounded-full hover:from-pink-600 hover:to-orange-500 transition-all"
+                >
+                  <InstagramIcon class="h-4 w-4" />
+                  Resmi Okul Hesabımız
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* Clubs List */}
+          {clubs.length === 0 ? (
+            <div class="text-center py-16">
+              <InstagramIcon class="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+              <h2 class="text-xl font-semibold mb-2">Henüz Instagram hesabı bulunmuyor</h2>
+              <p class="text-muted-foreground mb-6">
+                Kulüplerimizin Instagram hesapları burada görünecek
+              </p>
+              <Button href="/clubs" variant="outline">
+                <UsersIcon class="h-4 w-4 mr-2" />
+                Tüm Kulüpleri Gör
+              </Button>
+            </div>
+          ) : (
+            <div class="space-y-6">
+              {clubs.map((club) => (
+                <Card class="overflow-hidden hover:shadow-lg transition-all duration-300">
+                  <CardContent class="p-6">
+                    <div class="flex items-start gap-4">
+                      {/* Club Logo */}
+                      <div class="flex-shrink-0">
+                        <div class="w-16 h-16 rounded-full overflow-hidden border-2 border-pink-200 dark:border-pink-800">
+                          <img
+                            src={club.logo || "/placeholder.svg"}
+                            alt={`${club.title} logo`}
+                            width={64}
+                            height={64}
+                            class="w-full h-full object-cover"
+                            loading="lazy"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Club Info */}
+                      <div class="flex-1 min-w-0">
+                        <div class="mb-3">
+                          <h3 class="text-xl font-bold mb-1">
+                            {club.title || 'Kulüp Adı'}
+                          </h3>
+                          {club.description && (
+                            <p class="text-muted-foreground text-sm line-clamp-2">
+                              {club.description}
+                            </p>
+                          )}
+                        </div>
+
+                        {/* Instagram Accounts */}
+                        <div class="space-y-2">
+                          <p class="text-sm font-medium text-muted-foreground mb-2">
+                            Instagram Hesapları:
+                          </p>
+                          <div class="flex flex-wrap gap-2">
+                            {parseClubInstagram(club.instagram).map((account) => {
+                              // Instagram URL'sini temizle ve username'i çıkar
+                              const username = account.replace(/https?:\/\/(www\.)?instagram\.com\//, '').replace(/\/$/, '')
+                              const cleanUrl = account.startsWith('http') ? account : `https://instagram.com/${account}`
+
+                              return (
+                                <a
+                                  href={cleanUrl}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-full text-sm font-medium hover:from-pink-600 hover:to-purple-700 transition-all hover:scale-105"
+                                >
+                                  <InstagramIcon class="h-4 w-4" />
+                                  @{username}
+                                  <ArrowTopRightOnSquareIcon class="h-3 w-3" />
+                                </a>
+                              )
+                            })}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Club Link */}
+                      <div class="flex-shrink-0">
+                        <Button href={`/clubs/${club.id}`} variant="outline" size="sm" class="gap-2">
+                          <UsersIcon class="h-4 w-4" />
+                          Kulüp Sayfası
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
+
+          {/* Bottom CTA */}
+          <div class="mt-12 text-center">
+            <div class="bg-muted/50 rounded-lg p-6">
+              <h3 class="text-lg font-semibold mb-2">Kulübünüzün Instagram Hesabı Eksik mi?</h3>
+              <p class="text-muted-foreground mb-4">
+                Kulüp yöneticileri Instagram hesaplarını eklemek için bizimle iletişime geçebilir
+              </p>
+              <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <Button href="/clubs" variant="outline" class="gap-2">
+                  <UsersIcon class="h-4 w-4" />
+                  Tüm Kulüpler
+                </Button>
+                <Button href="/instagram" class="gap-2">
+                  <InstagramIcon class="h-4 w-4" />
+                  Instagram Paylaşımları
+                </Button>
+              </div>
+            </div>
+          </div>
+
+          {/* Stats */}
+          <div class="mt-8 text-center">
+            <p class="text-sm text-muted-foreground">
+              {clubs.length} kulübün Instagram hesapları listeleniyor
+            </p>
+          </div>
+        </div>
+      </div>
+    </main>
+    <Footer />
+  </div>
+</BaseLayout>

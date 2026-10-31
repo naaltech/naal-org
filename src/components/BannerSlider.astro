@@ -1,0 +1,63 @@
+---
+// Sadece banner fotoğrafları
+const banners = [
+  "/banners/bilim.png",
+  "/banners/cevre.png",
+  "/banners/eng.png",
+  "/banners/fbc.png",
+  "/banners/felsefe.png",
+  "/banners/fest.png",
+  "/banners/foto.png",
+  "/banners/girisimcilik.png",
+  "/banners/gsd.png",
+  "/banners/id.png",
+  "/banners/mun.png",
+  "/banners/munazara.png",
+  "/banners/muzik.png",
+  "/banners/sinema.png",
+  "/banners/spor.png",
+  "/banners/teknoloji.png",
+]
+
+// Sonsuz akış için bannerları çoğalt
+const infiniteBanners = [...banners, ...banners, ...banners]
+---
+
+<div class="w-full py-3 bg-muted overflow-hidden">
+  <div class="container max-w-7xl mx-auto px-4 md:px-6">
+    <div data-banner-slider class="flex space-x-4 overflow-x-hidden h-12">
+      {
+        infiniteBanners.map((banner, index) => (
+          <div class="flex-shrink-0 h-12 w-20 relative">
+            <img
+              src={banner}
+              alt={`Banner ${index + 1}`}
+              class="absolute inset-0 h-full w-full object-contain"
+              loading="lazy"
+            />
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</div>
+
+<script>
+  const scrollContainer = document.querySelector<HTMLElement>("[data-banner-slider]")
+
+  if (scrollContainer) {
+    let scrollPosition = 0
+
+    const scroll = () => {
+      scrollPosition += 0.5
+      if (scrollPosition >= scrollContainer.scrollWidth / 3) {
+        scrollPosition = 0
+      }
+
+      scrollContainer.scrollLeft = scrollPosition
+      requestAnimationFrame(scroll)
+    }
+
+    requestAnimationFrame(scroll)
+  }
+</script>

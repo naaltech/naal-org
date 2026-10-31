@@ -1,0 +1,12 @@
+---
+import CertificatePage from "@/components/certificates/CertificatePage.astro"
+import { getCertificate } from "@/lib/certificate-utils"
+
+const certificate = await getCertificate(Astro.params.cert_id ?? "")
+
+if (!certificate) {
+  Astro.response.status = 404
+}
+---
+
+<CertificatePage certificate={certificate} />

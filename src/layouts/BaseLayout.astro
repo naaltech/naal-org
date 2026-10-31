@@ -1,0 +1,97 @@
+---
+import "@fontsource-variable/geist"
+import "@/styles/globals.css"
+
+const SITE_URL = "https://naal.org.tr"
+const SITE_NAME = "Nevzat Ayaz Anadolu Lisesi"
+const DEFAULT_TITLE = "Nevzat Ayaz Anadolu Lisesi - Etkileşim Ağı"
+const DEFAULT_DESCRIPTION =
+  "Nevzat Ayaz Anadolu Lisesi Etkileşim Ağı - Öğrencileri etkinlikler, kulüpler ve ortak ilgi alanları aracılığıyla birbirine bağlıyoruz."
+const DEFAULT_SOCIAL_DESCRIPTION =
+  "Öğrencileri etkinlikler, kulüpler ve ortak ilgi alanları aracılığıyla birbirine bağlıyoruz."
+const DEFAULT_KEYWORDS =
+  "Nevzat Ayaz Anadolu Lisesi, NAAL, İstanbul Anadolu Lisesi, Ümraniye Lise, Öğrenci Kulüpleri, Sertifika Doğrulama, Eğitim, Lise Etkinlikleri, İnkılap Mahallesi, Yelkenciler Sokak, Nevzat Ayaz, Anadolu Lisesi İstanbul"
+
+interface Props {
+  title?: string
+  description?: string
+  keywords?: string
+  ogTitle?: string
+  ogDescription?: string
+  ogType?: string
+  twitterDescription?: string
+}
+
+const {
+  title,
+  description = DEFAULT_DESCRIPTION,
+  keywords = DEFAULT_KEYWORDS,
+  ogTitle = title ?? DEFAULT_TITLE,
+  ogDescription = title ? description : DEFAULT_SOCIAL_DESCRIPTION,
+  ogType = "website",
+  twitterDescription = ogDescription,
+} = Astro.props
+
+const pageTitle = title ?? DEFAULT_TITLE
+const canonicalUrl = new URL(Astro.url.pathname, SITE_URL).href.replace(/\/$/, "")
+const ogImage = new URL("/og-image.png", SITE_URL).href
+const gaId = import.meta.env.NEXT_PUBLIC_GA_ID
+---
+
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="keywords" content={keywords} />
+    <meta name="author" content={SITE_NAME} />
+    <meta name="creator" content={SITE_NAME} />
+    <meta name="publisher" content={SITE_NAME} />
+    <meta name="category" content="education" />
+    <meta name="format-detection" content="telephone=no, date=no, email=no, address=no" />
+    <meta name="robots" content="index, follow" />
+    <meta name="googlebot" content="index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1" />
+    <meta name="google-site-verification" content="your-google-verification-code" />
+    <meta name="yandex-verification" content="your-yandex-verification-code" />
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" href="/favicon.ico" />
+
+    <meta property="og:type" content={ogType} />
+    <meta property="og:locale" content="tr_TR" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:title" content={ogTitle} />
+    <meta property="og:description" content={ogDescription} />
+    <meta property="og:site_name" content={SITE_NAME} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:alt" content={SITE_NAME} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@NevzatAyazLise" />
+    <meta name="twitter:creator" content="@NevzatAyazLise" />
+    <meta name="twitter:title" content={ogTitle} />
+    <meta name="twitter:description" content={twitterDescription} />
+    <meta name="twitter:image" content={ogImage} />
+
+    {
+      gaId && (
+        <>
+          <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`} />
+          <script is:inline define:vars={{ gaId }}>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', gaId);
+          </script>
+        </>
+      )
+    }
+    <slot name="head" />
+  </head>
+  <body class="antialiased min-w-0 w-full">
+    <slot />
+  </body>
+</html>

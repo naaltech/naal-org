@@ -1,0 +1,56 @@
+---
+// Sample club logos
+const clubLogos = [
+  { id: 1, name: "Bilim Kulübü" },
+  { id: 2, name: "Tiyatro Kulübü" },
+  { id: 3, name: "Kodlama Kulübü" },
+  { id: 4, name: "Sanat Kulübü" },
+  { id: 5, name: "Müzik Kulübü" },
+  { id: 6, name: "Münazara Kulübü" },
+  { id: 7, name: "Fotoğrafçılık Kulübü" },
+  { id: 8, name: "Satranç Kulübü" },
+]
+
+// Duplicate logos for continuous scrolling effect
+const allLogos = [...clubLogos, ...clubLogos]
+---
+
+<div class="w-full py-12 bg-muted overflow-hidden">
+  <div class="container max-w-7xl mx-auto px-4 md:px-6">
+    <div class="text-center mb-8">
+      <h2 class="text-2xl font-bold mb-2">Okul Kulüpleri</h2>
+      <p class="text-muted-foreground">Çeşitli öğrenci organizasyonlarımızdan oluşan topluluğumuza katılın</p>
+    </div>
+    <div class="flex space-x-8 overflow-x-hidden" data-logo-scroller>
+      {allLogos.map((club) => (
+        <div class="flex-shrink-0 flex flex-col items-center space-y-2 min-w-[100px]">
+          <div class="w-16 h-16 rounded-full bg-background flex items-center justify-center p-2 shadow-sm">
+            <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+              <span class="text-primary font-semibold text-sm">
+                {club.name.split(' ').map((word) => word[0]).join('')}
+              </span>
+            </div>
+          </div>
+          <span class="text-xs font-medium text-center">{club.name}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+</div>
+
+<script>
+  const scrollContainer = document.querySelector<HTMLElement>("[data-logo-scroller]")!
+  let scrollPosition = 0
+
+  const scroll = () => {
+    scrollPosition += 0.5
+    if (scrollPosition >= scrollContainer.scrollWidth / 2) {
+      scrollPosition = 0
+    }
+
+    scrollContainer.scrollLeft = scrollPosition
+    requestAnimationFrame(scroll)
+  }
+
+  requestAnimationFrame(scroll)
+</script>

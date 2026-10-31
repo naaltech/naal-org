@@ -1,0 +1,159 @@
+---
+import ArrowTopRightOnSquareIcon from "heroicons/24/outline/arrow-top-right-on-square.svg"
+import UsersIcon from "heroicons/24/outline/users.svg"
+import InstagramIcon from "@/components/icons/instagram.svg"
+
+// Instagram postları şimdilik gizli.
+// import ClubInstagramFeed from "@/components/ClubInstagramFeed.astro"
+
+interface Props {
+  code: string | null
+  owners: string | null
+  instagrams: string[]
+  urls: string[]
+}
+
+const { code, owners, instagrams, urls } = Astro.props
+
+const tabTriggerClass = "inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 aria-selected:bg-background aria-selected:text-foreground aria-selected:shadow-sm"
+const tabPanelClass = "mt-6 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+---
+
+<div class="w-full" data-club-tabs>
+  <div role="tablist" class="grid h-10 w-full grid-cols-1 items-center justify-center rounded-md bg-muted p-1 text-muted-foreground">
+    {/* Instagram postları şimdilik gizli. Açarken tablist'teki grid-cols-1'i grid-cols-2 yap.
+    <button type="button" role="tab" aria-selected="false" tabindex="-1" class={tabTriggerClass} data-tab="instagram">Instagram</button>
+    */}
+    <button type="button" role="tab" aria-selected="true" class={tabTriggerClass} data-tab="contact">İletişim</button>
+  </div>
+
+  {/* Instagram postları şimdilik gizli.
+  <div role="tabpanel" tabindex="0" class:list={[tabPanelClass, "hidden"]} data-tab-panel="instagram">
+    <div class="space-y-6">
+      <div class="flex items-center gap-2 mb-4">
+        <InstagramIcon class="h-5 w-5 text-muted-foreground" />
+        <h3 class="text-xl font-semibold">Instagram Postları</h3>
+      </div>
+
+      {instagrams.length > 0 ? (
+        <div class="space-y-6">
+          <div class="text-sm text-muted-foreground mb-4">
+            Takip edilen hesaplar: {instagrams.map((ig) => `@${ig.replace(/^@/, '')}`).join(', ')}
+          </div>
+          <ClubInstagramFeed clubInstagramAccounts={instagrams} />
+        </div>
+      ) : (
+        <div class="text-center py-12">
+          <InstagramIcon class="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+          <p class="text-muted-foreground">
+            Bu kulübün Instagram hesabı henüz eklenmemiş.
+          </p>
+        </div>
+      )}
+
+      {code && (
+        <div class="mt-6 p-4 bg-muted rounded-lg">
+          <h4 class="font-medium mb-2">Kulüp Kodu</h4>
+          <p class="font-mono text-sm">{code}</p>
+        </div>
+      )}
+    </div>
+  </div>
+  */}
+
+  <div role="tabpanel" tabindex="0" class={tabPanelClass} data-tab-panel="contact">
+    <div class="space-y-6">
+      <h3 class="text-xl font-semibold">İletişim Bilgileri</h3>
+
+      <div class="grid gap-4">
+        {owners && (
+          <div class="flex items-start gap-3 p-4 bg-muted rounded-lg">
+            <UsersIcon class="h-5 w-5 text-muted-foreground mt-0.5" />
+            <div>
+              <h4 class="font-medium">Yöneticiler</h4>
+              <p class="text-muted-foreground">{owners}</p>
+            </div>
+          </div>
+        )}
+
+        {instagrams.length > 0 && (
+          <div class="flex items-start gap-3 p-4 bg-muted rounded-lg">
+            <InstagramIcon class="h-5 w-5 text-muted-foreground mt-0.5" />
+            <div>
+              <h4 class="font-medium">Instagram</h4>
+              <div class="space-y-1">
+                {instagrams.map((ig) => (
+                  <a
+                    href={ig.startsWith('http') ? ig : `https://instagram.com/${ig}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="block text-primary hover:underline"
+                  >
+                    @{ig.replace(/^@/, '')}
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {urls.length > 0 && (
+          <div class="flex items-start gap-3 p-4 bg-muted rounded-lg">
+            <ArrowTopRightOnSquareIcon class="h-5 w-5 text-muted-foreground mt-0.5" />
+            <div>
+              <h4 class="font-medium">Ek Bağlantılar</h4>
+              <div class="space-y-1">
+                {urls.map((url) => (
+                  <a
+                    href={url.startsWith('http') ? url : `https://${url}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="block text-primary hover:underline"
+                  >
+                    {url}
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const root = document.querySelector<HTMLElement>("[data-club-tabs]")!
+  const tabs = Array.from(root.querySelectorAll<HTMLElement>('[role="tab"]'))
+  const panels = root.querySelectorAll<HTMLElement>('[role="tabpanel"]')
+
+  const selectTab = (selected: HTMLElement) => {
+    tabs.forEach((tab) => {
+      tab.setAttribute("aria-selected", String(tab === selected))
+      tab.tabIndex = tab === selected ? 0 : -1
+    })
+    panels.forEach((panel) => {
+      panel.classList.toggle("hidden", panel.dataset.tabPanel !== selected.dataset.tab)
+    })
+  }
+
+  tabs.forEach((tab) => tab.addEventListener("click", () => selectTab(tab)))
+
+  root.querySelector('[role="tablist"]')!.addEventListener("keydown", (event) => {
+    const { key } = event as KeyboardEvent
+    const currentIndex = tabs.indexOf(document.activeElement as HTMLElement)
+    const targetIndexes: Record<string, number> = {
+      ArrowRight: (currentIndex + 1) % tabs.length,
+      ArrowLeft: (currentIndex - 1 + tabs.length) % tabs.length,
+      Home: 0,
+      End: tabs.length - 1,
+    }
+    const nextIndex = targetIndexes[key]
+
+    if (nextIndex !== undefined) {
+      event.preventDefault()
+      tabs[nextIndex].focus()
+      selectTab(tabs[nextIndex])
+    }
+  })
+</script>

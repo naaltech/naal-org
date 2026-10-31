@@ -1,0 +1,330 @@
+---
+import BookOpenIcon from "heroicons/24/outline/book-open.svg"
+import CalendarIcon from "heroicons/24/outline/calendar.svg"
+import CheckCircleIcon from "heroicons/24/outline/check-circle.svg"
+import MagnifyingGlassIcon from "heroicons/24/outline/magnifying-glass.svg"
+import ShieldCheckIcon from "heroicons/24/outline/shield-check.svg"
+import UserIcon from "heroicons/24/outline/user.svg"
+import XCircleIcon from "heroicons/24/outline/x-circle.svg"
+import BaseLayout from "@/layouts/BaseLayout.astro"
+import SiteHeader from "@/components/SiteHeader.astro"
+import Footer from "@/components/Footer.astro"
+import Alert from "@/components/ui/Alert.astro"
+import Badge from "@/components/ui/Badge.astro"
+import Button from "@/components/ui/Button.astro"
+import Card from "@/components/ui/Card.astro"
+import CardContent from "@/components/ui/CardContent.astro"
+import CardDescription from "@/components/ui/CardDescription.astro"
+import CardHeader from "@/components/ui/CardHeader.astro"
+import CardTitle from "@/components/ui/CardTitle.astro"
+import Input from "@/components/ui/Input.astro"
+import { verifyCertificateUnified, type UnifiedCertificate } from "@/lib/supabase"
+import { formatDate } from "@/lib/utils"
+
+const query = Astro.url.searchParams.get("id")?.trim()
+let certificate: UnifiedCertificate | null = null
+let error: string | null = null
+
+if (query === "") {
+  error = "Lütfen bir sertifika UID'si veya file ID'si girin"
+} else if (query) {
+  const result = await verifyCertificateUnified(query)
+
+  if (result.success && result.certificate) {
+    certificate = result.certificate
+  } else {
+    error = result.error || "Sertifika doğrulanamadı"
+  }
+}
+
+const longDate = { year: "numeric", month: "long", day: "numeric" } as const
+---
+
+<BaseLayout
+  title="Sertifika Doğrulama - Nevzat Ayaz Anadolu Lisesi | Güvenli Belge Kontrolü"
+  description="Nevzat Ayaz Anadolu Lisesi öğrenci sertifikalarını güvenli bir şekilde doğrulayın. UID veya File ID ile anında sertifika geçerliliğini kontrol edin."
+  keywords="sertifika doğrulama, NAAL sertifika, öğrenci belgesi, belge kontrolü, Nevzat Ayaz Anadolu Lisesi, güvenli doğrulama"
+  ogTitle="Sertifika Doğrulama - Nevzat Ayaz Anadolu Lisesi"
+  ogDescription="Öğrenci sertifikalarını güvenli bir şekilde doğrulayın. Anında sonuç alın."
+>
+  <div class="flex min-h-screen flex-col">
+    <SiteHeader />
+    <main class="flex-1">
+      <section class="w-full py-12 md:py-24 lg:py-32 bg-muted">
+        <div class="container max-w-7xl mx-auto px-4 md:px-6">
+          <div class="flex flex-col items-center justify-center space-y-4 text-center">
+            <div class="space-y-2">
+              <div class="inline-block rounded-lg bg-primary/10 px-3 py-1 text-sm">
+                Sertifika Doğrulama
+              </div>
+              <h1 class="text-3xl font-bold tracking-tighter sm:text-5xl">
+                Sertifika Doğrulama Sistemi
+              </h1>
+              <p class="max-w-[700px] text-muted-foreground md:text-xl">
+                Sertifika ID'si veya hash değeri ile sertifikaların geçerliliğini doğrulayın.
+                <br />
+                <span class="text-sm">
+                  Eski sistem URL'leri (/cert) ve yeni sistem (/certificates) desteklenmektedir.
+                </span>
+              </p>
+            </div>
+
+            <form action="/certificates#sonuc" method="get" class="w-full max-w-md space-y-4" data-verify-form>
+              <div class="relative">
+                <MagnifyingGlassIcon class="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                <Input
+                  type="text"
+                  name="id"
+                  value={query}
+                  placeholder="Sertifika UID veya File ID girin..."
+                  aria-label="Sertifika UID veya File ID"
+                  class="w-full bg-background pl-8"
+                />
+              </div>
+
+              <Button type="submit" class="w-full">Sertifikayı Doğrula</Button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <section id="sonuc" class="w-full scroll-mt-32 py-12 md:py-24">
+        <div class="container max-w-7xl mx-auto px-4 md:px-6">
+          <div class="max-w-4xl mx-auto">
+            {error && (
+              <Alert class="mb-6 border-destructive">
+                <XCircleIcon class="h-4 w-4" />
+                <div class="text-sm text-destructive [&_p]:leading-relaxed">
+                  {error}
+                </div>
+              </Alert>
+            )}
+
+            {certificate && (
+              <Card class="mb-8 border-2 border-green-200 bg-green-50/50">
+                <CardHeader class="text-center space-y-4">
+                  <div class="flex justify-center">
+                    <div class="rounded-full bg-green-100 p-3">
+                      <CheckCircleIcon class="h-8 w-8 text-green-600" />
+                    </div>
+                  </div>
+                  <div>
+                    <CardTitle class="text-2xl text-green-800">
+                      Sertifika Doğrulandı ✓
+                    </CardTitle>
+                    <CardDescription class="text-green-700">
+                      Bu sertifika geçerli ve aktif durumda
+                    </CardDescription>
+                  </div>
+                </CardHeader>
+
+                <CardContent class="space-y-6">
+                  {/* PDF Sertifika için PDF Görüntüleme */}
+                  {certificate.type === 'pdf' && certificate.pdf_link && (
+                    <div class="mb-6">
+                      <div class="bg-muted rounded-lg p-4">
+                        <h3 class="font-semibold mb-2">PDF Sertifika</h3>
+                        <iframe
+                          src={certificate.pdf_link}
+                          class="w-full h-96 border rounded"
+                          title="Sertifika PDF"
+                        ></iframe>
+                        <div class="mt-2">
+                          <a
+                            href={certificate.pdf_link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="text-primary hover:underline"
+                          >
+                            PDF'i Yeni Sekmede Aç
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-4">
+                      <div class="flex items-center gap-3">
+                        <UserIcon class="h-5 w-5 text-muted-foreground" />
+                        <div>
+                          <p class="text-sm font-medium text-muted-foreground">Verilen Kişi</p>
+                          <p class="font-semibold">{certificate.given}</p>
+                        </div>
+                      </div>
+
+                      <div class="flex items-center gap-3">
+                        <BookOpenIcon class="h-5 w-5 text-muted-foreground" />
+                        <div>
+                          <p class="text-sm font-medium text-muted-foreground">
+                            {certificate.type === 'pdf' ? 'Sertifika Adı' : 'Başlık'}
+                          </p>
+                          <p class="font-semibold">
+                            {certificate.type === 'pdf' ? certificate.cert_name : certificate.head}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div class="flex items-center gap-3">
+                        <CalendarIcon class="h-5 w-5 text-muted-foreground" />
+                        <div>
+                          <p class="text-sm font-medium text-muted-foreground">Tarih</p>
+                          <p class="font-semibold">
+                            {certificate.date ? formatDate(certificate.date, longDate) : 'Belirtilmemiş'}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="space-y-4">
+                      <div class="flex items-center gap-3">
+                        <ShieldCheckIcon class="h-5 w-5 text-muted-foreground" />
+                        <div>
+                          <p class="text-sm font-medium text-muted-foreground">
+                            {certificate.type === 'pdf' ? 'UID' : 'File ID'}
+                          </p>
+                          <p class="font-mono text-sm bg-muted px-2 py-1 rounded">
+                            {certificate.type === 'pdf' ? certificate.uid : certificate.file_id}
+                          </p>
+                        </div>
+                      </div>
+
+                      {certificate.type === 'pdf' && certificate.from && (
+                        <div class="flex items-center gap-3">
+                          <UserIcon class="h-5 w-5 text-muted-foreground" />
+                          <div>
+                            <p class="text-sm font-medium text-muted-foreground">Veren Kurum</p>
+                            <p class="font-semibold">{certificate.from}</p>
+                          </div>
+                        </div>
+                      )}
+
+                      {certificate.type === 'standard' && certificate.creator && (
+                        <div class="flex items-center gap-3">
+                          <UserIcon class="h-5 w-5 text-muted-foreground" />
+                          <div>
+                            <p class="text-sm font-medium text-muted-foreground">Oluşturan</p>
+                            <p class="font-semibold">{certificate.creator}</p>
+                          </div>
+                        </div>
+                      )}
+
+                      <div class="flex items-center gap-3">
+                        <CalendarIcon class="h-5 w-5 text-muted-foreground" />
+                        <div>
+                          <p class="text-sm font-medium text-muted-foreground">Oluşturulma Tarihi</p>
+                          <p class="font-semibold">{formatDate(certificate.created_at, longDate)}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="border-t pt-4">
+                    <div class="flex flex-wrap gap-2 justify-center mb-4">
+                      <Badge variant="secondary" class="bg-green-100 text-green-800">
+                        {certificate.type === 'pdf' ? 'PDF Sertifika' : 'Standart Sertifika'}
+                      </Badge>
+                      <Badge variant="outline">Doğrulandı</Badge>
+                    </div>
+
+                    <div class="flex gap-2 justify-center">
+                      <Button href={`/certificates/${certificate.type === 'pdf' ? certificate.uid : certificate.file_id}`} variant="outline" size="sm">
+                        Detay Sayfasını Görüntüle
+                      </Button>
+                      {certificate.type === 'pdf' && certificate.pdf_link && (
+                        <Button href={certificate.pdf_link} target="_blank" rel="noopener noreferrer" variant="outline" size="sm">
+                          PDF'i Aç
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {!certificate && !error && (
+              <div class="text-center py-12">
+                <div class="mx-auto max-w-sm">
+                  <div class="mx-auto mb-4 w-48 h-32 bg-muted rounded-lg flex items-center justify-center">
+                    <ShieldCheckIcon class="h-16 w-16 text-muted-foreground/50" />
+                  </div>
+                  <h3 class="text-lg font-semibold mb-2">Sertifika Doğrulama</h3>
+                  <p class="text-muted-foreground">
+                    Doğrulamak istediğiniz sertifikanın ID'sini veya hash değerini yukarıdaki alana girin.
+                  </p>
+                </div>
+              </div>
+            )}
+
+            <div class="mt-12 space-y-6">
+              <div class="text-center">
+                <h2 class="text-2xl font-bold mb-4">Nasıl Çalışır?</h2>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <Card>
+                  <CardHeader class="text-center">
+                    <div class="mx-auto rounded-full bg-primary/10 p-2 w-fit">
+                      <MagnifyingGlassIcon class="h-6 w-6 text-primary" />
+                    </div>
+                    <CardTitle class="text-lg">1. Sertifika Bilgisi</CardTitle>
+                  </CardHeader>
+                  <CardContent class="text-center">
+                    <p class="text-sm text-muted-foreground">
+                      Sertifika UID (PDF sertifikalar için) veya File ID (standart sertifikalar için) girin.
+                    </p>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader class="text-center">
+                    <div class="mx-auto rounded-full bg-primary/10 p-2 w-fit">
+                      <ShieldCheckIcon class="h-6 w-6 text-primary" />
+                    </div>
+                    <CardTitle class="text-lg">2. Doğrulama</CardTitle>
+                  </CardHeader>
+                  <CardContent class="text-center">
+                    <p class="text-sm text-muted-foreground">
+                      Sistem hem PDF'li hem de standart sertifikaları tek sorgudan kontrol eder.
+                    </p>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader class="text-center">
+                    <div class="mx-auto rounded-full bg-primary/10 p-2 w-fit">
+                      <CheckCircleIcon class="h-6 w-6 text-primary" />
+                    </div>
+                    <CardTitle class="text-lg">3. Sonuç</CardTitle>
+                  </CardHeader>
+                  <CardContent class="text-center">
+                    <p class="text-sm text-muted-foreground">
+                      Sertifika bilgileri görüntülenir. PDF'li sertifikalar için PDF de renderlanır.
+                    </p>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <Footer />
+  </div>
+</BaseLayout>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>("[data-verify-form]")!
+  const submitButton = form.querySelector("button")!
+
+  form.addEventListener("submit", () => {
+    submitButton.disabled = true
+    submitButton.textContent = "Doğrulanıyor..."
+  })
+
+  // Tarayıcının geri tuşu sayfayı önbellekten açtığında buton kilitli kalmasın.
+  window.addEventListener("pageshow", () => {
+    submitButton.disabled = false
+    submitButton.textContent = "Sertifikayı Doğrula"
+  })
+</script>

@@ -1,0 +1,293 @@
+---
+import ArrowDownTrayIcon from "heroicons/24/outline/arrow-down-tray.svg"
+import ArrowLeftIcon from "heroicons/24/outline/arrow-left.svg"
+import BookOpenIcon from "heroicons/24/outline/book-open.svg"
+import CalendarIcon from "heroicons/24/outline/calendar.svg"
+import DocumentCheckIcon from "heroicons/24/outline/document-check.svg"
+import ShieldCheckIcon from "heroicons/24/outline/shield-check.svg"
+import UserIcon from "heroicons/24/outline/user.svg"
+import BaseLayout from "@/layouts/BaseLayout.astro"
+import SiteHeader from "@/components/SiteHeader.astro"
+import Footer from "@/components/Footer.astro"
+import FacebookIcon from "@/components/icons/facebook.svg"
+import LinkedinIcon from "@/components/icons/linkedin.svg"
+import XIcon from "@/components/icons/x.svg"
+import Alert from "@/components/ui/Alert.astro"
+import Badge from "@/components/ui/Badge.astro"
+import Button from "@/components/ui/Button.astro"
+import Card from "@/components/ui/Card.astro"
+import CardContent from "@/components/ui/CardContent.astro"
+import CardHeader from "@/components/ui/CardHeader.astro"
+import CardTitle from "@/components/ui/CardTitle.astro"
+import Input from "@/components/ui/Input.astro"
+import type { UnifiedCertificate } from "@/lib/supabase"
+import { formatDate } from "@/lib/utils"
+
+interface Props {
+  certificate: UnifiedCertificate | null
+}
+
+const { certificate } = Astro.props
+
+const name = certificate?.type === "pdf" ? certificate.cert_name : certificate?.head
+const title = certificate ? `${certificate.given} - ${name}` : null
+const issuer = certificate?.type === "pdf" ? certificate.from : certificate?.creator
+const description = certificate
+  ? `${certificate.given} adlı kişiye verilen sertifika. ${issuer} tarafından düzenlenmiştir.`
+  : "Aradığınız sertifika bulunamadı."
+
+const shareUrl = Astro.url.href
+const shareTitle = certificate?.cert_name || certificate?.head || 'Sertifika'
+const encodedUrl = encodeURIComponent(shareUrl)
+const linkedInShareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}&title=${encodeURIComponent(shareTitle)}`
+const twitterShareUrl = `https://x.com/intent/tweet?text=${encodeURIComponent(`${shareTitle} - Nevzat Ayaz Etkileşim Ağı üzerinden doğrulandı`)}&url=${encodedUrl}`
+const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`
+---
+
+<BaseLayout
+  title={title ? `${title} | Nevzat Ayaz Sertifika Doğrulama` : "Sertifika Bulunamadı | Nevzat Ayaz Sertifika Doğrulama"}
+  description={description}
+  ogTitle={title ?? undefined}
+  ogType={certificate ? "article" : undefined}
+>
+  <div class="flex min-h-screen flex-col">
+    <SiteHeader />
+    {certificate ? (
+      <main class="flex flex-1 flex-col">
+        <div class="container max-w-4xl mx-auto px-4 py-8">
+          {/* Back Button */}
+          <div class="mb-6">
+            <Button href="/certificates" variant="outline" size="sm">
+              <ArrowLeftIcon class="mr-2 h-4 w-4" />
+              Sertifika Doğrulamaya Geri Dön
+            </Button>
+          </div>
+
+          {/* Success Alert */}
+          <Alert class="mb-8 border-green-200 bg-green-50">
+            <ShieldCheckIcon class="h-4 w-4 text-green-600" />
+            <div class="text-sm text-green-800 [&_p]:leading-relaxed">
+              Bu sertifika başarıyla doğrulandı ve geçerlidir.
+            </div>
+          </Alert>
+
+          {/* Certificate Details */}
+          <div class="grid gap-8 lg:grid-cols-3">
+            {/* Main Certificate Info */}
+            <div class="lg:col-span-2">
+              <Card class="mb-6">
+                <CardHeader class="pb-4">
+                  <div class="flex items-start justify-between">
+                    <div class="flex-1">
+                      <CardTitle class="text-2xl mb-2">
+                        {certificate.cert_name || certificate.head}
+                      </CardTitle>
+                      <Badge variant="secondary" class="mb-4">
+                        {certificate.type === 'pdf' ? 'PDF Sertifikası' : 'Dijital Sertifika'}
+                      </Badge>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent class="space-y-6">
+                  {/* Certificate Image/PDF Preview */}
+                  {certificate.pdf_link && (
+                    <div class="relative bg-muted rounded-lg overflow-hidden">
+                      <div class="aspect-[4/3] relative">
+                        <iframe
+                          src={certificate.pdf_link}
+                          class="w-full h-full border-0"
+                          title="PDF Sertifikası"
+                        ></iframe>
+                      </div>
+                      <div class="p-4 text-center bg-background border-t">
+                        <Button href={certificate.pdf_link} target="_blank" rel="noopener noreferrer">
+                          <ArrowDownTrayIcon class="mr-2 h-4 w-4" />
+                          PDF İndir
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Certificate Details */}
+                  <div class="grid gap-4 sm:grid-cols-2">
+                    <div class="flex items-center space-x-3">
+                      <UserIcon class="h-5 w-5 text-muted-foreground flex-shrink-0" />
+                      <div>
+                        <p class="text-sm font-medium">Alıcı</p>
+                        <p class="text-sm text-muted-foreground">{certificate.given}</p>
+                      </div>
+                    </div>
+
+                    <div class="flex items-center space-x-3">
+                      <CalendarIcon class="h-5 w-5 text-muted-foreground flex-shrink-0" />
+                      <div>
+                        <p class="text-sm font-medium">Tarih</p>
+                        <p class="text-sm text-muted-foreground">{formatDate(certificate.date)}</p>
+                      </div>
+                    </div>
+
+                    {certificate.from && (
+                      <div class="flex items-center space-x-3">
+                        <BookOpenIcon class="h-5 w-5 text-muted-foreground flex-shrink-0" />
+                        <div>
+                          <p class="text-sm font-medium">Veren Kurum</p>
+                          <p class="text-sm text-muted-foreground">{certificate.from}</p>
+                        </div>
+                      </div>
+                    )}
+
+                    {certificate.creator && (
+                      <div class="flex items-center space-x-3">
+                        <UserIcon class="h-5 w-5 text-muted-foreground flex-shrink-0" />
+                        <div>
+                          <p class="text-sm font-medium">Oluşturan</p>
+                          <p class="text-sm text-muted-foreground">{certificate.creator}</p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Technical Details */}
+                  <div class="pt-4 border-t">
+                    <h4 class="font-medium mb-3">Teknik Detaylar</h4>
+                    <div class="grid gap-2 text-sm">
+                      {certificate.uid && (
+                        <div class="flex justify-between">
+                          <span class="text-muted-foreground">UID:</span>
+                          <span class="font-mono">{certificate.uid}</span>
+                        </div>
+                      )}
+                      {certificate.file_id && (
+                        <div class="flex justify-between">
+                          <span class="text-muted-foreground">File ID:</span>
+                          <span class="font-mono">{certificate.file_id}</span>
+                        </div>
+                      )}
+                      <div class="flex justify-between">
+                        <span class="text-muted-foreground">Oluşturma Tarihi:</span>
+                        <span>{formatDate(certificate.created_at)}</span>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Sidebar */}
+            <div class="space-y-6">
+              {/* Verification Status */}
+              <Card>
+                <CardHeader class="pb-4">
+                  <CardTitle class="text-lg">Doğrulama Durumu</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div class="flex items-center space-x-3 text-green-600">
+                    <ShieldCheckIcon class="h-5 w-5" />
+                    <span class="font-medium">Doğrulandı</span>
+                  </div>
+                  <p class="text-sm text-muted-foreground mt-2">
+                    Bu sertifika resmi veritabanımızda kayıtlıdır ve geçerlidir.
+                  </p>
+                </CardContent>
+              </Card>
+
+              {/* Share Options */}
+              <Card>
+                <CardHeader class="pb-4">
+                  <CardTitle class="text-lg">Paylaş</CardTitle>
+                </CardHeader>
+                <CardContent class="space-y-3">
+                  <div class="flex items-center space-x-2">
+                    <Input value={shareUrl} readonly aria-label="Paylaşım linki" class="text-xs" />
+                    <Button size="sm" variant="outline" data-copy-url={shareUrl}>
+                      Kopyala
+                    </Button>
+                  </div>
+
+                  <div class="grid grid-cols-3 gap-2">
+                    <Button href={linkedInShareUrl} target="_blank" rel="noopener noreferrer" size="sm" variant="outline" aria-label="LinkedIn'de paylaş">
+                      <LinkedinIcon class="h-4 w-4" />
+                    </Button>
+                    <Button href={twitterShareUrl} target="_blank" rel="noopener noreferrer" size="sm" variant="outline" aria-label="X'te paylaş">
+                      <XIcon class="h-4 w-4" />
+                    </Button>
+                    <Button href={facebookShareUrl} target="_blank" rel="noopener noreferrer" size="sm" variant="outline" aria-label="Facebook'ta paylaş">
+                      <FacebookIcon class="h-4 w-4" />
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Actions */}
+              <Card>
+                <CardHeader class="pb-4">
+                  <CardTitle class="text-lg">İşlemler</CardTitle>
+                </CardHeader>
+                <CardContent class="space-y-3">
+                  {certificate.pdf_link && (
+                    <Button href={certificate.pdf_link} target="_blank" rel="noopener noreferrer" class="w-full">
+                      <ArrowDownTrayIcon class="mr-2 h-4 w-4" />
+                      PDF İndir
+                    </Button>
+                  )}
+
+                  <Button variant="outline" class="w-full" aria-haspopup="dialog" data-verify-dialog-trigger>
+                    <DocumentCheckIcon class="mr-2 h-4 w-4" />
+                    Başka Sertifika Doğrula
+                  </Button>
+
+                  <template data-verify-dialog>
+                    <div class="flex flex-col space-y-1.5 text-center sm:text-left">
+                      <h2 data-dialog-title class="text-lg font-semibold leading-none tracking-tight">Sertifika Doğrula</h2>
+                    </div>
+                    <form action="/certificates#sonuc" method="get" class="space-y-4">
+                      <div>
+                        <label for="verify-id" class="text-sm font-medium leading-none">Sertifika UID veya File ID</label>
+                        <Input id="verify-id" name="id" placeholder="Sertifika kimliğini buraya girin..." />
+                      </div>
+                      <Button type="submit" class="w-full">Doğrulama Sayfasına Git</Button>
+                    </form>
+                  </template>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
+      </main>
+    ) : (
+      <main class="flex flex-1 flex-col">
+        <div class="container max-w-4xl mx-auto px-4 py-16">
+          <div class="text-center">
+            <ShieldCheckIcon class="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+            <h1 class="text-2xl font-bold mb-2">Sertifika Bulunamadı</h1>
+            <p class="text-muted-foreground mb-8">
+              Aradığınız sertifika bulunamadı veya geçersiz.
+            </p>
+            <div class="space-x-4">
+              <Button href="/certificates">
+                <ArrowLeftIcon class="mr-2 h-4 w-4" />
+                Sertifika Doğrulamaya Geri Dön
+              </Button>
+              <Button href="/" variant="outline">Ana Sayfa</Button>
+            </div>
+          </div>
+        </div>
+      </main>
+    )}
+    <Footer />
+  </div>
+</BaseLayout>
+
+<script>
+  import { openDialog } from "@/scripts/dialog"
+
+  const copyButton = document.querySelector<HTMLElement>("[data-copy-url]")
+  copyButton?.addEventListener("click", () => {
+    navigator.clipboard.writeText(copyButton.dataset.copyUrl!)
+  })
+
+  const dialogTemplate = document.querySelector<HTMLTemplateElement>("[data-verify-dialog]")
+  document.querySelector("[data-verify-dialog-trigger]")?.addEventListener("click", () => {
+    openDialog(dialogTemplate!)
+  })
+</script>

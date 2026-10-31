@@ -1,0 +1,16 @@
+---
+import type { HTMLAttributes } from "astro/types"
+import { cn } from "@/lib/utils"
+
+type Props = HTMLAttributes<"div">
+
+const { class: className, ...props } = Astro.props
+---
+
+<div
+  role="alert"
+  class={cn("relative w-full rounded-lg border bg-background p-4 text-foreground [&>svg~*]:pl-7 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground", className)}
+  {...props}
+>
+  <slot />
+</div>

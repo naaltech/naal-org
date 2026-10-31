@@ -1,0 +1,129 @@
+---
+import ArrowLeftIcon from "heroicons/24/outline/arrow-left.svg"
+import ExclamationTriangleIcon from "heroicons/24/outline/exclamation-triangle.svg"
+import HomeIcon from "heroicons/24/outline/home.svg"
+import MagnifyingGlassIcon from "heroicons/24/outline/magnifying-glass.svg"
+import BaseLayout from "@/layouts/BaseLayout.astro"
+import SiteHeader from "@/components/SiteHeader.astro"
+import Footer from "@/components/Footer.astro"
+import { buttonVariants } from "@/components/ui/variants"
+import Card from "@/components/ui/Card.astro"
+import CardContent from "@/components/ui/CardContent.astro"
+import CardDescription from "@/components/ui/CardDescription.astro"
+import CardHeader from "@/components/ui/CardHeader.astro"
+import CardTitle from "@/components/ui/CardTitle.astro"
+import { cn } from "@/lib/utils"
+---
+
+<BaseLayout title="Sayfa Bulunamadı | Nevzat Ayaz Anadolu Lisesi">
+  <div class="min-h-screen bg-background">
+    <SiteHeader />
+    
+    <main class="container max-w-4xl mx-auto px-4 md:px-6 py-16">
+      <div class="flex flex-col items-center justify-center text-center space-y-8">
+        {/* 404 Icon */}
+        <div class="relative">
+          <div class="w-32 h-32 bg-muted rounded-full flex items-center justify-center mb-4">
+            <ExclamationTriangleIcon class="h-16 w-16 text-muted-foreground" />
+          </div>
+          <div class="absolute -top-2 -right-2 w-12 h-12 bg-primary rounded-full flex items-center justify-center">
+            <span class="text-primary-foreground font-bold text-lg">404</span>
+          </div>
+        </div>
+
+        {/* Error Message */}
+        <div class="space-y-4">
+          <h1 class="text-4xl md:text-6xl font-bold tracking-tighter">
+            Sayfa Bulunamadı
+          </h1>
+          <p class="text-xl text-muted-foreground max-w-2xl">
+            Aradığınız sayfa mevcut değil veya taşınmış olabilir. 
+            URL'yi kontrol edin veya ana sayfaya dönün.
+          </p>
+        </div>
+
+        {/* Action Cards */}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-2xl">
+          <Card class="hover:shadow-lg transition-shadow">
+            <CardHeader class="text-center pb-4">
+              <div class="mx-auto w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-2">
+                <HomeIcon class="h-6 w-6 text-primary" />
+              </div>
+              <CardTitle>Ana Sayfaya Dön</CardTitle>
+              <CardDescription>
+                Nevzat Ayaz Anadolu Lisesi ana sayfasına geri dönün
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <a href="/" class={cn(buttonVariants(), "w-full")}>
+                  <HomeIcon class="mr-2 h-4 w-4" />
+                  Ana Sayfa
+                </a>
+            </CardContent>
+          </Card>
+
+          <Card class="hover:shadow-lg transition-shadow">
+            <CardHeader class="text-center pb-4">
+              <div class="mx-auto w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-2">
+                <MagnifyingGlassIcon class="h-6 w-6 text-primary" />
+              </div>
+              <CardTitle>Sertifika Ara</CardTitle>
+              <CardDescription>
+                Sertifika doğrulama sayfasına gidin
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <a href="/certificates" class={cn(buttonVariants({ variant: "outline" }), "w-full")}>
+                  <MagnifyingGlassIcon class="mr-2 h-4 w-4" />
+                  Sertifika Doğrula
+                </a>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Quick Links */}
+        <div class="space-y-4">
+          <h3 class="text-lg font-semibold">Hızlı Erişim</h3>
+          <div class="flex flex-wrap justify-center gap-3">
+            <a href="/clubs" class={buttonVariants({ variant: "ghost" })}>
+                <ArrowLeftIcon class="mr-2 h-4 w-4" />
+                Kulüpler
+              </a>
+            {/* Instagram akışı şimdilik gizli.
+            <a href="/instagram" class={buttonVariants({ variant: "ghost" })}>
+                <ArrowLeftIcon class="mr-2 h-4 w-4" />
+                Instagram Akışı
+              </a>
+            */}
+          </div>
+        </div>
+
+        {/* Error Details */}
+        <Card class="w-full max-w-2xl">
+          <CardHeader>
+            <CardTitle class="text-lg">Teknik Bilgi</CardTitle>
+            <CardDescription>
+              Bu hata hakkında daha fazla bilgi
+            </CardDescription>
+          </CardHeader>
+          <CardContent class="space-y-3">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+              <div>
+                <span class="font-medium text-muted-foreground">Hata Kodu:</span>
+                <span class="ml-2 font-mono">404 Not Found</span>
+              </div>
+              <div>
+                <span class="font-medium text-muted-foreground">Durum:</span>
+                <span class="ml-2">Sayfa bulunamadı</span>
+              </div>
+            </div>
+            <div class="text-xs text-muted-foreground">
+              Eğer bu hatayı sürekli alıyorsanız, lütfen website yönetimi ile iletişime geçin.
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </main>
+    <Footer/>
+  </div>
+</BaseLayout>

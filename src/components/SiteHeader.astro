@@ -1,0 +1,253 @@
+---
+import Bars3Icon from "heroicons/24/outline/bars-3.svg"
+import ChevronDownIcon from "heroicons/24/outline/chevron-down.svg"
+import EnvelopeIcon from "heroicons/24/outline/envelope.svg"
+import MapPinIcon from "heroicons/24/outline/map-pin.svg"
+import XMarkIcon from "heroicons/24/outline/x-mark.svg"
+import FacebookIcon from "@/components/icons/facebook.svg"
+import InstagramIcon from "@/components/icons/instagram.svg"
+import LinkedinIcon from "@/components/icons/linkedin.svg"
+import XIcon from "@/components/icons/x.svg"
+import YoutubeIcon from "@/components/icons/youtube.svg"
+import ClubLinks from "@/components/ClubLinks.astro"
+import Button from "@/components/ui/Button.astro"
+
+const host = Astro.request.headers.get("host") ?? Astro.url.host
+const isCertSubdomain = host.startsWith("cert.")
+---
+
+<header class="sticky top-0 z-50 w-full bg-background">
+  {/* Upper Header */}
+  <div class="bg-muted/30 border-b border-border/50">
+    <div class="container max-w-7xl mx-auto px-4 md:px-6">
+      <div class="flex items-center justify-between py-2 text-sm">
+        {/* Left side - Contact Info */}
+        <div class="hidden md:flex items-center space-x-6 text-muted-foreground">
+          <div class="flex items-center space-x-2">
+            <EnvelopeIcon class="h-4 w-4" />
+            <span>E-Posta: <a href="mailto:iletisim@naal.org.tr" class="hover:text-foreground transition-colors">iletisim@naal.org.tr</a></span>
+          </div>
+          <div class="flex items-center space-x-2">
+            <MapPinIcon class="h-4 w-4" />
+            <span>Konum: <a href="https://www.google.com/maps?q=İnkılap+Mah.+Yelkenciler+Sok.+NO:1+Ümraniye/İstanbul" target="_blank" rel="noopener noreferrer" class="hover:text-foreground transition-colors">İnkılap Mah. Yelkenciler Sok. NO:1 Ümraniye/İstanbul</a></span>
+          </div>
+        </div>
+
+        {/* Right side - Social Media & Admin */}
+        <div class="flex items-center space-x-3">
+          <a
+            href="https://admin.naal.org.tr/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="hidden md:flex text-muted-foreground hover:text-foreground transition-colors text-xs px-2 py-1 border border-muted-foreground/20 rounded-md hover:border-foreground/50"
+          >
+            Yönetici Arayüzü
+          </a>
+          <div class="hidden md:block w-px h-4 bg-muted-foreground/20"></div>
+          <a href="https://www.facebook.com/nevzatayaz.al.14" target="_blank" rel="noopener noreferrer" class="text-muted-foreground hover:text-foreground transition-colors">
+            <FacebookIcon class="h-4 w-4" />
+          </a>
+          <a href="https://www.instagram.com/nevzatayazanadolulisesi_/" target="_blank" rel="noopener noreferrer" class="text-muted-foreground hover:text-foreground transition-colors">
+            <InstagramIcon class="h-4 w-4" />
+          </a>
+          <a href="https://www.linkedin.com/school/nevzatayazlisesi/" target="_blank" rel="noopener noreferrer" class="text-muted-foreground hover:text-foreground transition-colors">
+            <LinkedinIcon class="h-4 w-4" />
+          </a>
+          <a href="https://x.com/NevzatAyazLise" target="_blank" rel="noopener noreferrer" class="text-muted-foreground hover:text-foreground transition-colors">
+            <XIcon class="h-4 w-4" />
+          </a>
+          <a href="https://www.youtube.com/@NaalRec" target="_blank" rel="noopener noreferrer" class="text-muted-foreground hover:text-foreground transition-colors">
+            <YoutubeIcon class="h-4 w-4" />
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {/* Main Header */}
+  <div class="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <div class="container max-w-7xl mx-auto flex h-16 items-center justify-between px-4 md:px-6">
+      <a href={isCertSubdomain ? "/certificates" : "/"} class="flex items-center space-x-2">
+        <span class="font-bold text-xl" style={{ color: '#2ea5d5' }}>
+          {isCertSubdomain ? "cert.naal.org.tr" : "naal.org.tr"}
+        </span>
+      </a>
+
+      {/* Mobile Menu Button */}
+      <Button variant="ghost" size="icon" class="md:hidden" aria-label="Menü" aria-expanded="false" data-mobile-menu-toggle>
+        <Bars3Icon class="h-6 w-6" data-menu-closed-icon />
+        <XMarkIcon class="hidden h-6 w-6" data-menu-open-icon />
+      </Button>
+
+      {/* Desktop Navigation */}
+      <nav class="hidden md:flex items-center space-x-4">
+        {/* Instagram akışı şimdilik gizli.
+        {!isCertSubdomain && (
+          <Button href="/instagram" variant="ghost">Instagram Akışı</Button>
+        )}
+        */}
+        <Button href="/certificates" variant="ghost">Sertifika Doğrula</Button>
+
+        {!isCertSubdomain && (
+          <div class="relative inline-block" data-clubs-dropdown>
+            <Button variant="ghost" class="flex items-center gap-1" aria-haspopup="menu" aria-expanded="false">
+              Okul Kulüpleri <ChevronDownIcon class="h-4 w-4" />
+            </Button>
+            <div
+              role="menu"
+              tabindex="-1"
+              class="absolute right-0 top-full z-50 mt-1 hidden max-h-[calc(100vh-8rem)] w-max min-w-[8rem] max-w-[calc(100vw-2rem)] overflow-y-auto rounded-md border bg-popover p-1 text-popover-foreground shadow-md animate-in fade-in-0 zoom-in-95 slide-in-from-top-2 focus:outline-none"
+            >
+              <ClubLinks server:defer>
+                <div slot="fallback" role="menuitem" aria-disabled="true" class="relative flex select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm opacity-50 pointer-events-none">
+                  Yükleniyor...
+                </div>
+              </ClubLinks>
+            </div>
+          </div>
+        )}
+
+        {isCertSubdomain && (
+          <Button href="https://naal.org.tr" target="_blank" rel="noopener noreferrer" variant="outline">
+            Ana Siteye Git
+          </Button>
+        )}
+      </nav>
+
+      {/* Mobile Navigation */}
+      <div class="absolute top-20 left-0 right-0 hidden bg-background border-b md:hidden" data-mobile-menu>
+        <div class="container py-4 space-y-2">
+          {/* Instagram akışı şimdilik gizli.
+          {!isCertSubdomain && (
+            <Button href="/instagram" variant="ghost" class="w-full justify-start">Instagram Akışı</Button>
+          )}
+          */}
+          <Button href="/certificates" variant="ghost" class="w-full justify-start">
+            Sertifika Doğrula
+          </Button>
+
+          {!isCertSubdomain && (
+            <div class="pt-2 border-t">
+              <Button
+                variant="ghost"
+                class="w-full justify-between px-4 py-2 text-sm font-medium text-muted-foreground"
+                aria-expanded="false"
+                data-mobile-clubs-toggle
+              >
+                Okul Kulüpleri
+                <ChevronDownIcon class="h-4 w-4 transition-transform" />
+              </Button>
+
+              <div class="hidden space-y-1" data-mobile-clubs>
+                <ClubLinks server:defer mobile>
+                  <div slot="fallback" class="px-4 py-2 text-sm text-muted-foreground">
+                    Yükleniyor...
+                  </div>
+                </ClubLinks>
+              </div>
+            </div>
+          )}
+
+          {isCertSubdomain && (
+            <div class="pt-2 border-t">
+              <Button href="https://naal.org.tr" target="_blank" rel="noopener noreferrer" variant="outline" class="w-full">
+                Ana Siteye Git
+              </Button>
+            </div>
+          )}
+
+          {/* Admin Panel Link for Mobile */}
+          <div class="pt-2 border-t">
+            <Button href="https://admin.naal.org.tr/" target="_blank" rel="noopener noreferrer" variant="outline" class="w-full">
+              Yönetici Arayüzü
+            </Button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<script>
+  const ENABLED_ITEM_SELECTOR = '[role="menuitem"]:not([aria-disabled="true"])'
+
+  const dropdown = document.querySelector<HTMLElement>("[data-clubs-dropdown]")
+
+  if (dropdown) {
+    const trigger = dropdown.querySelector("button")!
+    const menu = dropdown.querySelector<HTMLElement>('[role="menu"]')!
+    // Kulüp listesi sayfa açıldıktan sonra geldiği için her seferinde yeniden okunur.
+    const getItems = () => Array.from(menu.querySelectorAll<HTMLElement>(ENABLED_ITEM_SELECTOR))
+
+    const setOpen = (open: boolean) => {
+      menu.classList.toggle("hidden", !open)
+      trigger.setAttribute("aria-expanded", String(open))
+      if (open) (getItems()[0] ?? menu).focus()
+    }
+
+    trigger.addEventListener("click", () => setOpen(menu.classList.contains("hidden")))
+    trigger.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowDown") {
+        event.preventDefault()
+        setOpen(true)
+      }
+    })
+
+    document.addEventListener("pointerdown", (event) => {
+      if (!dropdown.contains(event.target as Node)) setOpen(false)
+    })
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && !menu.classList.contains("hidden")) {
+        setOpen(false)
+        trigger.focus()
+      }
+    })
+
+    menu.addEventListener("keydown", (event) => {
+      if (event.key === "Tab") {
+        setOpen(false)
+        return
+      }
+      if (event.key === " ") {
+        event.preventDefault()
+        ;(event.target as HTMLElement).click()
+        return
+      }
+      const items = getItems()
+      if (items.length === 0) return
+
+      const currentIndex = items.indexOf(document.activeElement as HTMLElement)
+      const targetIndexes: Record<string, number> = {
+        ArrowDown: (currentIndex + 1) % items.length,
+        ArrowUp: (currentIndex - 1 + items.length) % items.length,
+        Home: 0,
+        End: items.length - 1,
+      }
+      const nextIndex = targetIndexes[event.key]
+
+      if (nextIndex !== undefined) {
+        event.preventDefault()
+        items[nextIndex].focus()
+      }
+    })
+  }
+
+  const menuToggle = document.querySelector<HTMLElement>("[data-mobile-menu-toggle]")!
+  const mobileMenu = document.querySelector<HTMLElement>("[data-mobile-menu]")!
+
+  menuToggle.addEventListener("click", () => {
+    const open = mobileMenu.classList.toggle("hidden") === false
+    menuToggle.setAttribute("aria-expanded", String(open))
+    menuToggle.querySelector("[data-menu-closed-icon]")!.classList.toggle("hidden", open)
+    menuToggle.querySelector("[data-menu-open-icon]")!.classList.toggle("hidden", !open)
+  })
+
+  const clubsToggle = document.querySelector<HTMLElement>("[data-mobile-clubs-toggle]")
+  const mobileClubs = document.querySelector<HTMLElement>("[data-mobile-clubs]")
+
+  clubsToggle?.addEventListener("click", () => {
+    const open = mobileClubs!.classList.toggle("hidden") === false
+    clubsToggle.setAttribute("aria-expanded", String(open))
+    clubsToggle.querySelector("svg")!.classList.toggle("rotate-180", open)
+  })
+</script>

@@ -1,0 +1,84 @@
+---
+import InstagramIcon from "@/components/icons/instagram.svg"
+import InstagramPostCard from "@/components/instagram/InstagramPostCard.astro"
+import Button from "@/components/ui/Button.astro"
+import { getInstagramPostById, getInstagramPosts } from "@/lib/supabase"
+
+interface Props {
+  // Server island içinde Astro.url sayfanın adresi olmadığı için sayfadan gelir.
+  sharedPostParam: string | null
+}
+
+const POSTS_PER_PAGE = 12
+
+const { sharedPostParam } = Astro.props
+const sharedPostId = sharedPostParam ? parseInt(sharedPostParam) : null
+
+const { posts: firstPosts, totalCount, hasMore } = await getInstagramPosts(POSTS_PER_PAGE, 0)
+
+let posts = firstPosts
+let nextOffset = posts.length
+let sharedPost = posts.find((post) => post.id === sharedPostId)
+
+// Paylaşılan post ilk sayfada değilse listenin başına ekle. Yer açmak için çıkarılan
+// son post sonraki sayfada gelir, paylaşılan postun tekrarı istemci tarafında ayıklanır.
+if (sharedPostId && !sharedPost) {
+  const result = await getInstagramPostById(sharedPostId)
+  if (result.success && result.post) {
+    sharedPost = result.post
+    posts = [result.post, ...posts].slice(0, POSTS_PER_PAGE)
+    nextOffset -= 1
+  }
+}
+---
+
+<div
+  data-instagram-page
+  data-post-count={totalCount}
+  data-shared-post={sharedPost?.id}
+  data-shared-post-name={sharedPost?.name || 'Kulüp'}
+  data-shared-post-missing={sharedPostParam !== null && !sharedPost ? "" : undefined}
+>
+  {posts.length === 0 ? (
+    <div class="text-center py-16">
+      <InstagramIcon class="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+      <h2 class="text-xl font-semibold mb-2">Henüz paylaşım bulunmuyor</h2>
+      <p class="text-muted-foreground mb-6">
+        Kulüplerimizin paylaşımları burada görünecek
+      </p>
+      <Button href="https://www.instagram.com/nevzatayazanadolulisesi_/" target="_blank" rel="noopener noreferrer">
+        <InstagramIcon class="h-4 w-4 mr-2" />
+        Instagram'da Takip Et
+      </Button>
+    </div>
+  ) : (
+    <Fragment>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" data-post-grid>
+        {posts.map((post) => (
+          <InstagramPostCard post={post} highlighted={post.id === sharedPost?.id} />
+        ))}
+      </div>
+
+      {/* Load More Button */}
+      {hasMore && (
+        <div class="flex justify-center mt-12">
+          <Button variant="outline" size="lg" class="gap-2" data-load-more data-next-offset={nextOffset}>
+            <InstagramIcon class="h-4 w-4" />
+            <span>Daha Fazla Yükle</span>
+          </Button>
+        </div>
+      )}
+
+      {/* Stats */}
+      <div class="mt-12 text-center">
+        <p class="text-sm text-muted-foreground">
+          <span data-loaded-count>{posts.length}</span> / <span data-total-count>{totalCount}</span> paylaşım gösteriliyor
+        </p>
+      </div>
+    </Fragment>
+  )}
+</div>
+
+<script>
+  import "@/scripts/instagram"
+</script>

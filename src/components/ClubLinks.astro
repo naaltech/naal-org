@@ -1,0 +1,46 @@
+---
+import Button from "@/components/ui/Button.astro"
+import { getAllClubs } from "@/lib/supabase"
+
+interface Props {
+  mobile?: boolean
+}
+
+const { mobile = false } = Astro.props
+
+const { clubs: clubsData } = await getAllClubs()
+const clubs = clubsData ?? []
+---
+
+{mobile ? (
+  <Fragment>
+    {clubs.map((club) => (
+      <Button href={`/clubs/${club.id}`} variant="ghost" class="w-full justify-start pl-6">
+        {club.title || 'Kulüp Adı'}
+      </Button>
+    ))}
+    {clubs.length === 0 && (
+      <div class="px-4 py-2 text-sm text-muted-foreground">
+        Henüz kulüp yok
+      </div>
+    )}
+  </Fragment>
+) : (
+  <Fragment>
+    {clubs.map((club) => (
+      <a
+        href={`/clubs/${club.id}`}
+        role="menuitem"
+        tabindex="-1"
+        class="relative flex cursor-default select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+      >
+        {club.title || 'Kulüp Adı'}
+      </a>
+    ))}
+    {clubs.length === 0 && (
+      <div role="menuitem" aria-disabled="true" class="relative flex select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm opacity-50 pointer-events-none">
+        Henüz kulüp yok
+      </div>
+    )}
+  </Fragment>
+)}
